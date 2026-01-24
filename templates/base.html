@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}LexNush{% endblock %} {% if request.endpoint != 'home' %} — LexNush{% endif %}</title>
+    
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='logo.png') }}">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.8.1/vanilla-tilt.min.js"></script>
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        })();
+    </script>
+</head>
+<body>
+
+    <div id="preloader">
+        <div class="preloader-content">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="Loading..." class="preloader-logo">
+            <div class="loading-bar"></div>
+        </div>
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="{{ url_for('home') }}" class="logo-link">
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="LexNush Logo" class="nav-logo">
+            </a>
+            
+            <div class="nav-links">
+                <a href="{{ url_for('home') }}" class="{{ 'active' if request.endpoint == 'home' else '' }}">Home</a>
+                <a href="{{ url_for('about') }}" class="{{ 'active' if request.endpoint == 'about' else '' }}">About</a>
+                <a href="{{ url_for('blogs') }}" class="{{ 'active' if request.endpoint == 'blogs' else '' }}">Blogs</a>
+                <a href="{{ url_for('interviews') }}" class="{{ 'active' if request.endpoint == 'interviews' else '' }}">Interviews</a>
+                <a href="{{ url_for('contact') }}" class="{{ 'active' if request.endpoint == 'contact' else '' }}">Contact</a>
+                
+                <button id="theme-toggle" aria-label="Toggle Theme">
+                    <svg class="icon sun" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                    <svg class="icon moon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <button class="mobile-toggle" aria-label="Menu">
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <div class="mobile-menu-overlay">
+        <div class="mobile-links">
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('about') }}">About</a>
+            <a href="{{ url_for('blogs') }}">Blogs</a>
+            <a href="{{ url_for('interviews') }}">Interviews</a>
+            <a href="{{ url_for('contact') }}">Contact</a>
+        </div>
+    </div>
+
+    {% block content %}{% endblock %}
+
+    <footer style="padding: 50px 0; text-align: center; border-top: 1px solid var(--border-color); margin-top: 50px;">
+        <p style="color: var(--text-muted);">&copy; 2026 LexNush. Steadily building.</p>
+    </footer>
+
+    <div id="disclaimer-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 style="color: var(--accent); border-bottom: 1px solid var(--border-color); padding-bottom: 10px; margin-top: 0;">DISCLAIMER</h2>
+            </div>
+            <div class="modal-body">
+                <p><strong>Please read carefully before proceeding.</strong></p>
+                <p>Per the rules of the Bar Council of India, LexNush does not solicit work or advertise services.</p>
+                <ul>
+                    <li>You are accessing this website for your own information.</li>
+                    <li>No material provided herein constitutes legal advice.</li>
+                    <li>LexNush is not liable for any consequence of action taken relying on this material.</li>
+                </ul>
+            </div>
+            <button id="accept-btn" class="modal-btn">I AGREE</button>
+        </div>
+    </div>
+
+    <button id="back-to-top" aria-label="Back to Top">&uarr;</button>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

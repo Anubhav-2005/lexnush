@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}The Journal{% endblock %}
+
+{% block content %}
+<section class="about-hero" style="min-height: 60vh; align-items: center; text-align: center;">
+    <div class="text-container">
+        <h1 class="fade-in" style="font-size: 4rem; margin-bottom: 20px;">The <span class="gold-text">JOURNAL.</span></h1>
+        
+        <p class="statement-subtext fade-in delay-1" style="max-width: 600px; margin: 0 auto; font-size: 1.1rem; color: var(--text-muted);">
+            A curated space for deconstructing complex statutes, analyzing landmark judgments, and questioning the future of Indian jurisprudence.
+        </p>
+    </div>
+</section>
+
+<section class="content-grid" style="padding-top: 0; max-width: 1000px; margin: 0 auto;">
+    
+    <div class="grid-card fade-in delay-2" style="opacity: 0.7;">
+        <div style="border-bottom: 1px solid var(--accent); padding-bottom: 15px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.8rem; color: var(--accent); letter-spacing: 2px; text-transform: uppercase;">Upcoming Vol. 01</span>
+            <span style="font-size: 0.7rem; background: var(--accent); color: #000; padding: 2px 8px; border-radius: 2px; font-weight: bold;">WAITLIST</span>
+        </div>
+        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 15px;">AI & The Constitution</h3>
+        <p style="font-size: 0.95rem; line-height: 1.6; color: var(--text-muted);">
+            Can an algorithm have "intent"? Exploring the intersection of Artificial Intelligence, liability, and Article 21 rights in the digital age.
+        </p>
+    </div>
+
+    <div class="grid-card fade-in delay-3" style="opacity: 0.7;">
+        <div style="border-bottom: 1px solid var(--accent); padding-bottom: 15px; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-size: 0.8rem; color: var(--accent); letter-spacing: 2px; text-transform: uppercase;">Upcoming Vol. 01</span>
+            <span style="font-size: 0.7rem; background: var(--accent); color: #000; padding: 2px 8px; border-radius: 2px; font-weight: bold;">WAITLIST</span>
+        </div>
+        <h3 style="font-family: 'Playfair Display', serif; font-size: 1.8rem; margin-bottom: 15px;">The Basic Structure</h3>
+        <p style="font-size: 0.95rem; line-height: 1.6; color: var(--text-muted);">
+            Revisiting Kesavananda Bharati through the lens of modern political dissent. Is the doctrine a shield or a cage?
+        </p>
+    </div>
+
+</section>
+
+<section class="values-section" style="padding: 80px 20px; text-align: center;">
+    <div class="border-box fade-in delay-3" style="max-width: 600px; margin: 0 auto;">
+        <h2 style="font-size: 2rem; margin-bottom: 20px;">Don't miss the launch.</h2>
+        <p style="color: var(--text-muted); margin-bottom: 30px;">
+            Join the inner circle. Get notified when the first analysis drops.
+        </p>
+
+        <form name="journal-signup" method="POST" data-netlify="true" style="display: flex; gap: 10px; flex-direction: column;">
+            <input type="email" name="email" placeholder="Your Email Address" required 
+                style="padding: 15px; background: transparent; border: 1px solid var(--border-color); color: var(--text-main); font-family: 'Inter', sans-serif; outline: none;">
+            
+            <button type="submit" style="padding: 15px; background: var(--accent); color: #000; border: none; font-weight: 600; letter-spacing: 1px; cursor: pointer; transition: all 0.3s ease;">
+                NOTIFY ME
+            </button>
+        </form>
+    </div>
+</section>
+
+{% endblock %}
