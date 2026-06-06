@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+
+<section class="article-hero fade-in" style="padding-top: 180px; padding-bottom: 60px; text-align: center; max-width: 900px; margin: 0 auto;">
+    
+    <div style="margin-bottom: 20px;">
+        <span style="font-size: 0.8rem; color: var(--accent); letter-spacing: 2px; text-transform: uppercase; font-weight: 600;">
+            {{ post.category }}
+        </span>
+    </div>
+
+    <h1 style="font-size: clamp(2.5rem, 5vw, 4rem); line-height: 1.1; margin-bottom: 30px;">
+        {{ post.title }}
+    </h1>
+
+    <div style="display: flex; justify-content: center; gap: 20px; color: var(--text-muted); font-size: 0.9rem; font-family: 'Inter', sans-serif;">
+        <span>By <strong style="color: var(--text-main);">{{ post.author }}</strong></span>
+        <span>•</span>
+        <span>{{ post.date }}</span>
+        <span>•</span>
+        <span>{{ post.read_time }}</span>
+    </div>
+
+</section>
+
+<article class="fade-in delay-1" style="max-width: 740px; margin: 0 auto 100px auto; padding: 0 20px;">
+    
+    <div style="height: 1px; width: 100%; background: var(--border-color); margin-bottom: 50px;"></div>
+
+    {% if post.key_takeaways %}
+    <div style="background: rgba(212, 175, 55, 0.08); border-left: 3px solid var(--accent); padding: 30px; margin-bottom: 50px; border-radius: 4px;">
+        <h4 style="margin-top: 0; margin-bottom: 15px; color: var(--accent); letter-spacing: 1.5px; text-transform: uppercase; font-size: 0.85rem; font-family: 'Inter', sans-serif;">
+            Brief Analysis
+        </h4>
+        <ul style="margin: 0; padding-left: 20px; color: var(--text-main); font-family: 'Inter', sans-serif; font-size: 0.95rem; line-height: 1.6;">
+            {% for point in post.key_takeaways %}
+                <li style="margin-bottom: 10px;">{{ point }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <div class="article-body" style="font-family: 'Georgia', serif; font-size: 1.15rem; line-height: 1.8; color: var(--text-main);">
+        {{ post.content | safe }}
+    </div>
+
+    <div style="margin-top: 80px; padding-top: 40px; border-top: 1px solid var(--border-color); text-align: center;">
+        <h4 style="margin-bottom: 20px;">Share this analysis</h4>
+        <div style="display: flex; justify-content: center; gap: 15px;">
+            <button onclick="navigator.clipboard.writeText(window.location.href); alert('Link copied to clipboard.');" style="background: transparent; border: 1px solid var(--border-color); color: var(--text-muted); padding: 12px 25px; cursor: pointer; transition: all 0.3s ease; font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase;">
+                COPY LINK
+            </button>
+        </div>
+    </div>
+
+</article>
+
+{% endblock %}
