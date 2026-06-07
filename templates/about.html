@@ -4,64 +4,357 @@
 
 {% block content %}
 
-<section class="about-hero statement-mode">
-    
-    <h1 class="fade-in">Law is not just <span class="gold-text">written.</span></h1>
-    
-    <div class="gold-separator fade-in delay-1" style="height: 1px; width: 60px; background: var(--accent); margin: 0 auto 30px auto;"></div>
+<!-- HERO -->
 
-    <div class="text-box-container fade-in delay-2">
-        <p>
-            LexNush was created with a simple belief that the law does not have to feel cold, distant, or inaccessible to matter. It can be thoughtful. It can be empathetic. And above all, it can feel human.
-        </p>
-        <p>
-            Born at the intersection of legal education, lived experience, and curiosity, LexNush is a growing legal ecosystem that explores law beyond courtrooms and textbooks. It is a space for reflection, awareness, and conversation, where rights are understood, legal ideas are questioned, and justice is approached with clarity and care.
-        </p>
-    </div>
+<section class="about-hero fade-in" style="
+    padding: 140px 20px 80px;
+    text-align: center;
+    max-width: 900px;
+    margin: auto;
+">
+
+<h1 style="
+    font-size: clamp(3.8rem, 7vw, 5.8rem);
+    line-height: 0.95;
+    margin-bottom: 30px;
+">
+    Law With A <span class="gold-text">PULSE.</span>
+</h1>
+
+<p style="
+    max-width: 780px;
+    margin: auto;
+    color: var(--text-muted);
+    font-size: 1.25rem;
+    line-height: 1.9;
+">
+    The law doesn't have to be cold, distant, or unintelligible.
+    At LexNush, we believe the law should protect, clarify, and repair.
+</p>
+
 
 </section>
 
-<section class="fade-in delay-2" style="padding-top: 0;">
-    
-    <h2 style="text-align: center; margin-bottom: 40px;">At its core, LexNush exists to:</h2>
+<!-- LEXNUSH PHILOSOPHY -->
 
-    <div class="values-grid">
-        <div class="value-card">
-            <strong>Translate</strong>
-            <p>Complex legal concepts into meaningful understanding.</p>
-        </div>
-        
-        <div class="value-card">
-            <strong>Encourage</strong>
-            <p>Ethical, people-first legal thinking.</p>
-        </div>
-        
-        <div class="value-card">
-            <strong>Create Room</strong>
-            <p>For dialogue around law, rights, and reform.</p>
-        </div>
-        
-        <div class="value-card">
-            <strong>Build Access</strong>
-            <p>To legal awareness without noise or intimidation.</p>
-        </div>
-    </div>
+<section class="fade-in delay-1"
+         style="max-width: 1200px; margin: auto; padding: 0 20px 100px;">
 
-    <div class="manifesto-footer fade-in delay-3">
-        <p class="manifesto-text">
-            This is not a law firm. It is a platform for thought.
-        </p>
-        <span class="manifesto-sign">
-            Steadily Building.
+
+<div style="
+    display:grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    gap:80px;
+    align-items:center;
+">
+
+    <div style="max-width:650px;">
+
+        <span style="
+            color: var(--accent);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-size: .85rem;
+            font-family: 'Inter';
+        ">
+            Core Message
         </span>
+
+        <h2 style="
+            margin:20px 0 30px;
+            font-size: clamp(2.5rem,4vw,3.4rem);
+        ">
+            Why LexNush Exists
+        </h2>
+
+        <p style="color: var(--text-muted); line-height: 2; margin-bottom: 28px;">
+            To many outside the legal system, the law can feel intimidating,
+            closed-off, and entirely detached from reality. Hidden behind
+            towering stacks of paperwork and archaic terminology,
+            it often creates more confusion than clarity.
+        </p>
+
+        <p style="color: var(--text-muted); line-height: 2; margin-bottom: 28px;">
+            At LexNush, we challenge that idea. We believe legal knowledge
+            should empower people, not overwhelm them.
+        </p>
+
+        <p style="color: var(--text-muted); line-height: 2;">
+            Whether you're building a startup, protecting intellectual property,
+            negotiating contracts, or navigating regulatory change,
+            the law should speak in a language you understand.
+        </p>
+
     </div>
 
-    <div class="legal-box fade-in delay-3">
-        <h3>Disclaimer</h3>
-        <p>
-            This website is intended solely for educational and informational purposes. LexNush does not solicit clients or provide legal advice or legal services through this platform. Any future facilitation services, where applicable, will operate independently and in accordance with professional and regulatory standards.
+
+    <div class="grid-card" style="
+        padding:55px;
+        background:rgba(255,255,255,.02);
+        border:1px solid rgba(212,175,55,.12);
+    ">
+
+        <blockquote style="
+            margin:0;
+            font-size:1.6rem;
+            line-height:1.9;
+            font-style:italic;
+        ">
+            "We don't flex legal jargon for the sake of it.
+            We translate law into life and business strategy."
+        </blockquote>
+
+        <p style="
+            margin-top:35px;
+            color:var(--accent);
+            letter-spacing:2px;
+            text-transform:uppercase;
+            font-size:.8rem;
+        ">
+            — LexNush
         </p>
+
     </div>
+
+</div>
+
+
+</section>
+
+<!-- FOUNDER -->
+
+<section class="fade-in delay-2"
+         style="max-width: 1200px; margin:auto; padding:0 20px 100px;">
+
+
+<div class="about-founder-grid" style="
+    display:grid;
+    grid-template-columns:380px 1fr;
+    gap:90px;
+    align-items:start;
+">
+
+    <div>
+
+        <img src="{{ url_for('static', filename='images/anushka.jpeg') }}"
+             alt="Anushka Pandey"
+             style="
+                width:100%;
+                aspect-ratio:4/5;
+                object-fit:cover;
+                border-radius:32px;
+                box-shadow:0 35px 70px rgba(0,0,0,.25);
+                display:block;
+             ">
+
+        <div style="
+            margin-top:24px;
+            text-align:center;
+        ">
+
+            <h3 style="
+                margin-bottom:8px;
+                font-size:1.6rem;
+            ">
+                Anushka Pandey
+            </h3>
+
+            <p style="
+                color:var(--text-muted);
+                line-height:1.8;
+                font-size:.95rem;
+            ">
+                Founder • LexNush<br>
+                Legal Designer
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div>
+
+        <span style="
+            color: var(--accent);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-size: .85rem;
+            font-family: 'Inter';
+        ">
+            The Face Behind The Pulse
+        </span>
+
+        <h2 style="
+            margin:18px 0 35px;
+            font-size:clamp(2.8rem,4vw,4rem);
+            line-height:1.1;
+        ">
+            Hey, I'm Anushka Pandey.
+        </h2>
+
+        <p style="
+            line-height:2;
+            color:var(--text-muted);
+            max-width:700px;
+            margin-bottom:28px;
+        ">
+            I am a fresh law graduate, a legal designer,
+            and the founder of LexNush.
+        </p>
+
+        <p style="
+            line-height:2;
+            color:var(--text-muted);
+            max-width:700px;
+            margin-bottom:28px;
+        ">
+            During my time in law school, I noticed a frustrating pattern:
+            the critical legal insights professionals actually need are often
+            buried beneath dense walls of text and inaccessible language.
+        </p>
+
+        <p style="
+            line-height:2;
+            color:var(--text-muted);
+            max-width:700px;
+            margin-bottom:28px;
+        ">
+            It felt as though people needed a law degree simply to understand
+            their own rights.
+        </p>
+
+        <p style="
+            line-height:2;
+            color:var(--text-muted);
+            max-width:700px;
+        ">
+            LexNush was born from the belief that legal knowledge deserves
+            better design, clearer communication, and a more human voice.
+        </p>
+
+    </div>
+
+</div>
+
+
+</section>
+
+<!-- WHY PULSE -->
+
+<section class="fade-in delay-3"
+         style="max-width:1000px; margin:auto; padding:40px 20px 100px; text-align:center;">
+
+
+<h2 style="
+    font-size:clamp(2.5rem,4vw,3.5rem);
+    margin-bottom:40px;
+">
+    Why "Law With A Pulse"?
+</h2>
+
+<p style="color:var(--text-muted); line-height:2; margin-bottom:24px;">
+    The law doesn't have to be intimidating to be legally sound.
+</p>
+
+<p style="color:var(--text-muted); line-height:2; margin-bottom:24px;">
+    Behind every commercial agreement is a founder building a dream.
+    Behind every trademark filing is a creator protecting a legacy.
+    Behind every arbitration clause is a story about trust.
+</p>
+
+<p style="color:var(--text-muted); line-height:2;">
+    When we strip humanity out of the law, we turn it into a clinical hurdle
+    instead of a tool for growth.
+</p>
+
+
+</section>
+
+<!-- WHAT I BRING -->
+
+<section class="content-grid fade-in delay-4"
+         style="padding-top:0;">
+
+
+<div class="grid-card">
+    <h3>The Analytical Edge</h3>
+    <p style="color:var(--text-muted); line-height:1.8;">
+        A fresh understanding of rapidly evolving legal frontiers and
+        contemporary commercial realities.
+    </p>
+</div>
+
+<div class="grid-card">
+    <h3>The Creative Lens</h3>
+    <p style="color:var(--text-muted); line-height:1.8;">
+        Transforming complex regulations into structured,
+        accessible, and visually engaging legal insights.
+    </p>
+</div>
+
+<div class="grid-card">
+    <h3>The Empathetic Approach</h3>
+    <p style="color:var(--text-muted); line-height:1.8;">
+        Leading with perspective and understanding the
+        real-world impact behind every legal issue.
+    </p>
+</div>
+
+
+</section>
+
+<!-- CTA -->
+
+<section class="fade-in delay-5"
+         style="padding:90px 20px 130px; text-align:center;">
+
+
+<h2 style="font-size:3rem; margin-bottom:30px;">
+    Welcome to LexNush.
+</h2>
+
+<p style="
+    max-width:800px;
+    margin:auto;
+    color:var(--text-muted);
+    line-height:2;
+    margin-bottom:50px;
+">
+    If you value clarity over chaos, strategy over jargon,
+    and legal insights with an actual heartbeat,
+    you're exactly where you belong.
+</p>
+
+<div style="
+    display:flex;
+    justify-content:center;
+    gap:20px;
+    flex-wrap:wrap;
+">
+
+    <a href="{{ url_for('blogs') }}"
+       style="
+         border:1px solid var(--border-color);
+         padding:16px 32px;
+         text-transform:uppercase;
+         letter-spacing:2px;
+       ">
+        Blogs
+    </a>
+
+    <a href="{{ url_for('contact') }}"
+       style="
+         border:1px solid var(--border-color);
+         padding:16px 32px;
+         text-transform:uppercase;
+         letter-spacing:2px;
+       ">
+        Contact Us
+    </a>
+
+</div>
+
 
 </section>
 

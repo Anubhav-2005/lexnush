@@ -611,3 +611,18 @@ body.loaded #preloader { clip-path: inset(0 0 100% 0); }
         font-size: 1rem;
     }
 }
+@media (max-width: 900px){
+
+```
+.about-founder-grid{
+    grid-template-columns: 1fr !important;
+    gap: 50px !important;
+}
+
+.about-founder-grid img{
+    max-width: 400px;
+    margin: auto;
+}
+```
+
+}
