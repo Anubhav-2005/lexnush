@@ -1,70 +1,84 @@
 {% extends "base.html" %}
 
-{% block title %}Contact{% endblock %}
-
 {% block content %}
-
-<section class="contact-hero">
-    <h1 class="fade-in">Start The <span class="gold-text">DIALOGUE.</span></h1>
-    
+<section class="page-hero">
+    <h1 class="page-title fade-in">Start The <span class="gold-text">Dialogue.</span></h1>
     <p class="fade-in delay-1">
         Whether you have a legal perspective to share, a proposal for collaboration, or a question about our research, we value the conversation.
     </p>
 </section>
 
-<section class="content-grid fade-in delay-2" style="padding-top: 0;">
-    
-    <div class="grid-card">
-        <h3 style="margin-bottom: 15px;">General Inquiries</h3>
-        <p style="color: var(--text-muted); margin-bottom: 25px; min-height: 60px;">
-            For general questions regarding our platform, technical support, or press inquiries.
-        </p>
-        <a href="mailto:adv.anushp@lexnush.com" style="color: var(--accent); font-weight: 500; font-size: 1.05rem; text-decoration: none; border-bottom: 1px solid rgba(212, 175, 55, 0.3); padding-bottom: 2px; transition: all 0.3s;">
-            adv.anushp@lexnush.com &rarr;
-        </a>
+<section class="section section-wide section-compact">
+    <div class="content-grid fade-in delay-2">
+        <article class="contact-card stack-sm">
+            <h2 class="card-title">General Inquiries</h2>
+            <p>For general questions regarding our platform, technical support, or press inquiries.</p>
+            <a href="mailto:adv.anushp@lexnush.com" class="contact-link">adv.anushp@lexnush.com &rarr;</a>
+        </article>
+
+        <article class="contact-card stack-sm">
+            <h2 class="card-title">Editorial Desk</h2>
+            <p>Pitch an op-ed, submit a legal essay, or request a correction. We review submissions on a rolling basis.</p>
+            <a href="mailto:editor@lexnush.com" class="contact-link">editor@lexnush.com &rarr;</a>
+        </article>
+
+        <article class="contact-card stack-sm">
+            <h2 class="card-title">Social Presence</h2>
+            <p>Follow LexNush on LinkedIn for editorial updates, legal commentary, institutional announcements, and perspectives shaping contemporary legal discourse.</p>
+            <a href="https://www.linkedin.com/company/thelexnush/posts/?feedView=all" class="contact-link" rel="noopener noreferrer">LinkedIn &nearr;</a>
+        </article>
     </div>
-
-    <div class="grid-card">
-        <h3 style="margin-bottom: 15px;">Editorial Desk</h3>
-        <p style="color: var(--text-muted); margin-bottom: 25px; min-height: 60px;">
-            Pitch an op-ed, submit a legal essay, or request a correction. We review submissions on a rolling basis.
-        </p>
-        <a href="mailto:editor@lexnush.com" style="color: var(--accent); font-weight: 500; font-size: 1.05rem; text-decoration: none; border-bottom: 1px solid rgba(212, 175, 55, 0.3); padding-bottom: 2px; transition: all 0.3s;">
-            editor@lexnush.com &rarr;
-        </a>
-    </div>
-
-    <div class="grid-card">
-        <div class="contact-card">
-    <h3 style="margin-bottom: 15px;">Social Presence</h3>
-
-    <p style="color: var(--text-muted); margin-bottom: 25px; min-height: 60px;">
-        Follow LexNush on LinkedIn for editorial updates, legal commentary,
-        institutional announcements, and perspectives shaping contemporary legal discourse.
-    </p>
-
-    <a  href="https://www.linkedin.com/company/thelexnush/posts/?feedView=all" style="color: var(--accent); font-weight: 500; font-size: 1.05rem; text-decoration: none; border-bottom: 1px solid rgba(212, 175, 55, 0.3); padding-bottom: 2px; transition: all 0.3s;">
-            
-      
-        LINKEDIN ↗
-    </a>
-</div>
-    </div>
-
 </section>
 
-<section class="guidelines-section fade-in delay-3">
-    <div class="guidelines-box">
-        <h4>Submission Guidelines</h4>
-        
+<section class="section section-compact">
+    <div class="contact-form-card fade-in delay-3">
+        <div class="stack-md">
+            <span class="section-kicker">Contact Form</span>
+            <h2 class="section-title">Send a considered note.</h2>
+            <p>Use this form for editorial pitches, collaboration ideas, correction requests, or thoughtful questions.</p>
+
+            <form method="post" action="{{ url_for('main.contact') }}" class="form" novalidate>
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+
+                <div class="form-row">
+                    <label for="name">Name</label>
+                    <input id="name" name="name" type="text" value="{{ form_data.get('name', '') }}" autocomplete="name" required>
+                    {% if errors.get('name') %}<span class="form-error">{{ errors.name }}</span>{% endif %}
+                </div>
+
+                <div class="form-row">
+                    <label for="email">Email</label>
+                    <input id="email" name="email" type="email" value="{{ form_data.get('email', '') }}" autocomplete="email" required>
+                    {% if errors.get('email') %}<span class="form-error">{{ errors.email }}</span>{% endif %}
+                </div>
+
+                <div class="form-row">
+                    <label for="topic">Topic</label>
+                    <input id="topic" name="topic" type="text" value="{{ form_data.get('topic', '') }}" required>
+                    {% if errors.get('topic') %}<span class="form-error">{{ errors.topic }}</span>{% endif %}
+                </div>
+
+                <div class="form-row">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" rows="6" required>{{ form_data.get('message', '') }}</textarea>
+                    {% if errors.get('message') %}<span class="form-error">{{ errors.message }}</span>{% endif %}
+                </div>
+
+                <button type="submit" class="primary-button">Submit Inquiry</button>
+            </form>
+        </div>
+    </div>
+</section>
+
+<section class="section section-compact">
+    <aside class="guidelines-box fade-in delay-4">
+        <h2>Submission Guidelines</h2>
         <p>
-            <strong>Context Matter:</strong> We prioritize pieces that sit at the intersection of law, policy, and human experience. We avoid purely academic jargon in favor of clear, analytical prose.
+            <strong>Context Matters:</strong> We prioritize pieces that sit at the intersection of law, policy, and human experience. We avoid purely academic jargon in favor of clear, analytical prose.
         </p>
-        
         <p>
             <strong>Response Time:</strong> Due to the volume of inquiries, we aim to respond to substantive proposals within 3-5 business days. Please note that we do not accept unsolicited promotional content.
         </p>
-    </div>
+    </aside>
 </section>
-
 {% endblock %}

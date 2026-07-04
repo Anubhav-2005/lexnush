@@ -2,3 +2,12 @@ __pycache__/
 build/
 *.pyc
 .env
+.env.*
+!.env.example
+.venv/
+.DS_Store
+static/.DS_Store
+instance/
+*.sqlite
+*.sqlite3
+.pytest_cache/

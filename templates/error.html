@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section error-page fade-in">
+    <div class="error-page-inner">
+        <span class="section-kicker">Something Needs Attention</span>
+        <h1>{{ error.code }}</h1>
+        <p>{{ error.description or "The request could not be completed." }}</p>
+        <a href="{{ url_for('main.home') }}" class="outline-link">Return Home</a>
+    </div>
+</section>
+{% endblock %}

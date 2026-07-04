@@ -1,38 +1,28 @@
 {% extends "base.html" %}
 
-{% block title %}LexNush | Law With A Pulse{% endblock %}
-
 {% block content %}
-<section class="hero-section">
-    
-    <div class="hero-logo-container">
-        <img src="{{ url_for('static', filename='logo.png') }}" alt="LexNush"" alt="LexNush Masthead" class="hero-logo">
-    </div>
-
-    <h1 class="fade-in delay-1">Law With A <span class="gold-text">PULSE</span></h1>
-    
-    <p class="fade-in delay-2" style="max-width: 500px; margin: 0 auto;">
-        Insightful legal writing, policy conversations, and critical thinking 
-        shaping the future of law.
+<section class="section home-hero">
+    <img src="{{ url_for('static', filename='logo.png') }}" alt="LexNush masthead" class="hero-logo" width="320" height="160">
+    <h1 class="display-title fade-in delay-1">Law With A <span class="gold-text">Pulse</span></h1>
+    <p class="hero-copy fade-in delay-2">
+        Insightful legal writing, policy conversations, and critical thinking shaping the future of law.
     </p>
-
-    <div class="fade-in delay-2" style="margin-top: 40px;">
-        <a href="{{ url_for('about') }}" style="border-bottom: 1px solid var(--accent); padding-bottom: 5px; font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase;">
-            Read Our Manifesto
-        </a>
+    <div class="hero-actions fade-in delay-3">
+        <a href="{{ url_for('main.about') }}" class="text-link">Read Our Manifesto</a>
     </div>
 </section>
 
-<section class="content-grid">
-    <div class="grid-card fade-in delay-2" style="grid-column: 1 / -1; text-align: center;">
-        <h3>Coming Soon</h3>
-        <p>
-            We are curating our first series of essays on Constitutional Morality 
-            and the intersection of AI & Justice.
-        </p>
-        <span style="font-size: 0.8rem; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; margin-top: 20px; display: block;">
-            Stay Tuned
-        </span>
+<section class="section section-wide section-compact">
+    <div class="content-grid">
+        <article class="grid-card full-span centered fade-in">
+            <div class="stack-sm">
+                <h2 class="card-title">Coming Soon</h2>
+                <p class="muted-copy">
+                    We are curating our first series of essays on constitutional morality and the intersection of AI and justice.
+                </p>
+                <span class="coming-soon-note">Stay Tuned</span>
+            </div>
+        </article>
     </div>
 </section>
 {% endblock %}

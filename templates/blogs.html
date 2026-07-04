@@ -1,61 +1,46 @@
 {% extends "base.html" %}
 
-{% block title %}The Journal{% endblock %}
-
 {% block content %}
-
-<section class="blog-hero">
-    <h1 class="fade-in">House of  <span class="gold-text">RIGHTS.</span></h1>
-    
+<section class="page-hero">
+    <h1 class="page-title fade-in">House of <span class="gold-text">Rights.</span></h1>
     <p class="fade-in delay-1">
         A curated space for deconstructing complex statutes, analyzing landmark judgments, and questioning the future of Indian jurisprudence.
     </p>
 </section>
 
-<section class="content-grid fade-in delay-2" style="padding-top: 0;">
-    
-    {% for post in posts %}
-    <div class="blog-card" data-tilt>
-        
-        <div style="border-bottom: 1px solid var(--border-color); padding-bottom: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-size: 0.75rem; color: var(--accent); letter-spacing: 1.5px; text-transform: uppercase; font-weight: 600;">
-                {{ post.category }}
-            </span>
-            <span style="font-size: 0.75rem; color: var(--text-muted); font-family: 'Inter', sans-serif;">
-                {{ post.date }} • {{ post.read_time }}
-            </span>
+<section class="section section-wide section-compact">
+    <div class="content-grid fade-in delay-2">
+        {% for post in posts %}
+            <article class="blog-card stack-md">
+                <div class="blog-card-header">
+                    <span class="card-meta-label">{{ post.category }}</span>
+                    <span class="card-meta">{{ post.date }} &bull; {{ post.read_time }}</span>
+                </div>
+                <h2 class="card-title">{{ post.title }}</h2>
+                <p>{{ post.summary }}</p>
+                <a href="{{ url_for('main.post_detail', slug=post.slug) }}" class="text-link">Read Analysis</a>
+            </article>
+        {% else %}
+            <article class="grid-card full-span centered stack-sm">
+                <h2 class="card-title">No entries found.</h2>
+                <p class="muted-copy">The archives are currently being updated.</p>
+            </article>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="section section-compact">
+    <div class="subscription-box fade-in delay-3">
+        <div class="stack-md">
+            <h2 class="section-title">Do not miss the launch.</h2>
+            <p>Join the inner circle. Get notified when the first analysis drops.</p>
+            <form name="journal-signup" method="post" action="{{ url_for('main.newsletter_signup') }}" class="subscription-form">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+                <label for="journal-email" class="sr-only">Email address</label>
+                <input id="journal-email" type="email" name="email" placeholder="Your email address" autocomplete="email" required>
+                <button type="submit" class="primary-button">Notify Me</button>
+            </form>
         </div>
-        
-        <h3>{{ post.title }}</h3>
-        <p style="font-size: 0.95rem; line-height: 1.6; color: var(--text-muted); margin-bottom: 25px;">
-            {{ post.summary }}
-        </p>
-
-        <a href="{{ url_for('post_detail', slug=post.slug) }}" class="read-more-link" ...>
-            Read Analysis
-        </a>
-    </div>
-    {% else %}
-    <div class="grid-card" style="grid-column: 1 / -1; text-align: center;">
-        <h3>No entries found.</h3>
-        <p>The archives are currently being updated.</p>
-    </div>
-    {% endfor %}
-
-</section>
-
-<section class="values-section fade-in delay-3" style="padding-bottom: 100px;">
-    <div class="subscription-box">
-        <h2 style="font-size: 2rem; margin-bottom: 15px;">Don't miss the launch.</h2>
-        <p style="color: var(--text-muted);">
-            Join the inner circle. Get notified when the first analysis drops.
-        </p>
-
-        <form name="journal-signup" method="POST" class="subscription-form">
-            <input type="email" name="email" placeholder="Your Email Address" required>
-            <button type="submit">NOTIFY ME</button>
-        </form>
     </div>
 </section>
-
 {% endblock %}

@@ -1,0 +1,230 @@
+@media (max-width: 1024px) {
+    .content-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .two-column,
+    .founder-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .founder-media {
+        position: static;
+        width: min(100%, 420px);
+        margin-inline: auto;
+    }
+}
+
+@media (max-width: 820px) {
+    :root {
+        --nav-height: 74px;
+    }
+
+    .site-header {
+        padding: 16px 20px;
+    }
+
+    .site-header.is-scrolled {
+        padding-block: 10px;
+    }
+
+    .nav-links {
+        display: none;
+    }
+
+    .mobile-toggle {
+        display: inline-flex;
+    }
+
+    .mobile-menu {
+        position: fixed;
+        inset: 0;
+        z-index: 1500;
+        display: grid;
+        place-items: center;
+        background: var(--color-bg);
+        opacity: 0;
+        pointer-events: none;
+        visibility: hidden;
+        transition: opacity 0.24s ease;
+    }
+
+    .mobile-menu.is-active {
+        opacity: 1;
+        pointer-events: auto;
+        visibility: visible;
+    }
+
+    .mobile-links {
+        display: grid;
+        justify-items: center;
+        gap: var(--space-5);
+    }
+
+    .mobile-links .nav-link {
+        font-family: var(--font-serif);
+        font-size: clamp(1.8rem, 7vw, 2.6rem);
+        text-transform: none;
+        letter-spacing: 0;
+    }
+
+    .page-hero,
+    .article-hero {
+        padding-top: 122px;
+    }
+
+    .contact-card p {
+        min-height: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .section,
+    .section-narrow,
+    .section-wide,
+    .page-hero,
+    .article-hero,
+    .article-container {
+        width: min(100% - 32px, var(--container-lg));
+    }
+
+    .content-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .home-hero {
+        min-height: 82vh;
+        padding-top: 118px;
+    }
+
+    .display-title {
+        font-size: clamp(2.55rem, 14vw, 4rem);
+        line-height: 1.04;
+    }
+
+    .page-title {
+        font-size: clamp(2.35rem, 11vw, 3.8rem);
+    }
+
+    .subscription-form {
+        grid-template-columns: 1fr;
+    }
+
+    .primary-button,
+    .outline-button,
+    .outline-link {
+        width: 100%;
+    }
+
+    .flash-stack {
+        left: 16px;
+        right: 16px;
+        width: auto;
+    }
+
+    .blog-card-header,
+    .article-meta {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .article-meta {
+        align-items: center;
+        gap: var(--space-2);
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        font-size: 15px;
+    }
+
+    .section,
+    .section-narrow,
+    .section-wide,
+    .page-hero,
+    .article-hero,
+    .article-container {
+        width: min(100% - 28px, var(--container-lg));
+    }
+
+    .nav-logo {
+        height: 36px;
+    }
+
+    .nav-actions {
+        gap: var(--space-1);
+    }
+
+    .icon-button,
+    .mobile-toggle,
+    #theme-toggle {
+        min-width: 42px;
+        min-height: 42px;
+    }
+
+    .grid-card,
+    .blog-card,
+    .contact-card,
+    .subscription-box,
+    .contact-form-card,
+    .guidelines-box,
+    .coming-soon-card {
+        padding: 24px;
+    }
+
+    .hero-logo {
+        height: 88px;
+    }
+
+    .modal-content {
+        padding: 24px;
+    }
+
+    .search-overlay {
+        padding-top: 92px;
+    }
+
+    .back-to-top {
+        right: 16px;
+        bottom: 16px;
+    }
+}
+
+@media (max-width: 390px) {
+    .section,
+    .section-narrow,
+    .section-wide,
+    .page-hero,
+    .article-hero,
+    .article-container {
+        width: min(100% - 24px, var(--container-lg));
+    }
+
+    .page-title,
+    .display-title,
+    .article-title {
+        word-break: normal;
+        hyphens: auto;
+    }
+
+    .grid-card,
+    .blog-card,
+    .contact-card,
+    .subscription-box,
+    .contact-form-card,
+    .guidelines-box,
+    .coming-soon-card {
+        padding: 20px;
+    }
+}
+
+@media (min-width: 1440px) {
+    .site-header {
+        padding-inline: 72px;
+    }
+
+    .home-hero {
+        min-height: 88vh;
+    }
+}

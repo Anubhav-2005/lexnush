@@ -1,215 +1,254 @@
-document.addEventListener("DOMContentLoaded", () => {
-    
-    // ================= 1. UI VARIABLES =================
-    const navbar = document.querySelector('.navbar');
-    const mobileToggle = document.querySelector('.mobile-toggle');
-    const mobileOverlay = document.querySelector('.mobile-menu-overlay');
-    const backToTopBtn = document.getElementById('back-to-top');
+(() => {
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    // Search Variables
-    const searchTrigger = document.getElementById('search-trigger');
-    const searchOverlay = document.getElementById('search-overlay');
-    const searchInput = document.getElementById('search-input');
-    const closeSearch = document.getElementById('close-search');
-    const resultsContainer = document.getElementById('search-results');
+    const qs = (selector, scope = document) => scope.querySelector(selector);
+    const qsa = (selector, scope = document) => Array.from(scope.querySelectorAll(selector));
 
-    // ================= 2. PRELOADER & FADE IN =================
-    const preloader = document.getElementById('preloader');
-    const loadingBar = document.querySelector('.loading-bar');
-    
-    setTimeout(() => { 
-        if(loadingBar) loadingBar.style.width = "100%"; 
-    }, 50);
+    function setPageLocked(isLocked) {
+        document.body.classList.toggle("no-scroll", isLocked);
+    }
 
-    setTimeout(() => { 
-        if(preloader) {
-            preloader.style.opacity = "0"; 
-            setTimeout(() => preloader.remove(), 500);
-        }
-    }, 800);
+    function initPreloader() {
+        const preloader = qs("#preloader");
+        if (!preloader) return;
 
-    // ================= 3. NAVBAR SCROLL EFFECT =================
-    window.addEventListener('scroll', () => {
-        navbar.classList.toggle('scrolled', window.scrollY > 50);
-    });
+        window.setTimeout(() => {
+            preloader.classList.add("is-hidden");
+            window.setTimeout(() => preloader.remove(), 450);
+        }, prefersReducedMotion ? 0 : 650);
+    }
 
-    // ================= 4. MOBILE MENU LOGIC =================
-    if (mobileToggle) {
-        mobileToggle.addEventListener('click', () => {
-            const isActive = mobileOverlay.classList.toggle('active');
-            mobileToggle.classList.toggle('active'); // Animate the hamburger
-            document.body.style.overflow = isActive ? 'hidden' : '';
+    function initNavbar() {
+        const navbar = qs("[data-navbar]");
+        if (!navbar) return;
+
+        const sync = () => navbar.classList.toggle("is-scrolled", window.scrollY > 24);
+        sync();
+        window.addEventListener("scroll", sync, { passive: true });
+    }
+
+    function initMobileMenu() {
+        const toggle = qs(".mobile-toggle");
+        const menu = qs("#mobile-menu");
+        if (!toggle || !menu) return;
+
+        const setOpen = (isOpen) => {
+            toggle.classList.toggle("is-active", isOpen);
+            toggle.setAttribute("aria-expanded", String(isOpen));
+            toggle.setAttribute("aria-label", isOpen ? "Close menu" : "Open menu");
+            menu.classList.toggle("is-active", isOpen);
+            menu.setAttribute("aria-hidden", String(!isOpen));
+            setPageLocked(isOpen);
+        };
+
+        toggle.addEventListener("click", () => setOpen(!menu.classList.contains("is-active")));
+        qsa(".mobile-links a", menu).forEach((link) => link.addEventListener("click", () => setOpen(false)));
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape" && menu.classList.contains("is-active")) setOpen(false);
         });
-        
-        // Close menu when clicking any link
-        document.querySelectorAll('.mobile-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileOverlay.classList.remove('active');
-                mobileToggle.classList.remove('active');
-                document.body.style.overflow = '';
+    }
+
+    function initTheme() {
+        const toggle = qs("#theme-toggle");
+        if (!toggle) return;
+
+        toggle.addEventListener("click", () => {
+            const currentTheme = document.documentElement.getAttribute("data-theme");
+            const nextTheme = currentTheme === "dark" ? "light" : "dark";
+            document.documentElement.setAttribute("data-theme", nextTheme);
+            localStorage.setItem("theme", nextTheme);
+        });
+    }
+
+    function initBackToTop() {
+        const button = qs("#back-to-top");
+        if (!button) return;
+
+        const sync = () => button.classList.toggle("is-visible", window.scrollY > 360);
+        sync();
+        window.addEventListener("scroll", sync, { passive: true });
+        button.addEventListener("click", () => window.scrollTo({ top: 0, behavior: prefersReducedMotion ? "auto" : "smooth" }));
+    }
+
+    function initDisclaimer() {
+        const modal = qs("#disclaimer-modal");
+        const acceptButton = qs("#accept-btn");
+        if (!modal || !acceptButton) return;
+
+        const setOpen = (isOpen) => {
+            modal.classList.toggle("is-visible", isOpen);
+            setPageLocked(isOpen);
+        };
+
+        if (!sessionStorage.getItem("lexnush_disclaimer_accepted")) {
+            window.setTimeout(() => setOpen(true), prefersReducedMotion ? 0 : 900);
+        }
+
+        acceptButton.addEventListener("click", () => {
+            sessionStorage.setItem("lexnush_disclaimer_accepted", "true");
+            setOpen(false);
+        });
+    }
+
+    function initFadeIns() {
+        const elements = qsa(".fade-in");
+        if (!elements.length) return;
+
+        if (prefersReducedMotion || !("IntersectionObserver" in window)) {
+            elements.forEach((element) => element.classList.add("is-visible"));
+            return;
+        }
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("is-visible");
+                        observer.unobserve(entry.target);
+                    }
+                });
+            },
+            { threshold: 0.12 }
+        );
+
+        elements.forEach((element) => observer.observe(element));
+    }
+
+    function initCopyLinks() {
+        qsa("[data-copy-link]").forEach((button) => {
+            button.addEventListener("click", async () => {
+                const feedback = qs(".copy-feedback", button.closest(".article-share") || document);
+                try {
+                    await navigator.clipboard.writeText(window.location.href);
+                    if (feedback) feedback.textContent = "Link copied.";
+                } catch {
+                    if (feedback) feedback.textContent = "Copy failed. Please copy the browser address.";
+                }
             });
         });
     }
 
-    // ================= 5. THEME SWITCHER =================
-    const themeToggle = document.getElementById('theme-toggle');
-    const htmlElement = document.documentElement;
-    const iconSun = document.querySelector('.icon.sun');
-    const iconMoon = document.querySelector('.icon.moon');
-
-    function updateThemeIcons(theme) {
-        if (!iconSun || !iconMoon) return;
-        const isLight = theme === 'light';
-        
-        iconSun.style.opacity = isLight ? '1' : '0';
-        iconSun.style.transform = isLight ? 'translate(-50%, -50%) rotate(0deg)' : 'translate(-50%, -50%) rotate(-90deg)';
-        
-        iconMoon.style.opacity = isLight ? '0' : '1';
-        iconMoon.style.transform = isLight ? 'translate(-50%, -50%) rotate(90deg)' : 'translate(-50%, -50%) rotate(0deg)';
+    function createSearchState(className, text) {
+        const element = document.createElement("div");
+        element.className = className;
+        element.textContent = text;
+        return element;
     }
 
-    // Initialize Theme
-    const savedTheme = localStorage.getItem('theme') || 'dark';
-    htmlElement.setAttribute('data-theme', savedTheme);
-    updateThemeIcons(savedTheme);
+    function highlightedText(text, query) {
+        const fragment = document.createDocumentFragment();
+        const lowerText = text.toLowerCase();
+        const lowerQuery = query.toLowerCase();
+        const start = lowerText.indexOf(lowerQuery);
 
-    if (themeToggle) {
-        themeToggle.addEventListener('click', () => {
-            const currentTheme = htmlElement.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            
-            htmlElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            updateThemeIcons(newTheme);
-        });
+        if (start === -1 || !query) {
+            fragment.append(document.createTextNode(text));
+            return fragment;
+        }
+
+        fragment.append(document.createTextNode(text.slice(0, start)));
+        const mark = document.createElement("mark");
+        mark.textContent = text.slice(start, start + query.length);
+        fragment.append(mark, document.createTextNode(text.slice(start + query.length)));
+        return fragment;
     }
 
-    // ================= 6. BACK TO TOP BUTTON =================
-    if (backToTopBtn) {
-        window.addEventListener('scroll', () => {
-            backToTopBtn.classList.toggle('visible', window.scrollY > 300);
-        });
-        backToTopBtn.addEventListener('click', () => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-    }
+    function initSearch() {
+        const trigger = qs("#search-trigger");
+        const overlay = qs("#search-overlay");
+        const input = qs("#search-input");
+        const closeButton = qs("#close-search");
+        const results = qs("#search-results");
+        if (!trigger || !overlay || !input || !closeButton || !results) return;
 
-    // ================= 7. DISCLAIMER MODAL =================
-    const modal = document.getElementById('disclaimer-modal');
-    const acceptBtn = document.getElementById('accept-btn');
-    const hasAccepted = sessionStorage.getItem('lexnush_disclaimer_accepted');
+        let debounceTimer;
+        let abortController;
 
-    if (!hasAccepted && modal) {
-        setTimeout(() => {
-            modal.classList.add('visible');
-            document.body.style.overflow = 'hidden';
-        }, 1500);
-    }
-
-    if (acceptBtn) {
-        acceptBtn.addEventListener('click', () => {
-            if(modal) modal.classList.remove('visible');
-            document.body.style.overflow = '';
-            sessionStorage.setItem('lexnush_disclaimer_accepted', 'true');
-        });
-    }
-
-    // ================= 8. FADE ANIMATIONS =================
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
+        const setOpen = (isOpen) => {
+            overlay.classList.toggle("is-active", isOpen);
+            overlay.setAttribute("aria-hidden", String(!isOpen));
+            setPageLocked(isOpen);
+            if (isOpen) {
+                window.setTimeout(() => input.focus(), 80);
+            } else {
+                input.value = "";
+                results.replaceChildren();
+                if (abortController) abortController.abort();
             }
-        });
-    }, { threshold: 0.1 });
+        };
 
-    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-    
-    // ================= 9. 3D TILT INIT =================
-    if (typeof VanillaTilt !== 'undefined') {
-        VanillaTilt.init(document.querySelectorAll("[data-tilt]"), {
-            max: 5, speed: 400, glare: true, "max-glare": 0.2,
-        });
-    }
-
-    // ================= 10. SPOTLIGHT SEARCH (THE FIX) =================
-    function toggleSearch(show) {
-        if (!searchOverlay) return; // Safety Check
-        
-        if (show) {
-            searchOverlay.classList.add('active');
-            setTimeout(() => { if(searchInput) searchInput.focus(); }, 100);
-            document.body.style.overflow = 'hidden';
-        } else {
-            searchOverlay.classList.remove('active');
-            document.body.style.overflow = '';
-            if(searchInput) searchInput.value = ''; 
-            if(resultsContainer) resultsContainer.innerHTML = ''; 
-        }
-    }
-
-    // Event Listeners for Search
-    if(searchTrigger) {
-        searchTrigger.addEventListener('click', (e) => {
-            e.preventDefault(); // Stop any default button behavior
-            toggleSearch(true);
-        });
-    }
-
-    if(closeSearch) {
-        closeSearch.addEventListener('click', () => toggleSearch(false));
-    }
-
-    if(searchOverlay) {
-        searchOverlay.addEventListener('click', (e) => {
-            if (e.target === searchOverlay) toggleSearch(false);
-        });
-    }
-
-    // Keyboard Shortcuts (Cmd+K or Esc)
-    document.addEventListener('keydown', (e) => {
-        if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-            e.preventDefault();
-            toggleSearch(true);
-        }
-        if (e.key === 'Escape' && searchOverlay && searchOverlay.classList.contains('active')) {
-            toggleSearch(false);
-        }
-    });
-
-    // Live Search Logic (Debounced)
-    let debounceTimer;
-    if(searchInput) {
-        searchInput.addEventListener('input', (e) => {
-            clearTimeout(debounceTimer);
-            const query = e.target.value.trim();
-
-            if (query.length === 0) {
-                if(resultsContainer) resultsContainer.innerHTML = '';
+        const renderResults = (items, query) => {
+            results.replaceChildren();
+            if (!items.length) {
+                results.append(createSearchState("search-empty", "No results found."));
                 return;
             }
 
-            debounceTimer = setTimeout(() => {
-                fetch(`/api/search?q=${encodeURIComponent(query)}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (!resultsContainer) return;
-                        resultsContainer.innerHTML = '';
-                        
-                        if (data.length === 0) {
-                            resultsContainer.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--text-muted);">No results found.</div>';
-                        } else {
-                            data.forEach(item => {
-                                const el = document.createElement('a');
-                                el.className = 'search-item';
-                                el.href = item.url;
-                                el.innerHTML = `<span>${item.type}</span><strong>${item.title}</strong>`;
-                                resultsContainer.appendChild(el);
-                            });
-                        }
-                    })
-                    .catch(err => console.error("Search API Error:", err));
-            }, 300);
+            items.forEach((item) => {
+                const link = document.createElement("a");
+                const type = document.createElement("span");
+                const title = document.createElement("strong");
+                const summary = document.createElement("p");
+
+                link.className = "search-item";
+                link.href = item.url;
+                type.textContent = item.type;
+                title.append(highlightedText(item.title, query));
+                summary.textContent = item.summary || "";
+                link.append(type, title, summary);
+                results.append(link);
+            });
+        };
+
+        trigger.addEventListener("click", () => setOpen(true));
+        closeButton.addEventListener("click", () => setOpen(false));
+        overlay.addEventListener("click", (event) => {
+            if (event.target === overlay) setOpen(false);
+        });
+
+        document.addEventListener("keydown", (event) => {
+            if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+                event.preventDefault();
+                setOpen(true);
+            }
+            if (event.key === "Escape" && overlay.classList.contains("is-active")) setOpen(false);
+        });
+
+        input.addEventListener("input", () => {
+            window.clearTimeout(debounceTimer);
+            const query = input.value.trim();
+
+            if (abortController) abortController.abort();
+            if (!query) {
+                results.replaceChildren();
+                return;
+            }
+
+            results.replaceChildren(createSearchState("search-loading", "Searching..."));
+            debounceTimer = window.setTimeout(async () => {
+                abortController = new AbortController();
+                try {
+                    const response = await fetch(`/api/search?q=${encodeURIComponent(query)}`, { signal: abortController.signal });
+                    if (!response.ok) throw new Error(`Search failed with ${response.status}`);
+                    renderResults(await response.json(), query);
+                } catch (error) {
+                    if (error.name !== "AbortError") {
+                        results.replaceChildren(createSearchState("search-empty", "Search is temporarily unavailable."));
+                    }
+                }
+            }, 220);
         });
     }
-});
+
+    document.addEventListener("DOMContentLoaded", () => {
+        initPreloader();
+        initNavbar();
+        initMobileMenu();
+        initTheme();
+        initBackToTop();
+        initDisclaimer();
+        initFadeIns();
+        initCopyLinks();
+        initSearch();
+    });
+})();

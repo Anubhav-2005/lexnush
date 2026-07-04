@@ -1,0 +1,189 @@
+body {
+    background:
+        radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08), transparent 32rem),
+        linear-gradient(180deg, var(--color-bg), var(--color-bg-soft));
+    min-height: 100vh;
+    transition: background-color 0.35s var(--ease-standard), color 0.35s var(--ease-standard);
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.045;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 240 240' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
+}
+
+.site-shell {
+    min-height: 100vh;
+}
+
+.site-main {
+    min-height: 70vh;
+}
+
+.site-header {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    padding: 24px clamp(16px, 5vw, 72px);
+    transition: padding 0.28s var(--ease-standard), background 0.28s var(--ease-standard), border-color 0.28s var(--ease-standard);
+}
+
+.site-header.is-scrolled {
+    padding-block: 14px;
+    background: color-mix(in srgb, var(--color-bg) 88%, transparent);
+    border-bottom: 1px solid var(--color-border);
+    backdrop-filter: blur(18px);
+}
+
+.nav-container {
+    width: min(100%, var(--container-xl));
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-5);
+}
+
+.logo-link {
+    display: inline-flex;
+    align-items: center;
+    min-width: 44px;
+    min-height: 44px;
+}
+
+.nav-logo {
+    width: auto;
+    height: 44px;
+    mix-blend-mode: screen;
+}
+
+[data-theme="light"] .nav-logo,
+[data-theme="light"] .hero-logo,
+[data-theme="light"] .preloader-logo {
+    filter: invert(1);
+    mix-blend-mode: multiply;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: clamp(20px, 3vw, 40px);
+}
+
+.nav-link {
+    position: relative;
+    color: var(--color-muted);
+    font-size: 0.78rem;
+    font-weight: 650;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    transition: color 0.2s ease;
+}
+
+.nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 7px;
+    height: 1px;
+    background: var(--color-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.24s var(--ease-standard);
+}
+
+.nav-link:hover,
+.nav-link.is-active {
+    color: var(--color-text);
+}
+
+.nav-link:hover::after,
+.nav-link.is-active::after {
+    transform: scaleX(1);
+}
+
+.nav-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--space-3);
+}
+
+.mobile-menu {
+    display: none;
+    visibility: hidden;
+}
+
+.section {
+    width: min(100% - 40px, var(--container-lg));
+    margin-inline: auto;
+    padding-block: clamp(64px, 9vw, 120px);
+}
+
+.section-narrow {
+    width: min(100% - 40px, var(--container-sm));
+}
+
+.section-wide {
+    width: min(100% - 40px, var(--container-xl));
+}
+
+.section-compact {
+    padding-block: clamp(36px, 6vw, 80px);
+}
+
+.page-hero {
+    width: min(100% - 40px, 920px);
+    margin-inline: auto;
+    padding-top: clamp(140px, 15vw, 190px);
+    padding-bottom: clamp(48px, 7vw, 84px);
+    text-align: center;
+}
+
+.page-hero p {
+    width: min(100%, 720px);
+    margin-inline: auto;
+    color: var(--color-muted);
+    font-size: clamp(1rem, 1.7vw, 1.15rem);
+    line-height: 1.8;
+}
+
+.content-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(18px, 2.6vw, 30px);
+}
+
+.two-column {
+    display: grid;
+    grid-template-columns: minmax(0, 1.18fr) minmax(280px, 0.82fr);
+    gap: clamp(44px, 7vw, 86px);
+    align-items: center;
+}
+
+.founder-grid {
+    display: grid;
+    grid-template-columns: minmax(280px, 380px) minmax(0, 1fr);
+    gap: clamp(44px, 7vw, 90px);
+    align-items: start;
+}
+
+.site-footer {
+    border-top: 1px solid var(--color-border);
+    padding: var(--space-12) 20px;
+    text-align: center;
+}
+
+.site-footer p {
+    color: var(--color-subtle);
+    font-size: 0.92rem;
+}
