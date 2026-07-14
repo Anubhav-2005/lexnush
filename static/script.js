@@ -65,7 +65,7 @@
             menu.inert = !isOpen;
             syncPageLock();
             if (isOpen) {
-                window.setTimeout(() => qs("a", menu)?.focus(), 0);
+                window.requestAnimationFrame(() => qs("a", menu)?.focus({ preventScroll: true }));
             } else if (lastFocused instanceof HTMLElement) {
                 lastFocused.focus();
             }
@@ -94,7 +94,11 @@
             const currentTheme = document.documentElement.getAttribute("data-theme");
             const nextTheme = currentTheme === "dark" ? "light" : "dark";
             document.documentElement.setAttribute("data-theme", nextTheme);
-            localStorage.setItem("theme", nextTheme);
+            try {
+                localStorage.setItem("theme", nextTheme);
+            } catch {
+                // Browsers may deny localStorage in strict privacy modes.
+            }
             syncLabel();
         });
     }

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="section section-narrow">
+    <div class="contact-form-card stack-md">
+        <span class="section-kicker">LexNush Operations</span>
+        <h1 class="section-title">Secure sign in</h1>
+        <form method="post" class="form" novalidate>
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+            <div class="form-row"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="username" required></div>
+            <div class="form-row"><label for="password">Password</label><input id="password" name="password" type="password" autocomplete="current-password" required></div>
+            <button class="primary-button" type="submit">Sign in</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

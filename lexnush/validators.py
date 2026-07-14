@@ -2,7 +2,6 @@ import re
 
 from flask import current_app
 
-
 EMAIL_RE = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
 
 

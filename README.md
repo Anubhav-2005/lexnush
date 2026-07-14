@@ -1,105 +1,107 @@
 # LexNush
 
-LexNush is a Flask-powered premium legal publication with editorial pages, searchable posts, newsletter capture, contact submissions, and production security defaults.
+LexNush is a server-rendered Flask publication site with a production-oriented lead and newsletter workflow: PostgreSQL persistence, Redis-backed rate limiting, Resend email outbox delivery, double opt-in subscriptions, and a protected single-operator dashboard.
 
-## Project Structure
+## What is included
 
-```text
-lexnush/
-  __init__.py        # app factory and blueprint registration
-  config.py          # development/testing/production config
-  content.py         # controlled editorial content seed data
-  db.py              # SQLite schema and parameterized persistence
-  rate_limit.py      # lightweight local rate limiting fallback
-  routes.py          # page and API blueprints
-  security.py        # CSRF, CSP, Talisman/WTF fallback security
-  validators.py      # form normalization and validation
-static/
-  css/
-    variables.css
-    reset.css
-    layout.css
-    components.css
-    pages.css
-    responsive.css
-  script.js
-  theme.js
-templates/
-tests/
-```
+- Flask app factory, blueprints, server-rendered Jinja pages, search, SEO metadata, robots and sitemap.
+- SQLAlchemy models and Alembic migrations for contacts, newsletters, tokens, email outbox events, and admin audit events.
+- Contact notifications stored in an outbox before delivery is attempted, so a provider failure does not lose the inquiry.
+- Newsletter double opt-in and token-based unsubscribe lifecycle.
+- Argon2-protected admin login at `/admin/login/`; no public registration exists.
+- CSRF, Redis rate limiting, input validation, optional Turnstile, CSP, HSTS in production, trusted-host checks, secure cookies, and structured PII-redacting logging.
+- GitHub Actions checks for tests, Ruff, Bandit, dependency audit, and secret scanning.
 
-## Local Setup
+## Local development
 
-```bash
+```sh
 python3 -m venv .venv
 . .venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env
+set -a; . .env; set +a
 python app.py
 ```
 
-The app runs on `http://localhost:8000` by default.
+Local development uses SQLite and in-memory rate limits by default. Do not use those defaults for real visitor data.
 
-If you want to load `.env` in a shell:
+## Database migrations
 
-```bash
-set -a
-. .env
-set +a
-python app.py
+Use a fresh local database when applying the first migration:
+
+```sh
+flask --app app db upgrade
+flask --app app db current
 ```
 
-## Production Environment
+Development/tests can create their isolated SQLite schema automatically. Production must run `flask --app app db upgrade` against managed PostgreSQL before Gunicorn starts.
 
-Set these variables in production:
+## Admin password
 
-```bash
+Generate an Argon2 password hash without writing the password to shell history:
+
+```sh
+python3 -c "from argon2 import PasswordHasher; import getpass; print(PasswordHasher().hash(getpass.getpass('Admin password: ')))"
+```
+
+Set the result as `ADMIN_PASSWORD_HASH`; set the matching `ADMIN_EMAIL` in the host secret manager. Never create a default admin account or commit a hash for a real password.
+
+## Production environment
+
+Production startup fails closed until these are configured:
+
+```text
 FLASK_ENV=production
-SECRET_KEY=replace-with-a-long-random-secret
-LEXNUSH_DATABASE_PATH=instance/lexnush.sqlite3
-LEXNUSH_TRUSTED_HOSTS=lexnush.com,www.lexnush.com
+SECRET_KEY=<new high-entropy secret>
+DATABASE_URL=<managed PostgreSQL connection string>
+REDIS_URL=<managed Redis/Valkey connection string>
+PUBLIC_BASE_URL=https://your-domain.example
+LEXNUSH_TRUSTED_HOSTS=your-domain.example,www.your-domain.example
 TRUSTED_PROXY_COUNT=1
-PORT=8000
+RESEND_API_KEY=<Resend API key>
+MAIL_FROM=LexNush <hello@your-domain.example>
+CONTACT_RECIPIENT_EMAIL=owner@your-domain.example
+ADMIN_EMAIL=owner@your-domain.example
+ADMIN_PASSWORD_HASH=<Argon2 hash>
+SENTRY_DSN=<Sentry DSN>
 ```
 
-`SECRET_KEY` and `LEXNUSH_TRUSTED_HOSTS` are required in production. Set `TRUSTED_PROXY_COUNT` to the number of proxies that you control in front of the app (use `0` if the app is not behind a proxy). SQLite tables and indexes are created automatically when the app first touches the database.
+Optional bot protection:
 
-## Run In Production
-
-```bash
-gunicorn wsgi:app
+```text
+TURNSTILE_SITE_KEY=<Cloudflare site key>
+TURNSTILE_SECRET_KEY=<Cloudflare secret key>
+TURNSTILE_REQUIRED=true
+DATA_RETENTION_DAYS=365
 ```
 
-Platforms that support a `Procfile` can use the included file directly.
+`TRUSTED_PROXY_COUNT` must match the actual number of trusted proxies in front of the app. Do not copy `1` blindly—verify it with the host’s current documentation.
 
-## Backend Behavior
+## Operational commands
 
-- Public pages are served from the `main` blueprint.
-- `/api/search` is served from the `api` blueprint.
-- Contact submissions are validated server-side and stored in SQLite.
-- Newsletter signups are validated server-side and stored uniquely by email.
-- Search is case-insensitive, debounced client-side, rate-limited server-side, and returns escaped JSON consumed through DOM APIs.
-- `robots.txt`, `sitemap.xml`, canonical URLs, OpenGraph, Twitter cards, and schema microdata are included.
+```sh
+flask --app app retry-email-outbox --limit 100
+flask --app app purge-personal-data --older-than-days 365
+```
 
-## Security Baseline
-
-- `Flask-Talisman` is used when installed for CSP/security headers.
-- `Flask-WTF` CSRF protection is used when installed.
-- A fallback CSRF validator and security-header middleware keep local development safe even before optional extensions are installed.
-- Secure, HttpOnly, SameSite cookies are configured, with secure cookies enabled in production.
-- POST forms and search are rate-limited.
-- Rate limits are persisted in SQLite, so they remain effective across Gunicorn workers and process restarts.
-- Inputs are normalized and validated server-side.
-- Database writes use parameterized SQL.
-- SQLite uses WAL mode, a busy timeout, foreign-key enforcement, and secure deletion for better resilience and privacy.
-- `flask backup-db` uses SQLite's online backup API to create consistent timestamped backups under `instance/backups/`.
-- `flask purge-personal-data --older-than-days 365` supports a scheduled data-retention policy for contact and newsletter records.
-- Trusted-host enforcement, strict form-size limits, CSRF protection, secure cookies, CSP, HSTS in production, and cross-origin isolation headers are enabled.
-- Debug mode is disabled by production config.
-- Branded 400/404/429/500 error pages are registered.
+The first retries failed/pending Resend events. The second permanently removes old personal data, so run it only as part of a reviewed retention policy.
 
 ## Verification
 
-```bash
+```sh
 python -m unittest discover -s tests
+ruff check lexnush tests app.py wsgi.py
+bandit -r lexnush -ll
+pip-audit -r requirements.txt
 ```
+
+## Deployment
+
+`render.yaml` describes a Render web service, PostgreSQL, and private Key Value instance. Follow [DEPLOYMENT_CHECKLIST.md](DEPLOYMENT_CHECKLIST.md) exactly before launch. Run a real contact, newsletter confirmation, admin-login, backup, restore, Sentry, and mobile verification on the deployed domain before accepting public leads.
+
+## Backup, rollback, and recovery
+
+- Use managed PostgreSQL backups and test a restore into a non-production database at least quarterly.
+- Keep a prior Render deploy ready for rollback, but do not roll back database migrations without an explicit migration/recovery plan.
+- A local SQLite backup command exists only for local development; it is not a production backup system.
+- See [SECURITY_OPERATIONS.md](SECURITY_OPERATIONS.md) for the recurring security and incident process.

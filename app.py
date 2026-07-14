@@ -2,7 +2,6 @@ import os
 
 from lexnush import create_app
 
-
 app = create_app()
 
 

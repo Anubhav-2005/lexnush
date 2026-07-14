@@ -30,7 +30,7 @@
         </div>
 
         <aside class="hero-brief fade-in delay-4" aria-label="Featured LexNush analysis">
-            <img src="{{ url_for('static', filename='logo.png') }}" alt="" class="hero-mark" width="96" height="96">
+            <img src="{{ url_for('static', filename='logo.jpg') }}" alt="" class="hero-mark" width="96" height="96">
             <p class="brief-kicker">Featured Analysis</p>
             {% if featured_post %}
                 <h2>{{ featured_post.title }}</h2>
@@ -56,7 +56,7 @@
     </div>
     {% if featured_post %}
         <article class="feature-story fade-in delay-1">
-            <img src="{{ url_for('static', filename='images/lexnush-hero-editorial.png') }}" alt="Legal research materials on a desk" class="feature-story-image" width="1799" height="874">
+            <img src="{{ url_for('static', filename='images/lexnush-hero-editorial-1200.jpg') }}" srcset="{{ url_for('static', filename='images/lexnush-hero-editorial-640.jpg') }} 640w, {{ url_for('static', filename='images/lexnush-hero-editorial-1200.jpg') }} 1200w" sizes="(max-width: 768px) 100vw, 56vw" alt="Legal research materials on a desk" class="feature-story-image" width="1200" height="583" fetchpriority="high">
             <div class="feature-story-copy">
                 <div class="blog-card-header">
                     <span class="card-meta-label">{{ featured_post.category }}</span>
@@ -122,7 +122,7 @@
 
 <section class="section section-wide editorial-mission" aria-labelledby="editorial-mission-title">
     <div class="mission-image fade-in">
-        <img src="{{ url_for('static', filename='images/lexnush-hero-editorial.png') }}" alt="A legal professional reviewing source materials" loading="lazy" width="1799" height="874">
+        <img src="{{ url_for('static', filename='images/lexnush-hero-editorial-1200.jpg') }}" srcset="{{ url_for('static', filename='images/lexnush-hero-editorial-640.jpg') }} 640w, {{ url_for('static', filename='images/lexnush-hero-editorial-1200.jpg') }} 1200w" sizes="(max-width: 768px) 100vw, 50vw" alt="A legal professional reviewing source materials" loading="lazy" width="1200" height="583">
     </div>
     <div class="mission-copy stack-md fade-in delay-1">
         <span class="section-kicker">Editorial Mission</span>
@@ -141,10 +141,12 @@
             <form name="home-signup" method="post" action="{{ url_for('main.newsletter_signup') }}" class="subscription-form">
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
                 <input type="hidden" name="next" value="{{ url_for('main.home') }}">
+                <div class="honeypot" aria-hidden="true"><label for="home-website">Website</label><input id="home-website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
                 <label for="home-email" class="sr-only">Email address</label>
                 <input id="home-email" type="email" name="email" placeholder="Your email address" autocomplete="email" required>
                 <button type="submit" class="primary-button">Join the reader list</button>
             </form>
+            <p class="form-privacy">We will send a confirmation email before subscribing you. See our <a href="{{ url_for('main.privacy') }}">privacy notice</a>.</p>
         </div>
     </div>
 </section>

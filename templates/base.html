@@ -5,28 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% set page_title = meta.title if meta is defined else "LexNush" %}
     {% set page_description = meta.description if meta is defined else "Premium legal insights from LexNush." %}
-    {% set page_image = meta.image if meta is defined and meta.image else url_for('static', filename='images/lexnush-hero-editorial.png', _external=True) %}
+    {% set page_image = meta.image if meta is defined and meta.image else public_base_url ~ url_for('static', filename='images/lexnush-hero-editorial-1200.jpg') %}
     <title>{{ page_title }}</title>
     <meta name="description" content="{{ page_description }}">
-    <link rel="canonical" href="{{ request.base_url }}">
+    <link rel="canonical" href="{{ meta.url if meta is defined and meta.url else public_base_url ~ request.path }}">
 
     <meta property="og:site_name" content="LexNush">
     <meta property="og:title" content="{{ page_title }}">
     <meta property="og:description" content="{{ page_description }}">
     <meta property="og:type" content="{{ meta.type if meta is defined and meta.type else 'website' }}">
-    <meta property="og:url" content="{{ request.base_url }}">
+    <meta property="og:url" content="{{ meta.url if meta is defined and meta.url else public_base_url ~ request.path }}">
     <meta property="og:image" content="{{ page_image }}">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{{ page_title }}">
     <meta name="twitter:description" content="{{ page_description }}">
     <meta name="twitter:image" content="{{ page_image }}">
 
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='logo.png') }}">
+    <link rel="icon" type="image/jpeg" href="{{ url_for('static', filename='logo.jpg') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&display=swap" rel="stylesheet">
 
-    {% set asset_version = "20260715-sec1" %}
+    {% set asset_version = "20260715-prod1" %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/variables.css') }}?v={{ asset_version }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}?v={{ asset_version }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}?v={{ asset_version }}">
@@ -45,17 +45,10 @@
     <a href="#main-content" class="skip-link">Skip to content</a>
 
     <div class="site-shell">
-        <div id="preloader" class="preloader" aria-hidden="true">
-            <div class="preloader-content">
-                <img src="{{ url_for('static', filename='logo.png') }}" alt="" class="preloader-logo">
-                <div class="loading-bar"></div>
-            </div>
-        </div>
-
         <header class="site-header" data-navbar>
             <div class="nav-container">
                 <a href="{{ url_for('main.home') }}" class="logo-link" aria-label="LexNush home">
-                    <img src="{{ url_for('static', filename='logo.png') }}" alt="LexNush" class="nav-logo" width="120" height="44">
+                    <img src="{{ url_for('static', filename='logo.jpg') }}" alt="LexNush" class="nav-logo" width="120" height="44">
                 </a>
 
                 {% set nav_items = [
@@ -67,7 +60,7 @@
                 ] %}
                 <nav class="nav-links" aria-label="Primary navigation">
                     {% for endpoint, label in nav_items %}
-                        <a href="{{ url_for(endpoint) }}" class="nav-link {{ 'is-active' if request.endpoint == endpoint else '' }}">{{ label }}</a>
+                        <a href="{{ url_for(endpoint) }}" class="nav-link {{ 'is-active' if request.endpoint == endpoint else '' }}"{% if request.endpoint == endpoint %} aria-current="page"{% endif %}>{{ label }}</a>
                     {% endfor %}
                 </nav>
 
@@ -93,7 +86,7 @@
         <div id="mobile-menu" class="mobile-menu" aria-hidden="true" inert>
             <nav class="mobile-links" aria-label="Mobile navigation">
                 {% for endpoint, label in nav_items %}
-                    <a href="{{ url_for(endpoint) }}" class="nav-link {{ 'is-active' if request.endpoint == endpoint else '' }}">{{ label }}</a>
+                    <a href="{{ url_for(endpoint) }}" class="nav-link {{ 'is-active' if request.endpoint == endpoint else '' }}"{% if request.endpoint == endpoint %} aria-current="page"{% endif %}>{{ label }}</a>
                 {% endfor %}
             </nav>
         </div>
@@ -116,7 +109,7 @@
             <meta itemprop="name" content="LexNush">
             <div class="footer-inner">
                 <div class="footer-brand">
-                    <img src="{{ url_for('static', filename='logo.png') }}" alt="LexNush" class="footer-logo" width="120" height="44">
+                    <img src="{{ url_for('static', filename='logo.jpg') }}" alt="LexNush" class="footer-logo" width="120" height="44">
                     <p class="footer-tagline">Indian law, explained with clarity and context. Editorial analysis for founders, professionals, and curious readers.</p>
                 </div>
                 <nav class="footer-nav" aria-label="Footer navigation">
@@ -125,12 +118,14 @@
                         <a href="{{ url_for('main.about') }}">About LexNush</a>
                         <a href="{{ url_for('main.blogs') }}">The Journal</a>
                         <a href="{{ url_for('main.interviews') }}">Conversations</a>
+                        <a href="{{ url_for('main.privacy') }}">Privacy</a>
                     </div>
                 </nav>
                 <nav class="footer-nav" aria-label="Footer contact">
                     <span class="footer-nav-title">Connect</span>
                     <div class="footer-nav-links">
                         <a href="{{ url_for('main.contact') }}">Contact</a>
+                        <a href="{{ url_for('main.privacy') }}">Privacy</a>
                         <a href="mailto:editor@lexnush.com">editor@lexnush.com</a>
                         <a href="https://www.linkedin.com/company/thelexnush/posts/?feedView=all" rel="noopener noreferrer">LinkedIn</a>
                     </div>

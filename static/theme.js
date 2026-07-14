@@ -1,4 +1,7 @@
-(function () {
-    const savedTheme = localStorage.getItem("theme") || "dark";
-    document.documentElement.setAttribute("data-theme", savedTheme);
+(() => {
+    try {
+        document.documentElement.setAttribute("data-theme", localStorage.getItem("theme") || "dark");
+    } catch {
+        document.documentElement.setAttribute("data-theme", "dark");
+    }
 })();

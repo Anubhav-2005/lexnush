@@ -38,10 +38,12 @@
             <form name="journal-signup" method="post" action="{{ url_for('main.newsletter_signup') }}" class="subscription-form">
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
                 <input type="hidden" name="next" value="{{ url_for('main.blogs') }}">
+                <div class="honeypot" aria-hidden="true"><label for="journal-website">Website</label><input id="journal-website" name="website" type="text" tabindex="-1" autocomplete="off"></div>
                 <label for="journal-email" class="sr-only">Email address</label>
                 <input id="journal-email" type="email" name="email" placeholder="Your email address" autocomplete="email" required>
                 <button type="submit" class="primary-button">Notify Me</button>
             </form>
+            <p class="form-privacy">We will send a confirmation email before subscribing you. See our <a href="{{ url_for('main.privacy') }}">privacy notice</a>.</p>
         </div>
     </div>
 </section>

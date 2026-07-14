@@ -1,8 +1,7 @@
-from html import unescape
 import math
 import re
+from html import unescape
 from textwrap import dedent
-
 
 HTML_TAG_RE = re.compile(r"<[^>]+>")
 
@@ -81,6 +80,7 @@ BLOG_POSTS = [
 
             <div class="table-scroll">
                 <table>
+                    <caption>Limited situations in which a court may modify an arbitral award</caption>
                     <thead>
                         <tr>
                             <th>The Toolkit</th>
@@ -165,5 +165,9 @@ PAGE_META = {
     "contact": {
         "title": "Contact LexNush",
         "description": "Contact LexNush for editorial pitches, collaboration proposals, corrections, and thoughtful legal dialogue.",
+    },
+    "privacy": {
+        "title": "Privacy | LexNush",
+        "description": "How LexNush handles contact inquiries and newsletter subscriptions.",
     },
 }

@@ -518,6 +518,14 @@
     font-size: 0.9rem;
 }
 
+.article-body caption {
+    padding: 12px 16px;
+    color: var(--color-muted);
+    text-align: left;
+    caption-side: top;
+    font-size: 0.85rem;
+}
+
 .article-body th,
 .article-body td {
     padding: 14px 16px;

@@ -1,8 +1,7 @@
 import secrets
 
+import bleach
 from flask import abort, current_app, request, session
-
-from .rate_limit import is_rate_limited
 
 try:
     from flask_talisman import Talisman
@@ -19,17 +18,24 @@ except ImportError:  # pragma: no cover - exercised only when dependency is inst
 CSP = {
     "default-src": "'self'",
     "base-uri": "'self'",
-    "connect-src": "'self'",
+    "connect-src": ["'self'", "https://challenges.cloudflare.com"],
     "font-src": ["'self'", "https://fonts.gstatic.com"],
     "form-action": "'self'",
     "frame-ancestors": "'none'",
     "img-src": ["'self'", "data:"],
     "media-src": "'none'",
     "object-src": "'none'",
-    "script-src": "'self'",
+    "script-src": ["'self'", "https://challenges.cloudflare.com"],
     "style-src": ["'self'", "https://fonts.googleapis.com"],
+    "frame-src": ["'self'", "https://challenges.cloudflare.com"],
     "worker-src": "'none'",
 }
+
+ARTICLE_TAGS = [
+    "p", "h2", "h3", "strong", "em", "ul", "ol", "li", "a", "blockquote", "br",
+    "div", "table", "thead", "tbody", "tr", "th", "td", "caption",
+]
+ARTICLE_ATTRIBUTES = {"a": ["href", "title", "rel"], "th": ["scope"], "div": ["class"]}
 
 
 def fallback_csrf_token():
@@ -55,24 +61,27 @@ def csp_header_value():
     return "; ".join(parts)
 
 
+def sanitize_article_html(content):
+    """Allow a narrow editorial HTML subset; never trust future CMS input."""
+    return bleach.clean(content, tags=ARTICLE_TAGS, attributes=ARTICLE_ATTRIBUTES, protocols=["https", "http", "mailto"], strip=True)
+
+
 def init_security(app):
-    if CSRFProtect and app.config.get("WTF_CSRF_ENABLED", True):
+    csrf_enabled = app.config.get("WTF_CSRF_ENABLED", True)
+    if csrf_enabled and CSRFProtect:
         CSRFProtect(app)
         app.context_processor(lambda: {"csrf_token": generate_csrf})
-    else:
+    elif csrf_enabled:
         app.context_processor(lambda: {"csrf_token": fallback_csrf_token})
 
         @app.before_request
         def fallback_csrf_protect():
             if request.method == "POST":
                 validate_fallback_csrf()
-
-    @app.before_request
-    def protect_form_posts():
-        if request.method == "POST":
-            limit, window = current_app.config["RATE_LIMIT_FORMS"]
-            if is_rate_limited("form-post", limit=limit, window_seconds=window):
-                abort(429)
+    else:
+        # Tests use this branch to exercise business flows without parsing a
+        # token; production never sets WTF_CSRF_ENABLED to false.
+        app.context_processor(lambda: {"csrf_token": fallback_csrf_token})
 
     if Talisman:
         Talisman(

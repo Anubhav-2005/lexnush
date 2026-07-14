@@ -4,13 +4,18 @@ import click
 from flask import Flask
 from werkzeug.middleware.proxy_fix import ProxyFix
 
+from .admin import admin_bp
+from .auth import init_login
 from .config import get_config
-from .db import backup_database, close_db, ensure_schema, get_db, purge_personal_data
+from .db import backup_database, db, init_database, purge_personal_data
+from .mailer import retry_pending_outbox
+from .observability import init_observability
+from .rate_limit import init_rate_limiting
 from .routes import api_bp, main_bp
 from .security import init_security
 
 
-def create_app(config_name=None):
+def create_app(config_name=None, config_overrides=None):
     project_root = Path(__file__).resolve().parent.parent
     app = Flask(
         __name__,
@@ -21,6 +26,8 @@ def create_app(config_name=None):
     )
     config = get_config(config_name)
     app.config.from_object(config)
+    if config_overrides:
+        app.config.update(config_overrides)
     config.init_app(app)
 
     # Only trust forwarded request data when the deployment explicitly declares
@@ -35,15 +42,25 @@ def create_app(config_name=None):
             x_host=trusted_proxy_count,
         )
 
+    init_database(app)
+    init_rate_limiting(app)
+    init_login(app)
     init_security(app)
-    app.teardown_appcontext(close_db)
+    init_observability(app)
+    app.context_processor(
+        lambda: {
+            "public_base_url": app.config["PUBLIC_BASE_URL"],
+            "turnstile_site_key": app.config.get("TURNSTILE_SITE_KEY", ""),
+        }
+    )
     app.register_blueprint(main_bp)
     app.register_blueprint(api_bp)
+    app.register_blueprint(admin_bp)
 
     @app.cli.command("init-db")
     def init_db_command():
-        ensure_schema(get_db())
-        print("Initialized LexNush database.")
+        db.create_all()
+        print("Initialized LexNush development database.")
 
     @app.cli.command("backup-db")
     def backup_db_command():
@@ -55,5 +72,10 @@ def create_app(config_name=None):
     def purge_personal_data_command(older_than_days):
         contacts, newsletter_signups = purge_personal_data(older_than_days)
         print(f"Purged {contacts} contact submissions and {newsletter_signups} newsletter signups.")
+
+    @app.cli.command("retry-email-outbox")
+    @click.option("--limit", type=click.IntRange(min=1, max=1000), default=100)
+    def retry_email_outbox_command(limit):
+        print(f"Attempted delivery for {retry_pending_outbox(limit)} queued email events.")
 
     return app

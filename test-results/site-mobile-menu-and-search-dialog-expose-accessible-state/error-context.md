@@ -1,0 +1,188 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - link "Skip to content" [ref=e2] [cursor=pointer]:
+    - /url: "#main-content"
+  - generic [ref=e3]:
+    - banner:
+      - generic [ref=e4]:
+        - link "LexNush home" [ref=e5] [cursor=pointer]:
+          - /url: /
+          - img "LexNush" [ref=e6]
+        - generic [ref=e7]:
+          - button "Search LexNush" [ref=e8] [cursor=pointer]:
+            - img [ref=e9]
+          - button "Switch to light theme" [ref=e12] [cursor=pointer]:
+            - img [ref=e13]
+            - img [ref=e16]
+          - button "Close menu" [expanded] [active] [ref=e18] [cursor=pointer]
+    - navigation "Mobile navigation" [ref=e22]:
+      - link "Home" [ref=e23] [cursor=pointer]:
+        - /url: /
+      - link "About LexNush" [ref=e24] [cursor=pointer]:
+        - /url: /about/
+      - link "Journal" [ref=e25] [cursor=pointer]:
+        - /url: /blogs/
+      - link "Conversations" [ref=e26] [cursor=pointer]:
+        - /url: /interviews/
+      - link "Contact" [ref=e27] [cursor=pointer]:
+        - /url: /contact/
+    - main [ref=e28]:
+      - generic [ref=e30]:
+        - generic [ref=e31]:
+          - paragraph [ref=e32]: Premium Legal Intelligence
+          - heading "Indian law, explained with clarity and context." [level=1] [ref=e33]
+          - paragraph [ref=e34]: LexNush turns complex judgments, policy shifts, and legal systems into clear editorial analysis for founders, professionals, students, and curious readers.
+          - generic [ref=e35]:
+            - link "Read The Journal" [ref=e36] [cursor=pointer]:
+              - /url: /blogs/
+            - link "Explore The Manifesto" [ref=e37] [cursor=pointer]:
+              - /url: /about/
+          - generic [ref=e38]:
+            - generic [ref=e39]:
+              - term [ref=e40]: Focus
+              - definition [ref=e41]: Indian Law
+            - generic [ref=e42]:
+              - term [ref=e43]: Format
+              - definition [ref=e44]: Editorial Briefs
+            - generic [ref=e45]:
+              - term [ref=e46]: Promise
+              - definition [ref=e47]: Clarity First
+        - complementary "Featured LexNush analysis" [ref=e48]:
+          - paragraph [ref=e49]: Featured Analysis
+          - heading "Surgery or Autopsy? The Supreme Court's Arbitral Scalpel" [level=2] [ref=e50]
+          - paragraph [ref=e51]: "It is the ultimate legal showdown: does this rescue people from endless litigation loops, or has the court opened the floodgates for judges to rewrite private contracts?"
+          - generic [ref=e52]:
+            - generic [ref=e53]: ADR
+            - generic [ref=e54]: 6 min read
+          - link "Read Analysis" [ref=e55] [cursor=pointer]:
+            - /url: /blogs/surgery-or-autopsy-adr-award-modification
+      - region "A closer read of the legal shifts worth watching." [ref=e56]:
+        - generic [ref=e57]:
+          - generic [ref=e58]: Featured Analysis
+          - heading "A closer read of the legal shifts worth watching." [level=2] [ref=e59]
+        - article [ref=e60]:
+          - img "Legal research materials on a desk" [ref=e61]
+          - generic [ref=e62]:
+            - generic [ref=e63]:
+              - generic [ref=e64]: ADR
+              - generic [ref=e65]: March 2026 • 6 min read
+            - heading "Surgery or Autopsy? The Supreme Court's Arbitral Scalpel" [level=3] [ref=e66]
+            - paragraph [ref=e67]: "It is the ultimate legal showdown: does this rescue people from endless litigation loops, or has the court opened the floodgates for judges to rewrite private contracts?"
+            - link "Read the full analysis" [ref=e68] [cursor=pointer]:
+              - /url: /blogs/surgery-or-autopsy-adr-award-modification
+      - region "Reasoned reporting for consequential questions." [ref=e69]:
+        - generic [ref=e70]:
+          - generic [ref=e71]: Latest Journal
+          - heading "Reasoned reporting for consequential questions." [level=2] [ref=e72]
+        - article [ref=e74]:
+          - generic [ref=e75]:
+            - generic [ref=e76]: ADR
+            - generic [ref=e77]: 6 min read
+          - heading "Surgery or Autopsy? The Supreme Court's Arbitral Scalpel" [level=3] [ref=e78]
+          - paragraph [ref=e79]: "It is the ultimate legal showdown: does this rescue people from endless litigation loops, or has the court opened the floodgates for judges to rewrite private contracts?"
+          - link "Read Analysis" [ref=e80] [cursor=pointer]:
+            - /url: /blogs/surgery-or-autopsy-adr-award-modification
+        - link "Browse the Journal" [ref=e82] [cursor=pointer]:
+          - /url: /blogs/
+      - generic [ref=e83]:
+        - generic [ref=e84]:
+          - generic [ref=e85]: What LexNush Does
+          - heading "Legal insight that respects your time." [level=2] [ref=e86]
+          - paragraph [ref=e87]: "The work is editorial, accessible, and commercially aware: less jargon theater, more judgment, structure, and practical context."
+        - generic [ref=e88]:
+          - article [ref=e89]:
+            - generic [ref=e90]: "01"
+            - heading "Judgment Explainers" [level=2] [ref=e91]
+            - paragraph [ref=e92]: Clear breakdowns of important decisions, why they matter, and what changes after the headline fades.
+          - article [ref=e93]:
+            - generic [ref=e94]: "02"
+            - heading "Policy Context" [level=2] [ref=e95]
+            - paragraph [ref=e96]: Thoughtful legal commentary across regulation, rights, technology, arbitration, and institutional change.
+          - article [ref=e97]:
+            - generic [ref=e98]: "03"
+            - heading "Human Translation" [level=2] [ref=e99]
+            - paragraph [ref=e100]: Law explained without flattening its nuance, designed for readers who need signal instead of noise.
+      - region "Law is public knowledge. It should be legible." [ref=e101]:
+        - img "A legal professional reviewing source materials" [ref=e103]
+        - generic [ref=e104]:
+          - generic [ref=e105]: Editorial Mission
+          - heading "Law is public knowledge. It should be legible." [level=2] [ref=e106]
+          - paragraph [ref=e107]: "LexNush approaches legal writing as a public service: careful with the record, honest about uncertainty, and clear enough to be useful before the next meeting."
+          - link "How we work" [ref=e108] [cursor=pointer]:
+            - /url: /about/
+      - region "A considered legal brief, when there is something worth saying." [ref=e109]:
+        - generic [ref=e111]:
+          - generic [ref=e112]: The LexNush Letter
+          - heading "A considered legal brief, when there is something worth saying." [level=2] [ref=e113]
+          - paragraph [ref=e114]: New analysis, editorial notes, and significant legal developments—delivered without the daily noise.
+          - generic [ref=e115]:
+            - generic [ref=e116]:
+              - text: Website
+              - textbox [ref=e117]
+            - generic [ref=e118]: Email address
+            - textbox "Email address" [ref=e119]:
+              - /placeholder: Your email address
+            - button "Join the reader list" [ref=e120] [cursor=pointer]
+          - paragraph [ref=e121]:
+            - text: We will send a confirmation email before subscribing you. See our
+            - link "privacy notice" [ref=e122] [cursor=pointer]:
+              - /url: /privacy/
+            - text: .
+      - generic [ref=e124]:
+        - generic [ref=e125]: Start Here
+        - heading "Read law like it belongs in the real world." [level=2] [ref=e126]
+        - paragraph [ref=e127]: Begin with the LexNush Journal for legal analysis that is structured, readable, and grounded in the human stakes behind legal change.
+        - generic [ref=e128]:
+          - link "Open The Journal" [ref=e129] [cursor=pointer]:
+            - /url: /blogs/
+          - link "Pitch A Topic" [ref=e130] [cursor=pointer]:
+            - /url: /contact/
+    - contentinfo [ref=e131]:
+      - generic [ref=e132]:
+        - generic [ref=e133]:
+          - img "LexNush" [ref=e134]
+          - paragraph [ref=e135]: Indian law, explained with clarity and context. Editorial analysis for founders, professionals, and curious readers.
+        - navigation "Footer navigation" [ref=e136]:
+          - generic [ref=e137]: Explore
+          - generic [ref=e138]:
+            - link "About LexNush" [ref=e139] [cursor=pointer]:
+              - /url: /about/
+            - link "The Journal" [ref=e140] [cursor=pointer]:
+              - /url: /blogs/
+            - link "Conversations" [ref=e141] [cursor=pointer]:
+              - /url: /interviews/
+            - link "Privacy" [ref=e142] [cursor=pointer]:
+              - /url: /privacy/
+        - navigation "Footer contact" [ref=e143]:
+          - generic [ref=e144]: Connect
+          - generic [ref=e145]:
+            - link "Contact" [ref=e146] [cursor=pointer]:
+              - /url: /contact/
+            - link "Privacy" [ref=e147] [cursor=pointer]:
+              - /url: /privacy/
+            - link "editor@lexnush.com" [ref=e148] [cursor=pointer]:
+              - /url: mailto:editor@lexnush.com
+            - link "LinkedIn" [ref=e149] [cursor=pointer]:
+              - /url: https://www.linkedin.com/company/thelexnush/posts/?feedView=all
+      - generic [ref=e150]:
+        - paragraph [ref=e151]: © 2026 LexNush. Steadily building.
+        - generic [ref=e152]: Information only. Not legal advice.
+  - complementary "Legal Notice" [ref=e153]:
+    - generic [ref=e154]:
+      - heading "Legal Notice" [level=2] [ref=e155]
+      - paragraph [ref=e156]: Information only. Not legal advice or a solicitation for legal services.
+    - button "Dismiss legal notice" [ref=e157] [cursor=pointer]: ×
+  - button "Back to top": ↑
+  - generic:
+    - dialog:
+      - generic: Search LexNush
+      - searchbox
+      - button: ×
+      - generic:
+        - generic:
+          - text: Press
+          - strong: Esc
+          - text: to close
+```

@@ -352,6 +352,21 @@
     font-size: 0.85rem;
 }
 
+.form-privacy {
+    color: var(--color-muted);
+    font-size: 0.82rem;
+    line-height: 1.55;
+}
+
+.honeypot {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    overflow: hidden !important;
+    clip: rect(1px, 1px, 1px, 1px) !important;
+    white-space: nowrap !important;
+}
+
 .subscription-form {
     width: min(100%, 480px);
     margin-inline: auto;

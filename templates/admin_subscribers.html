@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-hero"><span class="eyebrow">Operations</span><h1 class="page-title">Newsletter subscribers</h1></section>
+<section class="section section-wide"><div class="table-scroll"><table><caption>Newsletter subscribers</caption><thead><tr><th scope="col">Email</th><th scope="col">Source</th><th scope="col">Status</th><th scope="col">Created</th></tr></thead><tbody>{% for subscriber in subscribers_page.items %}<tr><td>{{ subscriber.email }}</td><td>{{ subscriber.source }}</td><td>{{ subscriber.status }}</td><td>{{ subscriber.created_at.strftime('%d %b %Y') }}</td></tr>{% else %}<tr><td colspan="4">No subscribers found.</td></tr>{% endfor %}</tbody></table></div></section>
+{% endblock %}

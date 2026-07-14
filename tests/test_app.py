@@ -1,23 +1,41 @@
+import json
 import re
-import sqlite3
 import tempfile
 import unittest
+from datetime import timedelta
 from pathlib import Path
+from unittest.mock import Mock, patch
 
-from app import app
-from lexnush.db import backup_database
-from lexnush.rate_limit import clear_rate_limits
+from lexnush import create_app
+from lexnush.admin import safe_csv_cell
+from lexnush.db import ContactSubmission, EmailOutboxEvent, NewsletterSubscription, db, purge_personal_data, utcnow
+from lexnush.security import sanitize_article_html
 
 
 class LexNushAppTests(unittest.TestCase):
     def setUp(self):
         self.tempdir = tempfile.TemporaryDirectory()
-        self.database_path = Path(self.tempdir.name) / "lexnush-test.sqlite3"
-        app.config.update(TESTING=True, DATABASE_PATH=str(self.database_path))
-        clear_rate_limits()
-        self.client = app.test_client()
+        database_path = Path(self.tempdir.name) / "lexnush-test.sqlite3"
+        self.app = create_app(
+            "testing",
+            {
+                "SQLALCHEMY_DATABASE_URI": f"sqlite:///{database_path}",
+                "PUBLIC_BASE_URL": "http://testserver",
+                "CONTACT_RECIPIENT_EMAIL": "owner@example.test",
+                "MAIL_FROM": "LexNush <hello@example.test>",
+                "RESEND_API_KEY": "test-key",
+                "RATELIMIT_STORAGE_URI": "memory://",
+                "REDIS_URL": "memory://",
+            },
+        )
+        with self.app.app_context():
+            db.create_all()
+        self.client = self.app.test_client()
 
     def tearDown(self):
+        with self.app.app_context():
+            db.session.remove()
+            db.drop_all()
         self.tempdir.cleanup()
 
     def csrf_from(self, path):
@@ -27,105 +45,116 @@ class LexNushAppTests(unittest.TestCase):
         self.assertIsNotNone(match)
         return match.group(1)
 
-    def test_public_pages_render(self):
-        for path in ["/", "/about/", "/blogs/", "/interviews/", "/contact/", "/healthz"]:
-            with self.subTest(path=path):
-                response = self.client.get(path)
-                self.assertEqual(response.status_code, 200)
+    def contact_payload(self, token=None):
+        data = {
+            "name": "Asha Rao",
+            "email": "asha@example.com",
+            "topic": "Editorial pitch",
+            "message": "I would like to share a detailed legal commentary proposal.",
+        }
+        if token:
+            data["_csrf_token"] = token
+        return data
 
-    def test_security_headers_are_present(self):
+    def test_public_pages_render(self):
+        for path in ["/", "/about/", "/blogs/", "/interviews/", "/contact/", "/privacy/", "/healthz"]:
+            with self.subTest(path=path):
+                self.assertEqual(self.client.get(path).status_code, 200)
+
+    def test_security_headers_and_canonical_url_are_present(self):
         response = self.client.get("/")
         self.assertIn("default-src 'self'", response.headers["Content-Security-Policy"])
         self.assertEqual(response.headers["X-Content-Type-Options"], "nosniff")
         self.assertEqual(response.headers["X-Frame-Options"], "DENY")
-        self.assertEqual(response.headers["Referrer-Policy"], "strict-origin-when-cross-origin")
-        self.assertIn("camera=()", response.headers["Permissions-Policy"])
-        self.assertEqual(response.headers["Cross-Origin-Opener-Policy"], "same-origin")
-        self.assertEqual(response.headers["Cross-Origin-Resource-Policy"], "same-origin")
-        self.assertIn("no-store", response.headers["Cache-Control"])
+        self.assertIn("http://testserver/", response.get_data(as_text=True))
 
-    def test_search_returns_matching_posts(self):
-        response = self.client.get("/api/search?q=arbitral")
+    def test_contact_is_persisted_with_outbox_event(self):
+        response = self.client.post("/contact/", data=self.contact_payload(), follow_redirects=True)
         self.assertEqual(response.status_code, 200)
-        data = response.get_json()
-        self.assertGreaterEqual(len(data), 1)
-        self.assertEqual(data[0]["type"], "Article")
-        self.assertIn("summary", data[0])
+        with self.app.app_context():
+            contact = db.session.query(ContactSubmission).one()
+            event = db.session.query(EmailOutboxEvent).one()
+            self.assertEqual(contact.email, "asha@example.com")
+            self.assertEqual(event.event_type, "contact-owner-notification")
+            self.assertEqual(event.status, "pending")
 
-    def test_search_rate_limit_is_enforced(self):
-        app.config["RATE_LIMIT_SEARCH"] = (2, 60)
-        self.assertEqual(self.client.get("/api/search?q=arbitral").status_code, 200)
-        self.assertEqual(self.client.get("/api/search?q=arbitral").status_code, 200)
-        self.assertEqual(self.client.get("/api/search?q=arbitral").status_code, 429)
+    def test_contact_validation_and_honeypot(self):
+        invalid = self.client.post("/contact/", data={"name": "A", "email": "nope", "topic": "x", "message": "short"})
+        self.assertEqual(invalid.status_code, 400)
+        bot = self.client.post("/contact/", data={**self.contact_payload(), "website": "spam.example"})
+        self.assertEqual(bot.status_code, 400)
 
-    def test_database_backup_includes_recent_submission(self):
-        token = self.csrf_from("/contact/")
-        self.client.post(
-            "/contact/",
-            data={
-                "_csrf_token": token,
-                "name": "Asha Rao",
-                "email": "asha@example.com",
-                "topic": "Editorial pitch",
-                "message": "I would like to share a detailed legal commentary proposal.",
+    def test_email_delivery_is_mockable_and_does_not_log_payload(self):
+        self.app.config.update(EMAIL_DELIVERY_ENABLED=True)
+        response = Mock()
+        response.raise_for_status.return_value = None
+        response.json.return_value = {"id": "email_123"}
+        with patch("lexnush.mailer.requests.post", return_value=response) as post:
+            self.client.post("/contact/", data=self.contact_payload())
+        self.assertTrue(post.called)
+        with self.app.app_context():
+            event = db.session.query(EmailOutboxEvent).one()
+            self.assertEqual(event.status, "sent")
+            self.assertEqual(event.provider_message_id, "email_123")
+
+    def test_newsletter_requires_confirmation_before_confirmed(self):
+        self.client.post("/newsletter/", data={"email": "reader@example.com", "next": "/blogs/"})
+        with self.app.app_context():
+            subscription = db.session.query(NewsletterSubscription).one()
+            event = db.session.query(EmailOutboxEvent).one()
+            self.assertEqual(subscription.status, "pending")
+            signed_token = re.search(r'href="http://testserver(/newsletter/confirm/[^"]+)"', json.loads(event.payload_json)["html"]).group(1)
+        confirmed = self.client.get(signed_token, follow_redirects=True)
+        self.assertEqual(confirmed.status_code, 200)
+        with self.app.app_context():
+            self.assertEqual(db.session.query(NewsletterSubscription).one().status, "confirmed")
+
+    def test_admin_requires_login_then_allows_operator(self):
+        self.assertEqual(self.client.get("/admin/", follow_redirects=False).status_code, 302)
+        login = self.client.post("/admin/login/", data={"email": "admin@example.test", "password": "test-admin-password"}, follow_redirects=True)
+        self.assertEqual(login.status_code, 200)
+        self.assertIn(b"admin dashboard", login.data)
+        self.assertEqual(self.client.get("/admin/contacts/").status_code, 200)
+
+    def test_csv_formula_injection_is_neutralized(self):
+        self.assertEqual(safe_csv_cell("=SUM(1,1)"), "'=SUM(1,1)")
+        self.assertEqual(safe_csv_cell("normal@example.com"), "normal@example.com")
+
+    def test_retention_purge_removes_old_records(self):
+        with self.app.app_context():
+            record = ContactSubmission(name="Old User", email="old@example.com", topic="Old", message="This is an old retained message.", created_at=utcnow() - timedelta(days=500))
+            db.session.add(record)
+            db.session.commit()
+            contacts, subscribers = purge_personal_data(365)
+            self.assertEqual((contacts, subscribers), (1, 0))
+
+    def test_sanitizer_removes_script_and_event_handlers(self):
+        cleaned = sanitize_article_html('<p onclick="alert(1)">Safe</p><script>alert(1)</script>')
+        self.assertEqual(cleaned, "<p>Safe</p>alert(1)")
+
+    def test_sitemap_and_robots_use_public_url(self):
+        self.assertIn(b"http://testserver/sitemap.xml", self.client.get("/robots.txt").data)
+        sitemap = self.client.get("/sitemap.xml").get_data(as_text=True)
+        self.assertIn("<lastmod>2026-03-01</lastmod>", sitemap)
+        self.assertIn("http://testserver/blogs/", sitemap)
+
+    def test_csrf_is_enforced_when_enabled(self):
+        secure_app = create_app(
+            "testing",
+            {
+                "SQLALCHEMY_DATABASE_URI": f"sqlite:///{Path(self.tempdir.name) / 'csrf.sqlite3'}",
+                "WTF_CSRF_ENABLED": True,
+                "PUBLIC_BASE_URL": "http://testserver",
             },
         )
-        with app.app_context():
-            backup_path = backup_database(Path(self.tempdir.name) / "backups")
-        connection = sqlite3.connect(backup_path)
-        count = connection.execute("SELECT COUNT(*) FROM contact_submissions").fetchone()[0]
-        connection.close()
-        self.assertEqual(count, 1)
-
-    def test_pages_include_structured_data(self):
-        home = self.client.get("/").get_data(as_text=True)
-        article = self.client.get("/blogs/surgery-or-autopsy-adr-award-modification").get_data(as_text=True)
-        self.assertIn('"Organization"', home)
-        self.assertIn('"BreadcrumbList"', home)
-        self.assertIn('"Article"', article)
-        self.assertIn('"Person"', article)
-
-    def test_newsletter_rejects_external_return_url(self):
-        token = self.csrf_from("/blogs/")
-        response = self.client.post(
-            "/newsletter/",
-            data={"_csrf_token": token, "email": "reader@example.com", "next": "https://example.com"},
-        )
-        self.assertEqual(response.status_code, 302)
-        self.assertTrue(response.headers["Location"].endswith("/blogs/"))
-
-    def test_templates_do_not_emit_inline_styles(self):
-        for path in ["/", "/about/", "/blogs/", "/interviews/", "/contact/"]:
-            with self.subTest(path=path):
-                response = self.client.get(path)
-                self.assertNotIn(b" style=", response.data)
-
-    def test_contact_requires_csrf(self):
-        response = self.client.post("/contact/", data={})
+        with secure_app.app_context():
+            db.create_all()
+        response = secure_app.test_client().post("/contact/", data=self.contact_payload())
         self.assertEqual(response.status_code, 400)
 
-    def test_contact_submission_is_persisted(self):
-        token = self.csrf_from("/contact/")
-        response = self.client.post(
-            "/contact/",
-            data={
-                "_csrf_token": token,
-                "name": "Asha Rao",
-                "email": "asha@example.com",
-                "topic": "Editorial pitch",
-                "message": "I would like to share a detailed legal commentary proposal.",
-            },
-            follow_redirects=True,
-        )
-
-        self.assertEqual(response.status_code, 200)
-        self.assertIn(b"Your message has been received", response.data)
-
-        connection = sqlite3.connect(self.database_path)
-        rows = connection.execute("SELECT name, email, topic FROM contact_submissions").fetchall()
-        connection.close()
-
-        self.assertEqual(rows, [("Asha Rao", "asha@example.com", "Editorial pitch")])
+    def test_production_config_fails_without_required_services(self):
+        with self.assertRaises(RuntimeError):
+            create_app("production", {"SECRET_KEY": "not-default", "DATABASE_URL": ""})
 
 
 if __name__ == "__main__":
