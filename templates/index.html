@@ -49,6 +49,50 @@
     </div>
 </section>
 
+<section class="section section-wide featured-analysis" aria-labelledby="featured-analysis-title">
+    <div class="section-heading fade-in">
+        <span class="section-kicker">Featured Analysis</span>
+        <h2 id="featured-analysis-title" class="section-title">A closer read of the legal shifts worth watching.</h2>
+    </div>
+    {% if featured_post %}
+        <article class="feature-story fade-in delay-1">
+            <img src="{{ url_for('static', filename='images/lexnush-hero-editorial.png') }}" alt="Legal research materials on a desk" class="feature-story-image" width="1799" height="874">
+            <div class="feature-story-copy">
+                <div class="blog-card-header">
+                    <span class="card-meta-label">{{ featured_post.category }}</span>
+                    <span class="card-meta">{{ featured_post.date }} &bull; {{ featured_post.read_time }}</span>
+                </div>
+                <h3>{{ featured_post.title }}</h3>
+                <p>{{ featured_post.summary }}</p>
+                <a href="{{ url_for('main.post_detail', slug=featured_post.slug) }}" class="text-link">Read the full analysis</a>
+            </div>
+        </article>
+    {% endif %}
+</section>
+
+<section class="section section-wide section-compact" aria-labelledby="latest-journal-title">
+    <div class="section-heading fade-in">
+        <span class="section-kicker">Latest Journal</span>
+        <h2 id="latest-journal-title" class="section-title">Reasoned reporting for consequential questions.</h2>
+    </div>
+    <div class="content-grid">
+        {% for post in posts %}
+            <article class="blog-card stack-md fade-in">
+                <div class="blog-card-header">
+                    <span class="card-meta-label">{{ post.category }}</span>
+                    <span class="card-meta">{{ post.read_time }}</span>
+                </div>
+                <h3 class="card-title">{{ post.title }}</h3>
+                <p>{{ post.summary }}</p>
+                <a href="{{ url_for('main.post_detail', slug=post.slug) }}" class="text-link">Read Analysis</a>
+            </article>
+        {% endfor %}
+    </div>
+    <div class="section-actions fade-in">
+        <a href="{{ url_for('main.blogs') }}" class="outline-link">Browse the Journal</a>
+    </div>
+</section>
+
 <section class="section section-wide section-compact">
     <div class="section-heading fade-in">
         <span class="section-kicker">What LexNush Does</span>
@@ -73,6 +117,35 @@
             <h2 class="card-title">Human Translation</h2>
             <p class="muted-copy">Law explained without flattening its nuance, designed for readers who need signal instead of noise.</p>
         </article>
+    </div>
+</section>
+
+<section class="section section-wide editorial-mission" aria-labelledby="editorial-mission-title">
+    <div class="mission-image fade-in">
+        <img src="{{ url_for('static', filename='images/lexnush-hero-editorial.png') }}" alt="A legal professional reviewing source materials" loading="lazy" width="1799" height="874">
+    </div>
+    <div class="mission-copy stack-md fade-in delay-1">
+        <span class="section-kicker">Editorial Mission</span>
+        <h2 id="editorial-mission-title" class="section-title">Law is public knowledge. It should be legible.</h2>
+        <p class="muted-copy">LexNush approaches legal writing as a public service: careful with the record, honest about uncertainty, and clear enough to be useful before the next meeting.</p>
+        <a href="{{ url_for('main.about') }}" class="text-link">How we work</a>
+    </div>
+</section>
+
+<section class="section section-compact" aria-labelledby="newsletter-title">
+    <div class="subscription-box fade-in">
+        <div class="stack-md">
+            <span class="section-kicker">The LexNush Letter</span>
+            <h2 id="newsletter-title" class="section-title">A considered legal brief, when there is something worth saying.</h2>
+            <p>New analysis, editorial notes, and significant legal developments—delivered without the daily noise.</p>
+            <form name="home-signup" method="post" action="{{ url_for('main.newsletter_signup') }}" class="subscription-form">
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+                <input type="hidden" name="next" value="{{ url_for('main.home') }}">
+                <label for="home-email" class="sr-only">Email address</label>
+                <input id="home-email" type="email" name="email" placeholder="Your email address" autocomplete="email" required>
+                <button type="submit" class="primary-button">Join the reader list</button>
+            </form>
+        </div>
     </div>
 </section>
 

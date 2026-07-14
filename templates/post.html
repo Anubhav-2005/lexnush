@@ -2,11 +2,14 @@
 
 {% block content %}
 <section class="article-hero fade-in" itemscope itemtype="https://schema.org/Article">
+    <meta itemprop="datePublished" content="{{ post.date_iso }}">
+    <meta itemprop="dateModified" content="{{ post.date_iso }}">
+    <meta itemprop="mainEntityOfPage" content="{{ request.base_url }}">
     <span class="card-meta-label" itemprop="articleSection">{{ post.category }}</span>
     <h1 class="article-title" itemprop="headline">{{ post.title }}</h1>
     <div class="article-meta">
-        <span>By <strong itemprop="author">{{ post.author }}</strong></span>
-        <span>{{ post.date }}</span>
+        <span itemprop="author" itemscope itemtype="https://schema.org/Person">By <strong itemprop="name">{{ post.author }}</strong></span>
+        <time datetime="{{ post.date_iso }}">{{ post.date }}</time>
         <span>{{ post.read_time }}</span>
     </div>
 </section>

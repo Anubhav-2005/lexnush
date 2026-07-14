@@ -22,6 +22,7 @@ BLOG_POSTS = [
         "author": "Anushka Pandey",
         "category": "ADR",
         "date": "March 2026",
+        "date_iso": "2026-03-01",
         "summary": "It is the ultimate legal showdown: does this rescue people from endless litigation loops, or has the court opened the floodgates for judges to rewrite private contracts?",
         "key_takeaways": [
             "For the last thirty years, the absolute golden rule of arbitration has been finality.",

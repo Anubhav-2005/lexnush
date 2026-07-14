@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% set page_title = meta.title if meta is defined else "LexNush" %}
     {% set page_description = meta.description if meta is defined else "Premium legal insights from LexNush." %}
+    {% set page_image = meta.image if meta is defined and meta.image else url_for('static', filename='images/lexnush-hero-editorial.png', _external=True) %}
     <title>{{ page_title }}</title>
     <meta name="description" content="{{ page_description }}">
     <link rel="canonical" href="{{ request.base_url }}">
@@ -13,11 +14,12 @@
     <meta property="og:title" content="{{ page_title }}">
     <meta property="og:description" content="{{ page_description }}">
     <meta property="og:type" content="{{ meta.type if meta is defined and meta.type else 'website' }}">
-    <meta property="og:url" content="{{ request.url }}">
-    <meta property="og:image" content="{{ url_for('static', filename='logo.png', _external=True) }}">
+    <meta property="og:url" content="{{ request.base_url }}">
+    <meta property="og:image" content="{{ page_image }}">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="{{ page_title }}">
     <meta name="twitter:description" content="{{ page_description }}">
+    <meta name="twitter:image" content="{{ page_image }}">
 
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='logo.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -32,6 +34,9 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/pages.css') }}?v={{ asset_version }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/responsive.css') }}?v={{ asset_version }}">
     <script src="{{ url_for('static', filename='theme.js') }}?v={{ asset_version }}"></script>
+    {% if meta is defined and meta.schema is defined %}
+        <script type="application/ld+json">{{ meta.schema | tojson }}</script>
+    {% endif %}
 </head>
 <body itemscope itemtype="https://schema.org/WebSite">
     <meta itemprop="name" content="LexNush">
@@ -73,7 +78,7 @@
                             <path d="m21 21-4.35-4.35"></path>
                         </svg>
                     </button>
-                    <button id="theme-toggle" type="button" aria-label="Toggle theme">
+                    <button id="theme-toggle" type="button" aria-label="Switch to light theme">
                         <svg class="icon sun" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path></svg>
                         <svg class="icon moon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
                     </button>
@@ -85,7 +90,7 @@
             </div>
         </header>
 
-        <div id="mobile-menu" class="mobile-menu" aria-hidden="true">
+        <div id="mobile-menu" class="mobile-menu" aria-hidden="true" inert>
             <nav class="mobile-links" aria-label="Mobile navigation">
                 {% for endpoint, label in nav_items %}
                     <a href="{{ url_for(endpoint) }}" class="nav-link {{ 'is-active' if request.endpoint == endpoint else '' }}">{{ label }}</a>
@@ -148,7 +153,7 @@
 
     <button id="back-to-top" class="icon-button back-to-top" type="button" aria-label="Back to top">&uarr;</button>
 
-    <div id="search-overlay" class="search-overlay" aria-hidden="true">
+    <div id="search-overlay" class="search-overlay" aria-hidden="true" inert>
         <div class="search-box" role="dialog" aria-modal="true" aria-label="Search">
             <label for="search-input" class="sr-only">Search LexNush</label>
             <input type="search" id="search-input" class="search-input" placeholder="Search journals and interviews" autocomplete="off">

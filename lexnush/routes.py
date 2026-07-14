@@ -1,3 +1,5 @@
+from urllib.parse import urlsplit
+
 from flask import (
     Blueprint,
     Response,
@@ -21,18 +23,66 @@ main_bp = Blueprint("main", __name__)
 api_bp = Blueprint("api", __name__, url_prefix="/api")
 
 
+PAGE_ENDPOINTS = {
+    "home": "main.home",
+    "about": "main.about",
+    "blogs": "main.blogs",
+    "interviews": "main.interviews",
+    "contact": "main.contact",
+}
+
+
 def page_meta(name):
-    return PAGE_META[name]
+    meta = dict(PAGE_META[name])
+    current_url = url_for(PAGE_ENDPOINTS[name], _external=True)
+    breadcrumbs = [{"@type": "ListItem", "position": 1, "name": "Home", "item": url_for("main.home", _external=True)}]
+    if name != "home":
+        breadcrumbs.append({"@type": "ListItem", "position": 2, "name": meta["title"], "item": current_url})
+
+    meta["schema"] = {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "WebSite",
+                "name": "LexNush",
+                "url": url_for("main.home", _external=True),
+                "description": "Premium legal intelligence for clear, contextual analysis of Indian law.",
+            },
+            {
+                "@type": "Organization",
+                "name": "LexNush",
+                "url": url_for("main.home", _external=True),
+                "email": "editor@lexnush.com",
+                "sameAs": ["https://www.linkedin.com/company/thelexnush/"],
+            },
+            {"@type": "BreadcrumbList", "itemListElement": breadcrumbs},
+        ],
+    }
+    return meta
 
 
 def find_post(slug):
     return next((item for item in BLOG_POSTS if item["slug"] == slug), None)
 
 
+def safe_local_redirect(value, default_endpoint):
+    """Return an internal redirect target and reject external URLs."""
+    target = (value or "").strip()
+    parsed = urlsplit(target)
+    if target.startswith("/") and not target.startswith("//") and not parsed.scheme and not parsed.netloc:
+        return target
+    return url_for(default_endpoint)
+
+
 @main_bp.route("/")
 def home():
     featured = BLOG_POSTS[0] if BLOG_POSTS else None
-    return render_template("index.html", featured_post=featured, meta=page_meta("home"))
+    return render_template(
+        "index.html",
+        featured_post=featured,
+        posts=BLOG_POSTS[:3],
+        meta=page_meta("home"),
+    )
 
 
 @main_bp.route("/about/")
@@ -54,6 +104,31 @@ def post_detail(slug):
         "title": post["title"],
         "description": post["summary"],
         "type": "article",
+        "image": url_for("static", filename="images/lexnush-hero-editorial.png", _external=True),
+        "schema": {
+            "@context": "https://schema.org",
+            "@graph": [
+                {
+                    "@type": "Article",
+                    "headline": post["title"],
+                    "description": post["summary"],
+                    "datePublished": post["date_iso"],
+                    "dateModified": post["date_iso"],
+                    "author": {"@type": "Person", "name": post["author"]},
+                    "publisher": {"@type": "Organization", "name": "LexNush"},
+                    "mainEntityOfPage": url_for("main.post_detail", slug=post["slug"], _external=True),
+                    "image": url_for("static", filename="images/lexnush-hero-editorial.png", _external=True),
+                },
+                {
+                    "@type": "BreadcrumbList",
+                    "itemListElement": [
+                        {"@type": "ListItem", "position": 1, "name": "Home", "item": url_for("main.home", _external=True)},
+                        {"@type": "ListItem", "position": 2, "name": "Journal", "item": url_for("main.blogs", _external=True)},
+                        {"@type": "ListItem", "position": 3, "name": post["title"], "item": url_for("main.post_detail", slug=post["slug"], _external=True)},
+                    ],
+                },
+            ],
+        },
     }
     return render_template("post.html", post=post, meta=meta)
 
@@ -94,11 +169,11 @@ def newsletter_signup():
     email, error = validate_email(request.form.get("email"))
     if error:
         flash(error, "error")
-        return redirect(url_for("main.blogs"))
+        return redirect(safe_local_redirect(request.form.get("next"), "main.blogs"))
 
     save_newsletter_signup(email)
     flash("You are on the LexNush journal list.", "success")
-    return redirect(url_for("main.blogs"))
+    return redirect(safe_local_redirect(request.form.get("next"), "main.blogs"))
 
 
 @main_bp.route("/healthz")

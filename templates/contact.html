@@ -43,26 +43,26 @@
 
                 <div class="form-row">
                     <label for="name">Name</label>
-                    <input id="name" name="name" type="text" value="{{ form_data.get('name', '') }}" autocomplete="name" required>
-                    {% if errors.get('name') %}<span class="form-error">{{ errors.name }}</span>{% endif %}
+                    <input id="name" name="name" type="text" value="{{ form_data.get('name', '') }}" autocomplete="name" required aria-invalid="{{ 'true' if errors.get('name') else 'false' }}"{% if errors.get('name') %} aria-describedby="name-error"{% endif %}>
+                    {% if errors.get('name') %}<span id="name-error" class="form-error">{{ errors.name }}</span>{% endif %}
                 </div>
 
                 <div class="form-row">
                     <label for="email">Email</label>
-                    <input id="email" name="email" type="email" value="{{ form_data.get('email', '') }}" autocomplete="email" required>
-                    {% if errors.get('email') %}<span class="form-error">{{ errors.email }}</span>{% endif %}
+                    <input id="email" name="email" type="email" value="{{ form_data.get('email', '') }}" autocomplete="email" required aria-invalid="{{ 'true' if errors.get('email') else 'false' }}"{% if errors.get('email') %} aria-describedby="email-error"{% endif %}>
+                    {% if errors.get('email') %}<span id="email-error" class="form-error">{{ errors.email }}</span>{% endif %}
                 </div>
 
                 <div class="form-row">
                     <label for="topic">Topic</label>
-                    <input id="topic" name="topic" type="text" value="{{ form_data.get('topic', '') }}" required>
-                    {% if errors.get('topic') %}<span class="form-error">{{ errors.topic }}</span>{% endif %}
+                    <input id="topic" name="topic" type="text" value="{{ form_data.get('topic', '') }}" required aria-invalid="{{ 'true' if errors.get('topic') else 'false' }}"{% if errors.get('topic') %} aria-describedby="topic-error"{% endif %}>
+                    {% if errors.get('topic') %}<span id="topic-error" class="form-error">{{ errors.topic }}</span>{% endif %}
                 </div>
 
                 <div class="form-row">
                     <label for="message">Message</label>
-                    <textarea id="message" name="message" rows="6" required>{{ form_data.get('message', '') }}</textarea>
-                    {% if errors.get('message') %}<span class="form-error">{{ errors.message }}</span>{% endif %}
+                    <textarea id="message" name="message" rows="6" required aria-invalid="{{ 'true' if errors.get('message') else 'false' }}"{% if errors.get('message') %} aria-describedby="message-error"{% endif %}>{{ form_data.get('message', '') }}</textarea>
+                    {% if errors.get('message') %}<span id="message-error" class="form-error">{{ errors.message }}</span>{% endif %}
                 </div>
 
                 <button type="submit" class="primary-button">Submit Inquiry</button>

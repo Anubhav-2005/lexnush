@@ -8,6 +8,27 @@
         document.body.classList.toggle("no-scroll", isLocked);
     }
 
+    function syncPageLock() {
+        setPageLocked(Boolean(qs(".mobile-menu.is-active, .search-overlay.is-active")));
+    }
+
+    function trapFocus(event, container) {
+        if (event.key !== "Tab") return;
+        const focusable = qsa('a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])', container)
+            .filter((element) => !element.closest("[inert]"));
+        if (!focusable.length) return;
+
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault();
+            last.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault();
+            first.focus();
+        }
+    }
+
     function initPreloader() {
         const preloader = qs("#preloader");
         if (!preloader) return;
@@ -15,7 +36,7 @@
         window.setTimeout(() => {
             preloader.classList.add("is-hidden");
             window.setTimeout(() => preloader.remove(), 450);
-        }, prefersReducedMotion ? 0 : 650);
+        }, prefersReducedMotion ? 0 : 180);
     }
 
     function initNavbar() {
@@ -31,20 +52,29 @@
         const toggle = qs(".mobile-toggle");
         const menu = qs("#mobile-menu");
         if (!toggle || !menu) return;
+        let lastFocused;
 
         const setOpen = (isOpen) => {
+            if (isOpen) lastFocused = document.activeElement;
             toggle.classList.toggle("is-active", isOpen);
             toggle.setAttribute("aria-expanded", String(isOpen));
             toggle.setAttribute("aria-label", isOpen ? "Close menu" : "Open menu");
             menu.classList.toggle("is-active", isOpen);
             menu.setAttribute("aria-hidden", String(!isOpen));
-            setPageLocked(isOpen);
+            menu.inert = !isOpen;
+            syncPageLock();
+            if (isOpen) {
+                window.setTimeout(() => qs("a", menu)?.focus(), 0);
+            } else if (lastFocused instanceof HTMLElement) {
+                lastFocused.focus();
+            }
         };
 
         toggle.addEventListener("click", () => setOpen(!menu.classList.contains("is-active")));
         qsa(".mobile-links a", menu).forEach((link) => link.addEventListener("click", () => setOpen(false)));
         document.addEventListener("keydown", (event) => {
             if (event.key === "Escape" && menu.classList.contains("is-active")) setOpen(false);
+            if (menu.classList.contains("is-active")) trapFocus(event, menu);
         });
     }
 
@@ -52,11 +82,19 @@
         const toggle = qs("#theme-toggle");
         if (!toggle) return;
 
+        const syncLabel = () => {
+            const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+            toggle.setAttribute("aria-label", isDark ? "Switch to light theme" : "Switch to dark theme");
+        };
+
+        syncLabel();
+
         toggle.addEventListener("click", () => {
             const currentTheme = document.documentElement.getAttribute("data-theme");
             const nextTheme = currentTheme === "dark" ? "light" : "dark";
             document.documentElement.setAttribute("data-theme", nextTheme);
             localStorage.setItem("theme", nextTheme);
+            syncLabel();
         });
     }
 
@@ -184,17 +222,21 @@
 
         let debounceTimer;
         let abortController;
+        let lastFocused;
 
         const setOpen = (isOpen) => {
+            if (isOpen) lastFocused = document.activeElement;
             overlay.classList.toggle("is-active", isOpen);
             overlay.setAttribute("aria-hidden", String(!isOpen));
-            setPageLocked(isOpen);
+            overlay.inert = !isOpen;
+            syncPageLock();
             if (isOpen) {
                 window.setTimeout(() => input.focus(), 80);
             } else {
                 input.value = "";
                 results.replaceChildren();
                 if (abortController) abortController.abort();
+                if (lastFocused instanceof HTMLElement) lastFocused.focus();
             }
         };
 
@@ -233,6 +275,7 @@
                 setOpen(true);
             }
             if (event.key === "Escape" && overlay.classList.contains("is-active")) setOpen(false);
+            if (overlay.classList.contains("is-active")) trapFocus(event, overlay);
         });
 
         input.addEventListener("input", () => {

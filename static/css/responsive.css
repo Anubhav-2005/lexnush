@@ -15,7 +15,8 @@
     }
 
     .two-column,
-    .founder-grid {
+    .founder-grid,
+    .editorial-mission {
         grid-template-columns: 1fr;
     }
 
@@ -113,6 +114,15 @@
 
     .hero-brief {
         max-width: 560px;
+    }
+
+    .feature-story {
+        grid-template-columns: 1fr;
+    }
+
+    .feature-story-image {
+        min-height: 240px;
+        max-height: 360px;
     }
 
     .page-hero,

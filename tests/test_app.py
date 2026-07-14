@@ -48,6 +48,23 @@ class LexNushAppTests(unittest.TestCase):
         self.assertEqual(data[0]["type"], "Article")
         self.assertIn("summary", data[0])
 
+    def test_pages_include_structured_data(self):
+        home = self.client.get("/").get_data(as_text=True)
+        article = self.client.get("/blogs/surgery-or-autopsy-adr-award-modification").get_data(as_text=True)
+        self.assertIn('"Organization"', home)
+        self.assertIn('"BreadcrumbList"', home)
+        self.assertIn('"Article"', article)
+        self.assertIn('"Person"', article)
+
+    def test_newsletter_rejects_external_return_url(self):
+        token = self.csrf_from("/blogs/")
+        response = self.client.post(
+            "/newsletter/",
+            data={"_csrf_token": token, "email": "reader@example.com", "next": "https://example.com"},
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.headers["Location"].endswith("/blogs/"))
+
     def test_templates_do_not_emit_inline_styles(self):
         for path in ["/", "/about/", "/blogs/", "/interviews/", "/contact/"]:
             with self.subTest(path=path):

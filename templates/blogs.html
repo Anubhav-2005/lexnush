@@ -37,6 +37,7 @@
             <p>Join the reader list for new analysis, editorial notes, and occasional legal briefings.</p>
             <form name="journal-signup" method="post" action="{{ url_for('main.newsletter_signup') }}" class="subscription-form">
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+                <input type="hidden" name="next" value="{{ url_for('main.blogs') }}">
                 <label for="journal-email" class="sr-only">Email address</label>
                 <input id="journal-email" type="email" name="email" placeholder="Your email address" autocomplete="email" required>
                 <button type="submit" class="primary-button">Notify Me</button>
