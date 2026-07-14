@@ -2,7 +2,8 @@
 
 {% block content %}
 <section class="page-hero">
-    <h1 class="page-title fade-in">House of <span class="gold-text">Rights.</span></h1>
+    <span class="eyebrow fade-in">The LexNush Journal</span>
+    <h1 class="page-title fade-in delay-1">Sharp legal analysis, without the fog.</h1>
     <p class="fade-in delay-1">
         A curated space for deconstructing complex statutes, analyzing landmark judgments, and questioning the future of Indian jurisprudence.
     </p>
@@ -33,7 +34,7 @@
     <div class="subscription-box fade-in delay-3">
         <div class="stack-md">
             <h2 class="section-title">Do not miss the launch.</h2>
-            <p>Join the inner circle. Get notified when the first analysis drops.</p>
+            <p>Join the reader list for new analysis, editorial notes, and occasional legal briefings.</p>
             <form name="journal-signup" method="post" action="{{ url_for('main.newsletter_signup') }}" class="subscription-form">
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
                 <label for="journal-email" class="sr-only">Email address</label>

@@ -71,22 +71,43 @@
     }
 
     function initDisclaimer() {
-        const modal = qs("#disclaimer-modal");
-        const acceptButton = qs("#accept-btn");
-        if (!modal || !acceptButton) return;
+        const panel = qs("#legal-notice");
+        const dismissButton = qs("#dismiss-legal-notice");
+        const storageKey = "lexnush_legal_notice_dismissed";
+        if (!panel || !dismissButton) return;
 
-        const setOpen = (isOpen) => {
-            modal.classList.toggle("is-visible", isOpen);
-            setPageLocked(isOpen);
+        const hasDismissed = () => {
+            try {
+                return sessionStorage.getItem(storageKey) === "true";
+            } catch {
+                return false;
+            }
         };
 
-        if (!sessionStorage.getItem("lexnush_disclaimer_accepted")) {
-            window.setTimeout(() => setOpen(true), prefersReducedMotion ? 0 : 900);
+        const rememberDismissed = () => {
+            try {
+                sessionStorage.setItem(storageKey, "true");
+            } catch {
+                // Browsers may deny sessionStorage in strict privacy modes.
+            }
+        };
+
+        const setOpen = (isOpen) => {
+            panel.classList.toggle("is-visible", isOpen);
+            panel.setAttribute("aria-hidden", String(!isOpen));
+        };
+
+        if (!hasDismissed()) {
+            window.setTimeout(() => setOpen(true), prefersReducedMotion ? 0 : 1800);
         }
 
-        acceptButton.addEventListener("click", () => {
-            sessionStorage.setItem("lexnush_disclaimer_accepted", "true");
+        dismissButton.addEventListener("click", () => {
+            rememberDismissed();
             setOpen(false);
+        });
+
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape" && panel.classList.contains("is-visible")) setOpen(false);
         });
     }
 

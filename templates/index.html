@@ -2,27 +2,91 @@
 
 {% block content %}
 <section class="section home-hero">
-    <img src="{{ url_for('static', filename='logo.png') }}" alt="LexNush masthead" class="hero-logo" width="320" height="160">
-    <h1 class="display-title fade-in delay-1">Law With A <span class="gold-text">Pulse</span></h1>
-    <p class="hero-copy fade-in delay-2">
-        Insightful legal writing, policy conversations, and critical thinking shaping the future of law.
-    </p>
-    <div class="hero-actions fade-in delay-3">
-        <a href="{{ url_for('main.about') }}" class="text-link">Read Our Manifesto</a>
+    <div class="hero-grid">
+        <div class="hero-content">
+            <p class="eyebrow fade-in">Premium Legal Intelligence</p>
+            <h1 class="display-title fade-in delay-1">Indian law, explained with clarity and context.</h1>
+            <p class="hero-copy fade-in delay-2">
+                LexNush turns complex judgments, policy shifts, and legal systems into clear editorial analysis for founders, professionals, students, and curious readers.
+            </p>
+            <div class="hero-actions fade-in delay-3">
+                <a href="{{ url_for('main.blogs') }}" class="primary-button">Read The Journal</a>
+                <a href="{{ url_for('main.about') }}" class="outline-link">Explore The Manifesto</a>
+            </div>
+            <dl class="hero-metrics fade-in delay-4">
+                <div>
+                    <dt>Focus</dt>
+                    <dd>Indian Law</dd>
+                </div>
+                <div>
+                    <dt>Format</dt>
+                    <dd>Editorial Briefs</dd>
+                </div>
+                <div>
+                    <dt>Promise</dt>
+                    <dd>Clarity First</dd>
+                </div>
+            </dl>
+        </div>
+
+        <aside class="hero-brief fade-in delay-4" aria-label="Featured LexNush analysis">
+            <img src="{{ url_for('static', filename='logo.png') }}" alt="" class="hero-mark" width="96" height="96">
+            <p class="brief-kicker">Featured Analysis</p>
+            {% if featured_post %}
+                <h2>{{ featured_post.title }}</h2>
+                <p>{{ featured_post.summary }}</p>
+                <div class="brief-meta">
+                    <span>{{ featured_post.category }}</span>
+                    <span>{{ featured_post.read_time }}</span>
+                </div>
+                <a href="{{ url_for('main.post_detail', slug=featured_post.slug) }}" class="text-link">Read Analysis</a>
+            {% else %}
+                <h2>Law With A Pulse</h2>
+                <p>Human-centered legal analysis for a world where regulation, technology, commerce, and rights keep colliding.</p>
+                <a href="{{ url_for('main.blogs') }}" class="text-link">Visit Journal</a>
+            {% endif %}
+        </aside>
     </div>
 </section>
 
 <section class="section section-wide section-compact">
+    <div class="section-heading fade-in">
+        <span class="section-kicker">What LexNush Does</span>
+        <h2 class="section-title">Legal insight that respects your time.</h2>
+        <p class="muted-copy">
+            The work is editorial, accessible, and commercially aware: less jargon theater, more judgment, structure, and practical context.
+        </p>
+    </div>
     <div class="content-grid">
-        <article class="grid-card full-span centered fade-in">
-            <div class="stack-sm">
-                <h2 class="card-title">Coming Soon</h2>
-                <p class="muted-copy">
-                    We are curating our first series of essays on constitutional morality and the intersection of AI and justice.
-                </p>
-                <span class="coming-soon-note">Stay Tuned</span>
-            </div>
+        <article class="grid-card stack-sm fade-in delay-1">
+            <span class="card-meta-label">01</span>
+            <h2 class="card-title">Judgment Explainers</h2>
+            <p class="muted-copy">Clear breakdowns of important decisions, why they matter, and what changes after the headline fades.</p>
         </article>
+        <article class="grid-card stack-sm fade-in delay-2">
+            <span class="card-meta-label">02</span>
+            <h2 class="card-title">Policy Context</h2>
+            <p class="muted-copy">Thoughtful legal commentary across regulation, rights, technology, arbitration, and institutional change.</p>
+        </article>
+        <article class="grid-card stack-sm fade-in delay-3">
+            <span class="card-meta-label">03</span>
+            <h2 class="card-title">Human Translation</h2>
+            <p class="muted-copy">Law explained without flattening its nuance, designed for readers who need signal instead of noise.</p>
+        </article>
+    </div>
+</section>
+
+<section class="section section-narrow centered-copy home-closing fade-in">
+    <div class="stack-md">
+        <span class="section-kicker">Start Here</span>
+        <h2 class="section-title">Read law like it belongs in the real world.</h2>
+        <p>
+            Begin with the LexNush Journal for legal analysis that is structured, readable, and grounded in the human stakes behind legal change.
+        </p>
+        <div class="cta-actions">
+            <a href="{{ url_for('main.blogs') }}" class="primary-button">Open The Journal</a>
+            <a href="{{ url_for('main.contact') }}" class="outline-link">Pitch A Topic</a>
+        </div>
     </div>
 </section>
 {% endblock %}

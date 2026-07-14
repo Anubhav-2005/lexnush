@@ -8,8 +8,9 @@ RATE_LIMIT_BUCKETS = defaultdict(list)
 
 
 def client_identifier():
-    forwarded_for = request.headers.get("X-Forwarded-For", "")
-    remote_addr = forwarded_for.split(",", 1)[0].strip() or request.remote_addr or "unknown"
+    # ProxyFix normalizes this value when trusted proxies are configured. Reading
+    # X-Forwarded-For directly would let any client select its own rate-limit key.
+    remote_addr = request.remote_addr or "unknown"
     return f"{remote_addr}:{request.endpoint or request.path}"
 
 

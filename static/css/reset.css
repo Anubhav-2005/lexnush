@@ -5,21 +5,20 @@
 }
 
 html {
-    min-width: 320px;
     overflow-x: hidden;
+    scroll-padding-top: calc(var(--nav-height) + 32px);
     scroll-behavior: smooth;
     text-size-adjust: 100%;
 }
 
 body {
     margin: 0;
-    min-width: 320px;
     overflow-x: hidden;
     background: var(--color-bg);
     color: var(--color-text);
     font-family: var(--font-sans);
     font-size: 16px;
-    line-height: 1.7;
+    line-height: 1.72;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
 }
@@ -84,8 +83,9 @@ span {
 }
 
 :focus-visible {
-    outline: 2px solid var(--color-focus);
+    outline: 3px solid var(--color-focus);
     outline-offset: 4px;
+    box-shadow: 0 0 0 6px var(--color-focus-shadow);
 }
 
 ::selection {

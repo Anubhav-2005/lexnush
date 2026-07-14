@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from flask import Flask
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 from .config import get_config
 from .db import backup_database, close_db, ensure_schema, get_db
@@ -20,6 +21,18 @@ def create_app(config_name=None):
     config = get_config(config_name)
     app.config.from_object(config)
     config.init_app(app)
+
+    # Only trust forwarded request data when the deployment explicitly declares
+    # how many reverse proxies sit in front of the app. This keeps host and IP
+    # based controls from accepting client-supplied forwarding headers by default.
+    trusted_proxy_count = app.config.get("TRUSTED_PROXY_COUNT", 0)
+    if trusted_proxy_count:
+        app.wsgi_app = ProxyFix(
+            app.wsgi_app,
+            x_for=trusted_proxy_count,
+            x_proto=trusted_proxy_count,
+            x_host=trusted_proxy_count,
+        )
 
     init_security(app)
     app.teardown_appcontext(close_db)
