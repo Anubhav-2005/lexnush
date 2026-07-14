@@ -2,16 +2,24 @@ import os
 from pathlib import Path
 
 
+def environment_list(name):
+    return tuple(value.strip() for value in os.getenv(name, "").split(",") if value.strip())
+
+
 class BaseConfig:
     SECRET_KEY = os.getenv("SECRET_KEY") or os.getenv("LEXNUSH_SECRET_KEY") or "dev-only-change-me"
     DATABASE_PATH = os.getenv("LEXNUSH_DATABASE_PATH")
     JSON_SORT_KEYS = False
     MAX_CONTENT_LENGTH = 128 * 1024
+    MAX_FORM_MEMORY_SIZE = 64 * 1024
+    MAX_FORM_PARTS = 20
     PREFERRED_URL_SCHEME = "http"
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SAMESITE = "Lax"
     SESSION_COOKIE_SECURE = False
+    SESSION_REFRESH_EACH_REQUEST = False
     TRUSTED_PROXY_COUNT = int(os.getenv("TRUSTED_PROXY_COUNT", "0"))
+    TRUSTED_HOSTS = environment_list("LEXNUSH_TRUSTED_HOSTS") or None
     WTF_CSRF_FIELD_NAME = "_csrf_token"
     WTF_CSRF_TIME_LIMIT = 3600
     RATE_LIMIT_SEARCH = (60, 60)
@@ -47,6 +55,8 @@ class ProductionConfig(BaseConfig):
         BaseConfig.init_app(app)
         if app.config["SECRET_KEY"] == "dev-only-change-me":
             raise RuntimeError("Set SECRET_KEY before running LexNush in production.")
+        if not app.config["TRUSTED_HOSTS"]:
+            raise RuntimeError("Set LEXNUSH_TRUSTED_HOSTS before running LexNush in production.")
 
 
 CONFIGS = {

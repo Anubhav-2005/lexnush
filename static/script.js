@@ -1,4 +1,5 @@
 (() => {
+    document.documentElement.classList.add("has-js");
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const qs = (selector, scope = document) => scope.querySelector(selector);

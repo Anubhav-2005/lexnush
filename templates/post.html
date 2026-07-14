@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<section class="article-hero fade-in" itemscope itemtype="https://schema.org/Article">
+<section class="article-hero" itemscope itemtype="https://schema.org/Article">
     <meta itemprop="datePublished" content="{{ post.date_iso }}">
     <meta itemprop="dateModified" content="{{ post.date_iso }}">
     <meta itemprop="mainEntityOfPage" content="{{ request.base_url }}">
@@ -14,7 +14,7 @@
     </div>
 </section>
 
-<article class="article-container fade-in delay-1">
+<article class="article-container">
     <div class="article-divider"></div>
 
     {% if post.key_takeaways %}

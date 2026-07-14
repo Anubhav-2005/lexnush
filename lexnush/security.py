@@ -24,9 +24,11 @@ CSP = {
     "form-action": "'self'",
     "frame-ancestors": "'none'",
     "img-src": ["'self'", "data:"],
+    "media-src": "'none'",
     "object-src": "'none'",
     "script-src": "'self'",
     "style-src": ["'self'", "https://fonts.googleapis.com"],
+    "worker-src": "'none'",
 }
 
 
@@ -87,7 +89,11 @@ def init_security(app):
             strict_transport_security_include_subdomains=True,
         )
     else:
-        app.after_request(apply_security_headers)
+        pass
+
+    # Talisman supplies the core policy when installed. These headers and the
+    # no-store HTML policy are applied in both modes to keep behavior identical.
+    app.after_request(apply_security_headers)
 
 
 def apply_security_headers(response):
@@ -97,6 +103,10 @@ def apply_security_headers(response):
     response.headers.setdefault("X-Content-Type-Options", "nosniff")
     response.headers.setdefault("X-Frame-Options", "DENY")
     response.headers.setdefault("X-XSS-Protection", "0")
+    response.headers.setdefault("Cross-Origin-Opener-Policy", "same-origin")
+    response.headers.setdefault("Cross-Origin-Resource-Policy", "same-origin")
+    if response.mimetype == "text/html":
+        response.headers.setdefault("Cache-Control", "no-store, max-age=0")
     if current_app.config["SESSION_COOKIE_SECURE"]:
         response.headers.setdefault("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
     return response

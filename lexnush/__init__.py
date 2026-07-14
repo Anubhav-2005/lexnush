@@ -1,10 +1,11 @@
 from pathlib import Path
 
+import click
 from flask import Flask
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 from .config import get_config
-from .db import backup_database, close_db, ensure_schema, get_db
+from .db import backup_database, close_db, ensure_schema, get_db, purge_personal_data
 from .routes import api_bp, main_bp
 from .security import init_security
 
@@ -48,5 +49,11 @@ def create_app(config_name=None):
     def backup_db_command():
         backup_path = backup_database()
         print(f"Backed up LexNush database to {backup_path}")
+
+    @app.cli.command("purge-personal-data")
+    @click.option("--older-than-days", type=click.IntRange(min=1), required=True)
+    def purge_personal_data_command(older_than_days):
+        contacts, newsletter_signups = purge_personal_data(older_than_days)
+        print(f"Purged {contacts} contact submissions and {newsletter_signups} newsletter signups.")
 
     return app

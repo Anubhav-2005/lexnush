@@ -1,6 +1,5 @@
 from datetime import datetime, timezone
 from pathlib import Path
-import shutil
 import sqlite3
 
 from flask import current_app, g
@@ -14,8 +13,13 @@ def get_db():
     if "db" not in g:
         database_path = Path(current_app.config["DATABASE_PATH"])
         database_path.parent.mkdir(parents=True, exist_ok=True)
-        g.db = sqlite3.connect(database_path)
+        g.db = sqlite3.connect(database_path, timeout=5)
         g.db.row_factory = sqlite3.Row
+        g.db.execute("PRAGMA foreign_keys = ON")
+        g.db.execute("PRAGMA busy_timeout = 5000")
+        g.db.execute("PRAGMA journal_mode = WAL")
+        g.db.execute("PRAGMA secure_delete = ON")
+        g.db.execute("PRAGMA trusted_schema = OFF")
         ensure_schema(g.db)
     return g.db
 
@@ -44,6 +48,16 @@ def ensure_schema(db):
 
         CREATE INDEX IF NOT EXISTS idx_newsletter_signups_created_at
         ON newsletter_signups(created_at);
+
+        CREATE TABLE IF NOT EXISTS rate_limit_events (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            scope TEXT NOT NULL,
+            client_key TEXT NOT NULL,
+            created_at REAL NOT NULL
+        );
+
+        CREATE INDEX IF NOT EXISTS idx_rate_limit_events_scope_client_created
+        ON rate_limit_events(scope, client_key, created_at);
         """
     )
     db.commit()
@@ -87,5 +101,24 @@ def backup_database(destination=None):
     backup_dir = Path(destination) if destination else database_path.parent / "backups"
     backup_dir.mkdir(parents=True, exist_ok=True)
     backup_path = backup_dir / f"{database_path.stem}-{now_iso().replace(':', '-')}.sqlite3"
-    shutil.copy2(database_path, backup_path)
+    # SQLite's backup API includes committed WAL pages. A filesystem copy can
+    # silently omit recent writes while WAL mode is enabled.
+    source = sqlite3.connect(database_path)
+    destination_connection = sqlite3.connect(backup_path)
+    try:
+        source.backup(destination_connection)
+    finally:
+        destination_connection.close()
+        source.close()
     return backup_path
+
+
+def purge_personal_data(older_than_days):
+    """Purge aged contact and newsletter data for a retention-policy job."""
+    cutoff = datetime.now(timezone.utc).timestamp() - older_than_days * 24 * 60 * 60
+    cutoff_iso = datetime.fromtimestamp(cutoff, timezone.utc).isoformat(timespec="seconds")
+    db = get_db()
+    contact_result = db.execute("DELETE FROM contact_submissions WHERE created_at < ?", (cutoff_iso,))
+    newsletter_result = db.execute("DELETE FROM newsletter_signups WHERE created_at < ?", (cutoff_iso,))
+    db.commit()
+    return contact_result.rowcount, newsletter_result.rowcount

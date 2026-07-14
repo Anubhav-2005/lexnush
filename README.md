@@ -57,10 +57,12 @@ Set these variables in production:
 FLASK_ENV=production
 SECRET_KEY=replace-with-a-long-random-secret
 LEXNUSH_DATABASE_PATH=instance/lexnush.sqlite3
+LEXNUSH_TRUSTED_HOSTS=lexnush.com,www.lexnush.com
+TRUSTED_PROXY_COUNT=1
 PORT=8000
 ```
 
-`SECRET_KEY` is required in production. SQLite tables and indexes are created automatically when the app first touches the database.
+`SECRET_KEY` and `LEXNUSH_TRUSTED_HOSTS` are required in production. Set `TRUSTED_PROXY_COUNT` to the number of proxies that you control in front of the app (use `0` if the app is not behind a proxy). SQLite tables and indexes are created automatically when the app first touches the database.
 
 ## Run In Production
 
@@ -86,9 +88,13 @@ Platforms that support a `Procfile` can use the included file directly.
 - A fallback CSRF validator and security-header middleware keep local development safe even before optional extensions are installed.
 - Secure, HttpOnly, SameSite cookies are configured, with secure cookies enabled in production.
 - POST forms and search are rate-limited.
+- Rate limits are persisted in SQLite, so they remain effective across Gunicorn workers and process restarts.
 - Inputs are normalized and validated server-side.
 - Database writes use parameterized SQL.
-- `flask backup-db` creates timestamped SQLite backups under `instance/backups/`.
+- SQLite uses WAL mode, a busy timeout, foreign-key enforcement, and secure deletion for better resilience and privacy.
+- `flask backup-db` uses SQLite's online backup API to create consistent timestamped backups under `instance/backups/`.
+- `flask purge-personal-data --older-than-days 365` supports a scheduled data-retention policy for contact and newsletter records.
+- Trusted-host enforcement, strict form-size limits, CSRF protection, secure cookies, CSP, HSTS in production, and cross-origin isolation headers are enabled.
 - Debug mode is disabled by production config.
 - Branded 400/404/429/500 error pages are registered.
 

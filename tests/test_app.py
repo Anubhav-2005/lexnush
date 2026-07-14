@@ -5,6 +5,7 @@ import unittest
 from pathlib import Path
 
 from app import app
+from lexnush.db import backup_database
 from lexnush.rate_limit import clear_rate_limits
 
 
@@ -39,6 +40,9 @@ class LexNushAppTests(unittest.TestCase):
         self.assertEqual(response.headers["X-Frame-Options"], "DENY")
         self.assertEqual(response.headers["Referrer-Policy"], "strict-origin-when-cross-origin")
         self.assertIn("camera=()", response.headers["Permissions-Policy"])
+        self.assertEqual(response.headers["Cross-Origin-Opener-Policy"], "same-origin")
+        self.assertEqual(response.headers["Cross-Origin-Resource-Policy"], "same-origin")
+        self.assertIn("no-store", response.headers["Cache-Control"])
 
     def test_search_returns_matching_posts(self):
         response = self.client.get("/api/search?q=arbitral")
@@ -47,6 +51,31 @@ class LexNushAppTests(unittest.TestCase):
         self.assertGreaterEqual(len(data), 1)
         self.assertEqual(data[0]["type"], "Article")
         self.assertIn("summary", data[0])
+
+    def test_search_rate_limit_is_enforced(self):
+        app.config["RATE_LIMIT_SEARCH"] = (2, 60)
+        self.assertEqual(self.client.get("/api/search?q=arbitral").status_code, 200)
+        self.assertEqual(self.client.get("/api/search?q=arbitral").status_code, 200)
+        self.assertEqual(self.client.get("/api/search?q=arbitral").status_code, 429)
+
+    def test_database_backup_includes_recent_submission(self):
+        token = self.csrf_from("/contact/")
+        self.client.post(
+            "/contact/",
+            data={
+                "_csrf_token": token,
+                "name": "Asha Rao",
+                "email": "asha@example.com",
+                "topic": "Editorial pitch",
+                "message": "I would like to share a detailed legal commentary proposal.",
+            },
+        )
+        with app.app_context():
+            backup_path = backup_database(Path(self.tempdir.name) / "backups")
+        connection = sqlite3.connect(backup_path)
+        count = connection.execute("SELECT COUNT(*) FROM contact_submissions").fetchone()[0]
+        connection.close()
+        self.assertEqual(count, 1)
 
     def test_pages_include_structured_data(self):
         home = self.client.get("/").get_data(as_text=True)
