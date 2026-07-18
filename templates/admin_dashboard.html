@@ -6,7 +6,7 @@
     <a class="admin-stat-card" href="{{ url_for('admin.contacts') }}"><span>Total inquiries</span><strong>{{ contacts }}</strong><small>{{ pending_contacts }} need review</small></a>
     <a class="admin-stat-card" href="{{ url_for('admin.subscribers') }}"><span>Confirmed readers</span><strong>{{ confirmed_subscribers }}</strong><small>{{ pending_subscribers }} awaiting opt-in</small></a>
     <a class="admin-stat-card" href="{{ url_for('admin.emails', status='sent') }}"><span>Emails delivered</span><strong>{{ sent_emails }}</strong><small>Transactional email events</small></a>
-    <a class="admin-stat-card admin-stat-attention" href="{{ url_for('admin.emails', status='failed') }}"><span>Delivery attention</span><strong>{{ attention_emails }}</strong><small>Pending or failed events</small></a>
+    <a class="admin-stat-card admin-stat-attention" href="{{ url_for('admin.emails', status='attention') }}"><span>Delivery attention</span><strong>{{ attention_emails }}</strong><small>Pending or failed events</small></a>
 </section>
 <section class="admin-page-section admin-split-grid">
     <article class="admin-panel"><div class="admin-panel-heading"><div><h2>Latest inquiries</h2><p>New contact messages from the public site.</p></div><a href="{{ url_for('admin.contacts') }}">View all</a></div><div class="admin-list">{% for contact in recent_contacts %}<a class="admin-list-row" href="{{ url_for('admin.contacts', q=contact.email) }}"><span class="admin-avatar">{{ contact.name[:1] }}</span><span><strong>{{ contact.name }}</strong><small>{{ contact.topic }} · {{ contact.email }}</small></span><span class="admin-status status-{{ contact.status }}">{{ contact.status }}</span></a>{% else %}<p class="admin-empty">No inquiries yet.</p>{% endfor %}</div></article>

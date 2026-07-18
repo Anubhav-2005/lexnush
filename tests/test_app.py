@@ -62,6 +62,22 @@ class LexNushAppTests(unittest.TestCase):
             with self.subTest(path=path):
                 self.assertEqual(self.client.get(path).status_code, 200)
 
+    def test_public_ux_helpers_render_only_where_needed(self):
+        article = self.client.get("/blogs/surgery-or-autopsy-adr-award-modification")
+        self.assertIn(b"reading-progress-bar", article.data)
+        self.assertNotIn(b"reading-progress-bar", self.client.get("/").data)
+        contact = self.client.get("/contact/")
+        self.assertIn(b'data-character-counter="message-counter"', contact.data)
+        self.assertIn(b'maxlength="3000"', contact.data)
+
+    def test_home_uses_editorial_dossier_without_redundant_final_cta(self):
+        homepage = self.client.get("/")
+        self.assertIn(b"LexNush dossier", homepage.data)
+        self.assertIn(b"Our editorial approach", homepage.data)
+        self.assertNotIn(b"dossier-orbit", homepage.data)
+        self.assertNotIn(b"Indian law, explained", homepage.data)
+        self.assertNotIn(b"Read law like it belongs in the real world.", homepage.data)
+
     def test_security_headers_and_canonical_url_are_present(self):
         response = self.client.get("/")
         self.assertIn("default-src 'self'", response.headers["Content-Security-Policy"])
@@ -131,6 +147,9 @@ class LexNushAppTests(unittest.TestCase):
         emails = self.client.get("/admin/emails/?status=pending")
         self.assertIn(b"New LexNush inquiry: Editorial pitch", emails.data)
         self.assertIn(b"owner@example.test", emails.data)
+        attention = self.client.get("/admin/emails/?status=attention")
+        self.assertEqual(attention.status_code, 200)
+        self.assertIn(b"New LexNush inquiry: Editorial pitch", attention.data)
 
     def test_csv_formula_injection_is_neutralized(self):
         self.assertEqual(safe_csv_cell("=SUM(1,1)"), "'=SUM(1,1)")

@@ -156,7 +156,7 @@ PAGE_META = {
     },
     "blogs": {
         "title": "The Journal",
-        "description": "Read LexNush essays on Indian law, arbitration, policy, judgments, and the future of legal thinking.",
+        "description": "Read LexNush essays on law, arbitration, policy, judgments, institutions, and the future of legal thinking.",
     },
     "interviews": {
         "title": "Interviews",

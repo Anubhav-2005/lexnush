@@ -46,7 +46,15 @@
         <main class="admin-main" id="main-content">
             <header class="admin-topbar">
                 <div><p class="admin-overline">Protected workspace</p><h1>{{ meta.title.replace(' | LexNush Admin', '') }}</h1></div>
-                <button class="admin-theme-toggle" type="button" aria-label="Toggle colour theme">Theme</button>
+                <div class="admin-topbar-actions">
+                    <button class="admin-theme-toggle" type="button" aria-label="Toggle colour theme">Theme</button>
+                    {% if current_user.is_authenticated %}
+                        <form method="post" action="{{ url_for('admin.logout') }}">
+                            <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+                            <button class="admin-mobile-logout" type="submit">Sign out</button>
+                        </form>
+                    {% endif %}
+                </div>
             </header>
             {% with messages = get_flashed_messages(with_categories=true) %}
                 {% if messages %}

@@ -116,6 +116,10 @@
         max-width: 560px;
     }
 
+    .hero-dossier {
+        min-height: 0;
+    }
+
     .feature-story {
         grid-template-columns: 1fr;
     }
@@ -250,6 +254,11 @@
         width: 52px;
         height: 52px;
     }
+
+    .dossier-topline {
+        font-size: 0.58rem;
+    }
+
 
     .hero-metrics {
         grid-template-columns: 1fr;

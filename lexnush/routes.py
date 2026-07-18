@@ -55,7 +55,7 @@ def page_meta(name):
     meta["schema"] = {
         "@context": "https://schema.org",
         "@graph": [
-            {"@type": "WebSite", "name": "LexNush", "url": public_url("main.home"), "description": "Premium legal intelligence for clear, contextual analysis of Indian law."},
+            {"@type": "WebSite", "name": "LexNush", "url": public_url("main.home"), "description": "Premium legal intelligence for clear, contextual analysis of law, policy, institutions, and public life."},
             {"@type": "Organization", "name": "LexNush", "url": public_url("main.home"), "email": "editor@lexnush.com", "sameAs": ["https://www.linkedin.com/company/thelexnush/"]},
             {"@type": "BreadcrumbList", "itemListElement": breadcrumbs},
         ],

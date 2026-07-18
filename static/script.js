@@ -192,6 +192,41 @@
         });
     }
 
+    function initReadingProgress() {
+        const bar = qs("#reading-progress-bar");
+        if (!bar) return;
+
+        let scheduled = false;
+        const sync = () => {
+            scheduled = false;
+            const maximum = document.documentElement.scrollHeight - window.innerHeight;
+            const progress = maximum > 0 ? Math.min(1, Math.max(0, window.scrollY / maximum)) : 0;
+            bar.style.transform = `scaleX(${progress})`;
+        };
+        const schedule = () => {
+            if (!scheduled) {
+                scheduled = true;
+                window.requestAnimationFrame(sync);
+            }
+        };
+
+        sync();
+        window.addEventListener("scroll", schedule, { passive: true });
+        window.addEventListener("resize", schedule, { passive: true });
+    }
+
+    function initCharacterCounters() {
+        qsa("[data-character-counter]").forEach((field) => {
+            const counter = qs(`#${field.dataset.characterCounter}`);
+            if (!counter || !field.maxLength) return;
+            const sync = () => {
+                counter.textContent = `${field.value.length} / ${field.maxLength}`;
+            };
+            sync();
+            field.addEventListener("input", sync);
+        });
+    }
+
     function createSearchState(className, text) {
         const element = document.createElement("div");
         element.className = className;
@@ -318,6 +353,8 @@
         initDisclaimer();
         initFadeIns();
         initCopyLinks();
+        initReadingProgress();
+        initCharacterCounters();
         initSearch();
     });
 })();

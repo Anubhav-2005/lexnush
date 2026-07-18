@@ -117,11 +117,13 @@ def subscribers():
 def emails():
     page = max(1, request.args.get("page", 1, type=int))
     status = (request.args.get("status") or "all").strip().lower()
-    allowed_statuses = {"all", "pending", "sent", "failed"}
+    allowed_statuses = {"all", "attention", "pending", "sent", "failed"}
     if status not in allowed_statuses:
         abort(400)
     statement = select(EmailOutboxEvent).order_by(EmailOutboxEvent.created_at.desc())
-    if status != "all":
+    if status == "attention":
+        statement = statement.where(EmailOutboxEvent.status.in_(["pending", "failed"]))
+    elif status != "all":
         statement = statement.where(EmailOutboxEvent.status == status)
     emails_page = db.paginate(statement, page=page, per_page=25, max_per_page=100)
     return render_template("admin_emails.html", emails_page=emails_page, status=status, meta=dashboard_meta("Email delivery"))

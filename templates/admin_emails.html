@@ -5,7 +5,7 @@
     <div class="admin-section-heading">
         <div><h2>Email delivery ledger</h2><p>Every transactional email is recorded before delivery. Message bodies are intentionally not shown here.</p></div>
         <div class="admin-filter-tabs" aria-label="Filter email events">
-            {% for value, label in [('all', 'All'), ('pending', 'Pending'), ('sent', 'Sent'), ('failed', 'Failed')] %}
+            {% for value, label in [('all', 'All'), ('attention', 'Attention'), ('pending', 'Pending'), ('sent', 'Sent'), ('failed', 'Failed')] %}
                 <a class="admin-filter {{ 'is-active' if status == value else '' }}" href="{{ url_for('admin.emails', status=value) }}">{{ label }}</a>
             {% endfor %}
         </div>

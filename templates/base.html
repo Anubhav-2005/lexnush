@@ -26,7 +26,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&display=swap" rel="stylesheet">
 
-    {% set asset_version = "20260715-prod1" %}
+    {% set asset_version = "20260718-ui3" %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/variables.css') }}?v={{ asset_version }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}?v={{ asset_version }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}?v={{ asset_version }}">
@@ -43,6 +43,10 @@
     <meta itemprop="url" content="{{ url_for('main.home', _external=True) }}">
 
     <a href="#main-content" class="skip-link">Skip to content</a>
+
+    {% if request.endpoint == 'main.post_detail' %}
+        <div class="reading-progress" aria-hidden="true"><span id="reading-progress-bar"></span></div>
+    {% endif %}
 
     <div class="site-shell">
         <header class="site-header" data-navbar>
@@ -110,7 +114,7 @@
             <div class="footer-inner">
                 <div class="footer-brand">
                     <img src="{{ url_for('static', filename='logo.jpg') }}" alt="LexNush" class="footer-logo" width="120" height="44">
-                    <p class="footer-tagline">Indian law, explained with clarity and context. Editorial analysis for founders, professionals, and curious readers.</p>
+                    <p class="footer-tagline">Law, policy, and public life—explained with clarity and context for founders, professionals, and curious readers.</p>
                 </div>
                 <nav class="footer-nav" aria-label="Footer navigation">
                     <span class="footer-nav-title">Explore</span>
