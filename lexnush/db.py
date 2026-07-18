@@ -9,7 +9,7 @@ from pathlib import Path
 from alembic.runtime.migration import MigrationContext
 from alembic.script import ScriptDirectory
 from flask import current_app
-from flask_migrate import Migrate
+from flask_migrate import Config, Migrate
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Index, String, Text, inspect, select, text
 from sqlalchemy.orm import Mapped, mapped_column
@@ -118,8 +118,15 @@ def verify_production_database():
     if missing_tables:
         raise RuntimeError("Production migration verification failed; missing tables: " + ", ".join(missing_tables))
 
-    migration_config = current_app.extensions["migrate"].get_config()
-    expected_revision = ScriptDirectory.from_config(migration_config).get_current_head()
+    from alembic.config import Config
+
+alembic_cfg = Config("alembic.ini")
+alembic_cfg.set_main_option(
+    "script_location",
+    str(Path(current_app.root_path).parent / "migrations"),
+)
+
+expected_revision = ScriptDirectory.from_config(alembic_cfg).get_current_head()
     with engine.connect() as connection:
         current_revision = MigrationContext.configure(connection).get_current_revision()
         database_name = connection.execute(text("SELECT current_database()")).scalar_one()
