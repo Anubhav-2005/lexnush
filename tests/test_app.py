@@ -7,7 +7,7 @@ from datetime import timedelta
 from pathlib import Path
 from unittest.mock import Mock, patch
 
-from lexnush import create_app
+from lexnush import create_app, main_route_url, static_asset_url
 from lexnush.admin import safe_csv_cell
 from lexnush.db import ContactSubmission, EmailOutboxEvent, NewsletterSubscription, db, purge_personal_data, utcnow
 from lexnush.security import sanitize_article_html
@@ -31,6 +31,11 @@ class LexNushAppTests(unittest.TestCase):
         )
         with self.app.app_context():
             db.create_all()
+
+        @self.app.route("/__test-server-error")
+        def test_server_error():
+            raise RuntimeError("controlled error")
+
         self.client = self.app.test_client()
 
     def tearDown(self):
@@ -61,6 +66,23 @@ class LexNushAppTests(unittest.TestCase):
         for path in ["/", "/about/", "/blogs/", "/interviews/", "/contact/", "/privacy/", "/healthz"]:
             with self.subTest(path=path):
                 self.assertEqual(self.client.get(path).status_code, 200)
+
+    def test_error_pages_render_with_static_asset_and_home_fallbacks(self):
+        self.assertTrue(callable(self.app.jinja_env.globals["url_for"]))
+        with self.app.app_context():
+            self.assertEqual(static_asset_url("css/variables.css"), "/static/css/variables.css")
+            self.assertEqual(main_route_url("main.home", "/"), "/")
+
+        not_found = self.client.get("/does-not-exist")
+        self.assertEqual(not_found.status_code, 404)
+        self.assertIn(b'href="/static/css/variables.css', not_found.data)
+        self.assertIn(b'href="/" class="outline-link">Return Home', not_found.data)
+
+        self.app.config["PROPAGATE_EXCEPTIONS"] = False
+        server_error = self.client.get("/__test-server-error")
+        self.assertEqual(server_error.status_code, 500)
+        self.assertIn(b'href="/static/css/variables.css', server_error.data)
+        self.assertIn(b'href="/" class="outline-link">Return Home', server_error.data)
 
     def test_public_ux_helpers_render_only_where_needed(self):
         article = self.client.get("/blogs/surgery-or-autopsy-adr-award-modification")

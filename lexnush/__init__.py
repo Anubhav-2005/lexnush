@@ -1,8 +1,10 @@
 from pathlib import Path
+from urllib.parse import quote
 
 import click
-from flask import Flask
+from flask import Flask, current_app, url_for as flask_url_for
 from werkzeug.middleware.proxy_fix import ProxyFix
+from werkzeug.routing import BuildError
 
 from .admin import admin_bp
 from .auth import init_login
@@ -13,6 +15,23 @@ from .observability import init_observability
 from .rate_limit import init_rate_limiting
 from .routes import api_bp, main_bp
 from .security import init_security
+
+
+def static_asset_url(filename):
+    """Build a static URL without making an error page depend on URL routing."""
+    try:
+        return flask_url_for("static", filename=filename)
+    except (AttributeError, BuildError, RuntimeError):
+        static_path = (current_app.static_url_path or "/static").rstrip("/")
+        return f"{static_path}/{quote(filename)}"
+
+
+def main_route_url(endpoint, fallback):
+    """Return a stable local route when URL routing is unavailable during recovery."""
+    try:
+        return flask_url_for(endpoint)
+    except (AttributeError, BuildError, RuntimeError):
+        return fallback
 
 
 def create_app(config_name=None, config_overrides=None):
@@ -47,10 +66,25 @@ def create_app(config_name=None, config_overrides=None):
     init_login(app)
     init_security(app)
     init_observability(app)
+
+    # Flask installs ``url_for`` as a Jinja global. Never replace it with a
+    # context value; restore it only if an extension has removed it.
+    if not callable(app.jinja_env.globals.get("url_for")):
+        app.jinja_env.globals["url_for"] = flask_url_for
+
     app.context_processor(
         lambda: {
             "public_base_url": app.config["PUBLIC_BASE_URL"],
             "turnstile_site_key": app.config.get("TURNSTILE_SITE_KEY", ""),
+            "static_url": static_asset_url,
+            "site_urls": {
+                "home": main_route_url("main.home", "/"),
+                "about": main_route_url("main.about", "/about/"),
+                "blogs": main_route_url("main.blogs", "/blogs/"),
+                "interviews": main_route_url("main.interviews", "/interviews/"),
+                "contact": main_route_url("main.contact", "/contact/"),
+                "privacy": main_route_url("main.privacy", "/privacy/"),
+            },
         }
     )
     app.register_blueprint(main_bp)
