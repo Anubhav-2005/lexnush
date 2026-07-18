@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>{{ meta.title }}</title>
+    <link rel="icon" type="image/jpeg" href="{{ url_for('static', filename='logo.jpg') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/variables.css') }}?v=20260718-admin1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}?v=20260718-admin1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}?v=20260718-admin1">
+    <script src="{{ url_for('static', filename='theme.js') }}?v=20260718-admin1"></script>
+</head>
+<body class="admin-body">
+    {% set nav_items = [
+        ('admin.dashboard', 'Overview'),
+        ('admin.contacts', 'Inquiries'),
+        ('admin.subscribers', 'Subscribers'),
+        ('admin.emails', 'Email delivery')
+    ] %}
+    <div class="admin-shell {{ 'is-authenticated' if current_user.is_authenticated else '' }}">
+        {% if current_user.is_authenticated %}
+        <aside class="admin-sidebar">
+            <a class="admin-brand" href="{{ url_for('admin.dashboard') }}" aria-label="LexNush operations home">
+                <span class="admin-brand-mark">LN</span>
+                <span><strong>LexNush</strong><small>Operations</small></span>
+            </a>
+            <nav class="admin-nav" aria-label="Admin navigation">
+                {% for endpoint, label in nav_items %}
+                    <a href="{{ url_for(endpoint) }}" class="admin-nav-link {{ 'is-active' if request.endpoint == endpoint else '' }}"{% if request.endpoint == endpoint %} aria-current="page"{% endif %}>{{ label }}</a>
+                {% endfor %}
+            </nav>
+            <div class="admin-sidebar-bottom">
+                <span class="admin-user">{{ current_user.email }}</span>
+                <a class="admin-site-link" href="{{ url_for('main.home') }}">View public site ↗</a>
+                <form method="post" action="{{ url_for('admin.logout') }}">
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+                    <button class="admin-logout" type="submit">Sign out</button>
+                </form>
+            </div>
+        </aside>
+        {% endif %}
+        <main class="admin-main" id="main-content">
+            <header class="admin-topbar">
+                <div><p class="admin-overline">Protected workspace</p><h1>{{ meta.title.replace(' | LexNush Admin', '') }}</h1></div>
+                <button class="admin-theme-toggle" type="button" aria-label="Toggle colour theme">Theme</button>
+            </header>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="admin-flash-stack" role="status" aria-live="polite">
+                        {% for category, message in messages %}<div class="admin-flash admin-flash-{{ category }}">{{ message }}</div>{% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+    <script>
+        document.querySelector('.admin-theme-toggle').addEventListener('click', function () {
+            const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+            document.documentElement.dataset.theme = next;
+            try { localStorage.setItem('theme', next); } catch (_) {}
+        });
+    </script>
+</body>
+</html>

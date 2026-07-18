@@ -34,7 +34,7 @@ flask --app app db upgrade
 flask --app app db current
 ```
 
-Development/tests can create their isolated SQLite schema automatically. Production must run `flask --app app db upgrade` against managed PostgreSQL before Gunicorn starts.
+Development/tests can create their isolated SQLite schema automatically. On Render, the pre-deploy release phase runs `flask --app app db upgrade && flask --app app verify-production-database` against managed PostgreSQL before Gunicorn starts. The verifier rejects SQLite, missing tables, and an Alembic revision below head.
 
 ## Admin password
 
@@ -51,7 +51,7 @@ Set the result as `ADMIN_PASSWORD_HASH`; set the matching `ADMIN_EMAIL` in the h
 Production startup fails closed until these are configured:
 
 ```text
-FLASK_ENV=production
+LEXNUSH_ENV=production
 SECRET_KEY=<new high-entropy secret>
 DATABASE_URL=<managed PostgreSQL connection string>
 REDIS_URL=<managed Redis/Valkey connection string>
@@ -82,9 +82,10 @@ DATA_RETENTION_DAYS=365
 ```sh
 flask --app app retry-email-outbox --limit 100
 flask --app app purge-personal-data --older-than-days 365
+flask --app app verify-production-database
 ```
 
-The first retries failed/pending Resend events. The second permanently removes old personal data, so run it only as part of a reviewed retention policy.
+The first retries failed/pending Resend events. The second permanently removes old personal data, so run it only as part of a reviewed retention policy. The third is read-only and succeeds only on PostgreSQL with the complete current migration schema.
 
 ## Verification
 

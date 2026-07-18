@@ -23,7 +23,7 @@ Store the generated values only in Render's encrypted environment-variable inter
 
 | Variable | Required value |
 |---|---|
-| `FLASK_ENV` | `production` |
+| `LEXNUSH_ENV` | `production` |
 | `SECRET_KEY` | New 48+ byte random value |
 | `DATABASE_URL` | Render Postgres internal connection string |
 | `REDIS_URL` | Render Key Value internal connection string, preferably authenticated |
@@ -41,7 +41,8 @@ Optional: `TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY`, `TURNSTILE_REQUIRED=true
 
 ## 4. Deploy and verify
 
-- [ ] Run `flask --app app db upgrade` in the Render build step before starting Gunicorn.
+- [ ] Confirm the Render service uses `preDeployCommand: flask --app app db upgrade && flask --app app verify-production-database` from `render.yaml`. Do not put migrations in `buildCommand`.
+- [ ] In the pre-deploy log, confirm `Verified PostgreSQL database ... at Alembic revision '20260715_02'.` before Render starts Gunicorn.
 - [ ] Confirm `/healthz` returns `200`.
 - [ ] Visit the custom HTTPS domain; test `http` to HTTPS redirect, one canonical host, navigation, 404, robots, sitemap, and metadata.
 - [ ] Submit a contact form using a safe test address. Confirm the database record, owner email, Resend delivery record, and admin dashboard entry.

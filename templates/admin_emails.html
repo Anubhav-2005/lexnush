@@ -1,0 +1,26 @@
+{% extends "admin_base.html" %}
+
+{% block content %}
+<section class="admin-page-section">
+    <div class="admin-section-heading">
+        <div><h2>Email delivery ledger</h2><p>Every transactional email is recorded before delivery. Message bodies are intentionally not shown here.</p></div>
+        <div class="admin-filter-tabs" aria-label="Filter email events">
+            {% for value, label in [('all', 'All'), ('pending', 'Pending'), ('sent', 'Sent'), ('failed', 'Failed')] %}
+                <a class="admin-filter {{ 'is-active' if status == value else '' }}" href="{{ url_for('admin.emails', status=value) }}">{{ label }}</a>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="admin-table-wrap">
+        <table class="admin-table"><caption>Email delivery events</caption><thead><tr><th scope="col">Created</th><th scope="col">Recipient</th><th scope="col">Message</th><th scope="col">Status</th><th scope="col">Attempts</th></tr></thead>
+            <tbody>{% for event in emails_page.items %}<tr>
+                <td>{{ event.created_at.strftime('%d %b %Y %H:%M UTC') }}</td>
+                <td><a href="mailto:{{ event.recipient }}">{{ event.recipient }}</a></td>
+                <td><strong>{{ event.subject }}</strong><small>{{ event.event_type }}</small>{% if event.last_error %}<span class="admin-error-copy">{{ event.last_error }}</span>{% endif %}</td>
+                <td><span class="admin-status status-{{ event.status }}">{{ event.status }}</span></td>
+                <td>{{ event.attempts }}</td>
+            </tr>{% else %}<tr><td colspan="5" class="admin-empty">No email events match this filter.</td></tr>{% endfor %}</tbody>
+        </table>
+    </div>
+    {% if emails_page.pages > 1 %}<nav class="admin-pagination" aria-label="Email event pagination">{% if emails_page.has_prev %}<a href="{{ url_for('admin.emails', page=emails_page.prev_num, status=status) }}">Previous</a>{% endif %}<span>Page {{ emails_page.page }} of {{ emails_page.pages }}</span>{% if emails_page.has_next %}<a href="{{ url_for('admin.emails', page=emails_page.next_num, status=status) }}">Next</a>{% endif %}</nav>{% endif %}
+</section>
+{% endblock %}

@@ -7,7 +7,7 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 from .admin import admin_bp
 from .auth import init_login
 from .config import get_config
-from .db import backup_database, db, init_database, purge_personal_data
+from .db import backup_database, db, init_database, purge_personal_data, verify_production_database
 from .mailer import retry_pending_outbox
 from .observability import init_observability
 from .rate_limit import init_rate_limiting
@@ -77,5 +77,11 @@ def create_app(config_name=None, config_overrides=None):
     @click.option("--limit", type=click.IntRange(min=1, max=1000), default=100)
     def retry_email_outbox_command(limit):
         print(f"Attempted delivery for {retry_pending_outbox(limit)} queued email events.")
+
+    @app.cli.command("verify-production-database")
+    def verify_production_database_command():
+        """Fail deployment unless the connected PostgreSQL schema is at Alembic head."""
+        database_name, revision = verify_production_database()
+        print(f"Verified PostgreSQL database {database_name!r} at Alembic revision {revision}.")
 
     return app

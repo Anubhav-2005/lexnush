@@ -6,10 +6,12 @@ import sqlite3
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
+from alembic.runtime.migration import MigrationContext
+from alembic.script import ScriptDirectory
 from flask import current_app
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Index, String, Text, select
+from sqlalchemy import Index, String, Text, inspect, select, text
 from sqlalchemy.orm import Mapped, mapped_column
 
 db = SQLAlchemy()
@@ -96,6 +98,37 @@ class AdminAuditEvent(db.Model):
 def init_database(app):
     db.init_app(app)
     migrate.init_app(app, db, compare_type=True)
+
+
+def verify_production_database():
+    """Verify the deployed connection and required migrated schema without mutating it."""
+    engine = db.engine
+    if engine.dialect.name != "postgresql":
+        raise RuntimeError(f"Expected PostgreSQL in production, connected to {engine.dialect.name!r} instead.")
+
+    inspector = inspect(engine)
+    required_tables = {
+        "contact_submissions",
+        "newsletter_subscriptions",
+        "newsletter_tokens",
+        "email_outbox_events",
+        "admin_audit_events",
+    }
+    missing_tables = sorted(required_tables - set(inspector.get_table_names()))
+    if missing_tables:
+        raise RuntimeError("Production migration verification failed; missing tables: " + ", ".join(missing_tables))
+
+    migration_config = current_app.extensions["migrate"].get_config()
+    expected_revision = ScriptDirectory.from_config(migration_config).get_current_head()
+    with engine.connect() as connection:
+        current_revision = MigrationContext.configure(connection).get_current_revision()
+        database_name = connection.execute(text("SELECT current_database()")).scalar_one()
+    if current_revision != expected_revision:
+        raise RuntimeError(
+            f"Production database {database_name!r} is at Alembic revision {current_revision!r}; "
+            f"expected {expected_revision!r}."
+        )
+    return database_name, current_revision
 
 
 def save_contact_submission(name, email, topic, message):

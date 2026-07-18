@@ -8,7 +8,7 @@ from flask_login import current_user, login_required, login_user, logout_user
 from sqlalchemy import or_, select
 
 from .auth import ConfigAdmin, verify_admin_password
-from .db import ContactSubmission, NewsletterSubscription, audit_admin_action, db, utcnow
+from .db import ContactSubmission, EmailOutboxEvent, NewsletterSubscription, audit_admin_action, db, utcnow
 from .rate_limit import hashed_client_ip, limiter
 
 admin_bp = Blueprint("admin", __name__, url_prefix="/admin")
@@ -61,6 +61,10 @@ def dashboard():
         pending_contacts=db.session.query(ContactSubmission).filter_by(status="new").count(),
         pending_subscribers=db.session.query(NewsletterSubscription).filter_by(status="pending").count(),
         confirmed_subscribers=db.session.query(NewsletterSubscription).filter_by(status="confirmed").count(),
+        sent_emails=db.session.query(EmailOutboxEvent).filter_by(status="sent").count(),
+        attention_emails=db.session.query(EmailOutboxEvent).filter(EmailOutboxEvent.status.in_(["pending", "failed"])).count(),
+        recent_contacts=db.session.scalars(select(ContactSubmission).order_by(ContactSubmission.created_at.desc()).limit(6)).all(),
+        recent_emails=db.session.scalars(select(EmailOutboxEvent).order_by(EmailOutboxEvent.created_at.desc()).limit(6)).all(),
         meta=dashboard_meta("Dashboard"),
     )
 
@@ -106,6 +110,21 @@ def subscribers():
     statement = select(NewsletterSubscription).order_by(NewsletterSubscription.created_at.desc())
     subscribers_page = db.paginate(statement, page=page, per_page=25, max_per_page=100)
     return render_template("admin_subscribers.html", subscribers_page=subscribers_page, meta=dashboard_meta("Subscribers"))
+
+
+@admin_bp.route("/emails/")
+@login_required
+def emails():
+    page = max(1, request.args.get("page", 1, type=int))
+    status = (request.args.get("status") or "all").strip().lower()
+    allowed_statuses = {"all", "pending", "sent", "failed"}
+    if status not in allowed_statuses:
+        abort(400)
+    statement = select(EmailOutboxEvent).order_by(EmailOutboxEvent.created_at.desc())
+    if status != "all":
+        statement = statement.where(EmailOutboxEvent.status == status)
+    emails_page = db.paginate(statement, page=page, per_page=25, max_per_page=100)
+    return render_template("admin_emails.html", emails_page=emails_page, status=status, meta=dashboard_meta("Email delivery"))
 
 
 @admin_bp.route("/export/contacts.csv")

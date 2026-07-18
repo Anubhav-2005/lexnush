@@ -2,11 +2,16 @@ services:
   - type: web
     name: lexnush
     runtime: python
-    buildCommand: pip install -r requirements.txt && flask --app app db upgrade
+    # preDeployCommand is the release phase: it runs against DATABASE_URL after
+    # dependencies are installed and blocks this version from going live if the
+    # migration or schema verification fails. It requires a paid web-service plan.
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    preDeployCommand: flask --app app db upgrade && flask --app app verify-production-database
     startCommand: gunicorn --workers 2 --threads 4 --timeout 30 --access-logfile - --error-logfile - wsgi:app
     healthCheckPath: /healthz
     envVars:
-      - key: FLASK_ENV
+      - key: LEXNUSH_ENV
         value: production
       - key: SECRET_KEY
         generateValue: true

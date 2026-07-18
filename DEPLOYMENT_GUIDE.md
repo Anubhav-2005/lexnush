@@ -20,7 +20,7 @@ flowchart LR
 ## Current Render-relevant files
 
 - `Procfile` starts `gunicorn wsgi:app`.
-- `wsgi.py` exposes the Flask application object.
+- `wsgi.py` exposes the Flask application object and fails startup if Render is not configured for PostgreSQL.
 - `requirements.txt` installs Flask, Gunicorn, Talisman and Flask-WTF.
 - `.env.example` documents the required variables.
 - `/healthz` can be used as a health-check path.
@@ -30,21 +30,21 @@ flowchart LR
 Set these in the host dashboard or secret manager—never commit them:
 
 ```text
-FLASK_ENV=production
+LEXNUSH_ENV=production
 SECRET_KEY=<unique high-entropy secret>
-LEXNUSH_DATABASE_PATH=/var/data/lexnush.sqlite3
+DATABASE_URL=<Render PostgreSQL internal connection string>
 LEXNUSH_TRUSTED_HOSTS=example.com,www.example.com
 TRUSTED_PROXY_COUNT=1
 ```
 
-Use the actual persistent mount path supplied by the hosting provider, if retaining SQLite temporarily. `TRUSTED_PROXY_COUNT=1` is only an example; set it to the exact number of trusted reverse proxies in front of the app after confirming the provider’s network design.
+SQLite is development-only and is deliberately rejected in production. `TRUSTED_PROXY_COUNT=1` is only an example; set it to the exact number of trusted reverse proxies in front of the app after confirming the provider’s network design.
 
 ## Safe first deployment sequence
 
 1. Provision the service and a custom domain. Force a single canonical host (for example, `www` or non-`www`).
-2. Provision managed PostgreSQL before real lead capture, or attach a durable disk for a temporary single-instance SQLite launch.
-3. Add production environment variables and validate that startup rejects a default secret/no host list.
-4. Run the app initially with one Gunicorn worker until rate limiting is moved off SQLite. Use an explicit process command such as `gunicorn --workers 1 --threads 4 --timeout 30 wsgi:app` after load testing.
+2. Provision managed PostgreSQL before real lead capture and link its internal connection string to `DATABASE_URL`.
+3. Add production environment variables and validate that startup rejects a default secret, an absent database URL, or a SQLite URL.
+4. Configure Render's pre-deploy command to run `flask --app app db upgrade && flask --app app verify-production-database`. The deploy must stop before Gunicorn if the database is not at Alembic head.
 5. Configure `/healthz` health checks, HTTPS, logs, alerting, and an external uptime monitor.
 6. Test the real domain: homepage, every navigation link, contact/newsletter form, 404, HTTPS redirect, headers, sitemap, robots, mobile menu, and error tracking.
 7. Perform and document one backup **and restore** test before accepting production data.

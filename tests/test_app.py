@@ -1,4 +1,5 @@
 import json
+import os
 import re
 import tempfile
 import unittest
@@ -113,8 +114,23 @@ class LexNushAppTests(unittest.TestCase):
         self.assertEqual(self.client.get("/admin/", follow_redirects=False).status_code, 302)
         login = self.client.post("/admin/login/", data={"email": "admin@example.test", "password": "test-admin-password"}, follow_redirects=True)
         self.assertEqual(login.status_code, 200)
-        self.assertIn(b"admin dashboard", login.data)
+        self.assertIn(b"Latest email activity", login.data)
         self.assertEqual(self.client.get("/admin/contacts/").status_code, 200)
+        emails = self.client.get("/admin/emails/")
+        self.assertEqual(emails.status_code, 200)
+        self.assertIn(b"Email delivery ledger", emails.data)
+
+    def test_admin_dashboard_and_email_ledger_show_database_activity(self):
+        self.client.post("/contact/", data=self.contact_payload())
+        self.client.post("/admin/login/", data={"email": "admin@example.test", "password": "test-admin-password"})
+
+        dashboard = self.client.get("/admin/")
+        self.assertIn(b"Total inquiries", dashboard.data)
+        self.assertIn(b">1</strong><small>1 need review", dashboard.data)
+
+        emails = self.client.get("/admin/emails/?status=pending")
+        self.assertIn(b"New LexNush inquiry: Editorial pitch", emails.data)
+        self.assertIn(b"owner@example.test", emails.data)
 
     def test_csv_formula_injection_is_neutralized(self):
         self.assertEqual(safe_csv_cell("=SUM(1,1)"), "'=SUM(1,1)")
@@ -155,6 +171,44 @@ class LexNushAppTests(unittest.TestCase):
     def test_production_config_fails_without_required_services(self):
         with self.assertRaises(RuntimeError):
             create_app("production", {"SECRET_KEY": "not-default", "DATABASE_URL": ""})
+
+    def test_production_requires_postgresql_and_never_uses_sqlite_fallback(self):
+        production_settings = {
+            "SECRET_KEY": "not-default",
+            "DATABASE_URL": "sqlite:////tmp/should-never-be-production.sqlite3",
+            "REDIS_URL": "redis://cache.example.test:6379/0",
+            "PUBLIC_BASE_URL": "https://lexnush.example.test",
+            "TRUSTED_HOSTS": ["lexnush.example.test"],
+            "RESEND_API_KEY": "test-key",
+            "MAIL_FROM": "LexNush <hello@lexnush.example.test>",
+            "CONTACT_RECIPIENT_EMAIL": "owner@lexnush.example.test",
+            "ADMIN_EMAIL": "admin@lexnush.example.test",
+            "ADMIN_PASSWORD_HASH": "$argon2id$test",
+        }
+        with self.assertRaisesRegex(RuntimeError, "PostgreSQL"):
+            create_app("production", production_settings)
+
+        production_settings["DATABASE_URL"] = "postgres://user:password@db.example.test:5432/lexnush"
+        production_app = create_app("production", production_settings)
+        self.assertEqual(
+            production_app.config["SQLALCHEMY_DATABASE_URI"],
+            "postgresql+psycopg://user:password@db.example.test:5432/lexnush",
+        )
+
+    def test_render_without_explicit_environment_fails_as_production(self):
+        with patch.dict(os.environ, {"RENDER": "true", "LEXNUSH_ENV": "", "FLASK_ENV": ""}, clear=False):
+            with self.assertRaisesRegex(RuntimeError, "DATABASE_URL"):
+                create_app()
+
+    def test_render_rejects_an_unknown_environment_instead_of_falling_back_to_sqlite(self):
+        with patch.dict(os.environ, {"RENDER": "true", "LEXNUSH_ENV": "prod", "FLASK_ENV": ""}, clear=False):
+            with self.assertRaisesRegex(RuntimeError, "Unsupported production environment"):
+                create_app()
+
+    def test_database_verification_command_rejects_sqlite(self):
+        result = self.app.test_cli_runner().invoke(args=["verify-production-database"])
+        self.assertNotEqual(result.exit_code, 0)
+        self.assertIn("Expected PostgreSQL", str(result.exception))
 
 
 if __name__ == "__main__":

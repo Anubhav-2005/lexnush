@@ -3,6 +3,8 @@
 import os
 from pathlib import Path
 
+from sqlalchemy.engine import make_url
+
 
 def environment_list(name):
     return tuple(value.strip() for value in os.getenv(name, "").split(",") if value.strip())
@@ -15,6 +17,18 @@ def environment_bool(name, default=False):
     return value.strip().lower() in {"1", "true", "yes", "on"}
 
 
+def normalize_database_url(database_url):
+    """Use the installed Psycopg 3 driver for Render/PostgreSQL URLs."""
+    database_url = (database_url or "").strip()
+    if database_url.startswith("postgres://"):
+        return database_url.replace("postgres://", "postgresql+psycopg://", 1)
+    if database_url.startswith("postgresql://"):
+        return database_url.replace("postgresql://", "postgresql+psycopg://", 1)
+    if database_url.startswith("postgresql+psycopg2://"):
+        return database_url.replace("postgresql+psycopg2://", "postgresql+psycopg://", 1)
+    return database_url
+
+
 class BaseConfig:
     SECRET_KEY = os.getenv("SECRET_KEY") or os.getenv("LEXNUSH_SECRET_KEY") or "dev-only-change-me"
     DATABASE_URL = os.getenv("DATABASE_URL", "")
@@ -22,6 +36,10 @@ class BaseConfig:
     PUBLIC_BASE_URL = os.getenv("PUBLIC_BASE_URL", "http://localhost:8000").rstrip("/")
     JSON_SORT_KEYS = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        "pool_pre_ping": True,
+        "pool_recycle": 300,
+    }
     MAX_CONTENT_LENGTH = 128 * 1024
     MAX_FORM_MEMORY_SIZE = 64 * 1024
     MAX_FORM_PARTS = 20
@@ -62,11 +80,10 @@ class BaseConfig:
 
     @staticmethod
     def init_app(app):
-        database_url = app.config.get("DATABASE_URL")
+        database_url = normalize_database_url(app.config.get("DATABASE_URL"))
         if database_url:
-            # Render and other providers may use the older postgres:// scheme.
-            if database_url.startswith("postgres://"):
-                database_url = database_url.replace("postgres://", "postgresql://", 1)
+            # Render supplies postgresql://; this application uses Psycopg 3.
+            app.config["DATABASE_URL"] = database_url
             app.config["SQLALCHEMY_DATABASE_URI"] = database_url
         elif not app.config.get("SQLALCHEMY_DATABASE_URI"):
             database_path = Path(app.instance_path) / "lexnush.sqlite3"
@@ -96,6 +113,12 @@ class ProductionConfig(BaseConfig):
 
     @staticmethod
     def init_app(app):
+        # Validate before BaseConfig can ever choose the development SQLite
+        # fallback. A web process connected to an ephemeral SQLite file can
+        # appear healthy but has neither the production schema nor durable data.
+        database_url = normalize_database_url(app.config.get("DATABASE_URL"))
+        app.config["DATABASE_URL"] = database_url
+
         BaseConfig.init_app(app)
         missing = []
         required = {
@@ -116,6 +139,16 @@ class ProductionConfig(BaseConfig):
         if missing:
             raise RuntimeError("Missing or unsafe production configuration: " + ", ".join(missing))
 
+        try:
+            database = make_url(app.config["SQLALCHEMY_DATABASE_URI"])
+        except Exception as exc:
+            raise RuntimeError("DATABASE_URL is not a valid SQLAlchemy PostgreSQL URL.") from exc
+        if database.get_backend_name() != "postgresql" or not database.host:
+            raise RuntimeError(
+                "Production DATABASE_URL must be a Render PostgreSQL connection string; "
+                "SQLite and hostless database URLs are not permitted."
+            )
+
 
 CONFIGS = {
     "development": DevelopmentConfig,
@@ -125,5 +158,16 @@ CONFIGS = {
 
 
 def get_config(name=None):
-    config_name = name or os.getenv("FLASK_ENV") or os.getenv("LEXNUSH_ENV") or "development"
+    # LEXNUSH_ENV is the explicit application setting. Render detection is a
+    # safety net: a missed environment variable must fail closed, never fall
+    # back to a local SQLite database in a deployed web service.
+    config_name = (name or os.getenv("LEXNUSH_ENV") or os.getenv("FLASK_ENV") or "").strip().lower()
+    is_render = os.getenv("RENDER", "").lower() == "true"
+    if config_name and config_name not in CONFIGS:
+        if is_render:
+            raise RuntimeError(f"Unsupported production environment name: {config_name!r}.")
+        return DevelopmentConfig
+    if not config_name and os.getenv("RENDER", "").lower() == "true":
+        config_name = "production"
+    config_name = config_name or "development"
     return CONFIGS.get(config_name, DevelopmentConfig)
