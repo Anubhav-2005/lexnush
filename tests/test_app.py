@@ -9,6 +9,7 @@ from unittest.mock import Mock, patch
 
 from lexnush import create_app, main_route_url, static_asset_url
 from lexnush.admin import safe_csv_cell
+from lexnush.config import normalize_trusted_hosts
 from lexnush.db import ContactSubmission, EmailOutboxEvent, NewsletterSubscription, db, purge_personal_data, utcnow
 from lexnush.security import sanitize_article_html
 
@@ -83,6 +84,13 @@ class LexNushAppTests(unittest.TestCase):
         self.assertEqual(server_error.status_code, 500)
         self.assertIn(b'href="/static/css/variables.css', server_error.data)
         self.assertIn(b'href="/" class="outline-link">Return Home', server_error.data)
+
+    def test_trusted_hosts_include_canonical_render_host_and_normalize_urls(self):
+        hosts = normalize_trusted_hosts(
+            ("https://preview.lexnush.onrender.com",),
+            "https://lexnush.onrender.com",
+        )
+        self.assertEqual(hosts, ("preview.lexnush.onrender.com", "lexnush.onrender.com"))
 
     def test_public_ux_helpers_render_only_where_needed(self):
         article = self.client.get("/blogs/surgery-or-autopsy-adr-award-modification")

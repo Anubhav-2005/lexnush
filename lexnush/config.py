@@ -2,6 +2,7 @@
 
 import os
 from pathlib import Path
+from urllib.parse import urlsplit
 
 from sqlalchemy.engine import make_url
 
@@ -15,6 +16,25 @@ def environment_bool(name, default=False):
     if value is None:
         return default
     return value.strip().lower() in {"1", "true", "yes", "on"}
+
+
+def normalize_trusted_hosts(values, public_base_url):
+    """Accept hostnames or accidental full URLs, plus the canonical host."""
+    hosts = []
+
+    def add(value):
+        value = (value or "").strip()
+        if not value:
+            return
+        parsed = urlsplit(value if "://" in value else f"//{value}")
+        host = (parsed.hostname or "").rstrip(".").lower()
+        if host and host not in hosts:
+            hosts.append(host)
+
+    for value in values:
+        add(value)
+    add(public_base_url)
+    return tuple(hosts)
 
 
 def normalize_database_url(database_url):
@@ -51,7 +71,7 @@ class BaseConfig:
     SESSION_REFRESH_EACH_REQUEST = False
     PERMANENT_SESSION_LIFETIME = 60 * 60 * 8
     TRUSTED_PROXY_COUNT = int(os.getenv("TRUSTED_PROXY_COUNT", "0"))
-    TRUSTED_HOSTS = environment_list("LEXNUSH_TRUSTED_HOSTS") or None
+    TRUSTED_HOSTS = normalize_trusted_hosts(environment_list("LEXNUSH_TRUSTED_HOSTS"), PUBLIC_BASE_URL) or None
     WTF_CSRF_FIELD_NAME = "_csrf_token"
     WTF_CSRF_TIME_LIMIT = 3600
     RATE_LIMIT_STORAGE_URI = REDIS_URL
