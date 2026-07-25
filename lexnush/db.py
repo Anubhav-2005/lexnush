@@ -118,15 +118,8 @@ def verify_production_database():
     if missing_tables:
         raise RuntimeError("Production migration verification failed; missing tables: " + ", ".join(missing_tables))
 
-    from alembic.config import Config
-
-alembic_cfg = Config("alembic.ini")
-alembic_cfg.set_main_option(
-    "script_location",
-    str(Path(current_app.root_path).parent / "migrations"),
-)
-
-expected_revision = ScriptDirectory.from_config(alembic_cfg).get_current_head()
+    migration_config = migrate.get_config()
+    expected_revision = ScriptDirectory.from_config(migration_config).get_current_head()
     with engine.connect() as connection:
         current_revision = MigrationContext.configure(connection).get_current_revision()
         database_name = connection.execute(text("SELECT current_database()")).scalar_one()
