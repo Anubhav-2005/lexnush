@@ -103,8 +103,10 @@ class LexNushAppTests(unittest.TestCase):
     def test_home_uses_editorial_experience_without_redundant_final_cta(self):
         homepage = self.client.get("/")
         self.assertIn(b"Independent legal editorial", homepage.data)
+        self.assertIn(b"Law, policy, and public life", homepage.data)
         self.assertIn(b"Our editorial approach", homepage.data)
         self.assertIn(b"Careful with the record", homepage.data)
+        self.assertNotIn(b"Law, in the language of", homepage.data)
         self.assertNotIn(b"dossier-orbit", homepage.data)
         self.assertNotIn(b"Indian law, explained", homepage.data)
         self.assertNotIn(b"Read law like it belongs in the real world.", homepage.data)

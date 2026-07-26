@@ -32,14 +32,14 @@
 
 .hero-content {
     display: grid;
-    gap: var(--space-6);
+    gap: var(--space-5);
 }
 
 .hero-copy {
-    max-width: 58ch;
+    max-width: 56ch;
     color: var(--color-muted);
-    font-size: clamp(1rem, 1.3vw, 1.12rem);
-    line-height: 1.8;
+    font-size: clamp(0.98rem, 1.2vw, 1.08rem);
+    line-height: 1.76;
 }
 
 .hero-actions {

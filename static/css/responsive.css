@@ -349,7 +349,8 @@
 
 @media (max-width: 390px) {
     .display-title {
-        font-size: clamp(2rem, 11vw, 2.5rem);
+        font-size: clamp(2.25rem, 11vw, 2.65rem);
+        line-height: 1.03;
     }
 
     .page-title {
