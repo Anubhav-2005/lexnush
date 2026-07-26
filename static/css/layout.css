@@ -1,5 +1,7 @@
 body {
-    background: linear-gradient(180deg, var(--color-bg) 0%, var(--color-bg-soft) 100%);
+    background:
+        radial-gradient(circle at 80% 4%, color-mix(in srgb, var(--color-accent) 5%, transparent), transparent 28rem),
+        linear-gradient(180deg, var(--color-bg) 0%, var(--color-bg-soft) 100%);
     min-height: 100vh;
     transition: background-color 0.35s var(--ease-standard), color 0.35s var(--ease-standard);
 }
@@ -49,10 +51,10 @@ body::before {
     justify-content: space-between;
     gap: var(--space-4);
     min-height: var(--nav-height);
-    padding: var(--space-2) var(--space-3) var(--space-2) var(--space-5);
-    background: color-mix(in srgb, var(--color-surface-solid) 72%, transparent);
+    padding: var(--space-2) var(--space-3) var(--space-2) var(--space-4);
+    background: color-mix(in srgb, var(--color-surface-solid) 78%, transparent);
     border: 1px solid var(--color-border);
-    border-radius: var(--radius-full);
+    border-radius: var(--radius-lg);
     box-shadow: var(--shadow-sm);
     backdrop-filter: blur(20px);
     transition: background 0.28s var(--ease-standard), border-color 0.28s var(--ease-standard), box-shadow 0.28s var(--ease-standard);
@@ -90,16 +92,16 @@ body::before {
     align-items: center;
     justify-content: center;
     flex: 1;
-    gap: clamp(12px, 2vw, 28px);
+    gap: clamp(12px, 2vw, 26px);
     padding-inline: var(--space-4);
 }
 
 .nav-link {
     position: relative;
     color: var(--color-subtle);
-    font-size: 0.72rem;
+    font-size: 0.69rem;
     font-weight: 650;
-    letter-spacing: 0.07em;
+    letter-spacing: 0.09em;
     text-transform: uppercase;
     min-height: 44px;
     display: inline-flex;
@@ -138,6 +140,19 @@ body::before {
     justify-content: flex-end;
     flex-shrink: 0;
     gap: var(--space-2);
+}
+
+#search-trigger {
+    width: auto;
+    padding-inline: 11px;
+    gap: 7px;
+}
+
+.search-shortcut {
+    color: var(--color-subtle);
+    font-size: 0.61rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
 }
 
 .mobile-menu {
@@ -212,6 +227,7 @@ body::before {
 .site-footer {
     margin-top: auto;
     border-top: 1px solid var(--color-border);
+    background: color-mix(in srgb, var(--color-bg) 48%, transparent);
     padding: var(--space-12) var(--gutter) var(--space-8);
 }
 

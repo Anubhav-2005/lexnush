@@ -2,53 +2,58 @@
 
 {% block content %}
 <section class="section home-hero">
+    <div class="hero-folio fade-in" aria-hidden="true">
+        <span>LexNush / Independent legal editorial</span>
+        <span>Vol. 01 &mdash; 2026</span>
+    </div>
     <div class="hero-grid">
         <div class="hero-content">
-            <p class="eyebrow fade-in">Premium Legal Intelligence</p>
-            <h1 class="display-title fade-in delay-1">Law, policy, and public life—explained with clarity and context.</h1>
+            <p class="eyebrow fade-in">Law beyond the headline</p>
+            <h1 class="display-title fade-in delay-1">Law, in the language of <em>real life.</em></h1>
             <p class="hero-copy fade-in delay-2">
-                LexNush turns complex judgments, policy shifts, institutions, and legal systems into clear editorial analysis for founders, professionals, students, and curious readers.
+                LexNush turns consequential judgments, policy shifts, and institutional change into lucid editorial analysis—for people who want the meaning, not just the ruling.
             </p>
             <div class="hero-actions fade-in delay-3">
                 <a href="{{ url_for('main.blogs') }}" class="primary-button">Read The Journal</a>
-                <a href="{{ url_for('main.about') }}" class="outline-link">Explore The Manifesto</a>
+                <a href="#featured-analysis-title" class="editorial-link">Begin with the lead story <span aria-hidden="true">&darr;</span></a>
             </div>
-            <dl class="hero-metrics fade-in delay-4">
-                <div>
-                    <dt>Focus</dt>
-                    <dd>Law &amp; Policy</dd>
-                </div>
-                <div>
-                    <dt>Format</dt>
-                    <dd>Editorial Intelligence</dd>
-                </div>
-                <div>
-                    <dt>Promise</dt>
-                    <dd>Global &amp; Local</dd>
-                </div>
-            </dl>
         </div>
 
         <aside class="hero-brief hero-dossier fade-in delay-4" aria-label="LexNush editorial desk">
-            <div class="dossier-topline"><span>LexNush dossier</span><span>Current edition</span></div>
-            <img src="{{ url_for('static', filename='logo.jpg') }}" alt="" class="hero-mark" width="96" height="96">
-            <p class="brief-kicker">Editorial desk</p>
-            <h2>Where law meets the real world.</h2>
-            <p>We follow the decisions, systems, and ideas shaping rights, markets, technology, governance, and the people living with their consequences.</p>
-            <div class="dossier-signals" aria-label="LexNush editorial subjects"><span>Courts</span><span>Policy</span><span>Rights</span><span>Technology</span></div>
+            <div class="dossier-topline"><span>From the editorial desk</span><span>Current edition</span></div>
+            <span class="dossier-number" aria-hidden="true">01</span>
+            <p class="brief-kicker">The LexNush brief</p>
+            <h2>What changes when law leaves the courtroom?</h2>
+            <p>We trace how decisions move through markets, technology, government, and everyday life—across borders, without losing the local detail.</p>
+            <dl class="briefing-index">
+                <div><dt>Lens</dt><dd>Global &amp; local</dd></div>
+                <div><dt>Method</dt><dd>Source-led</dd></div>
+                <div><dt>Voice</dt><dd>Independent</dd></div>
+            </dl>
             <a href="{{ url_for('main.about') }}" class="text-link">Our editorial approach</a>
         </aside>
     </div>
+    <ul class="editorial-standards fade-in delay-4" aria-label="LexNush editorial standards">
+        <li><span>01</span><strong>Careful with the record</strong></li>
+        <li><span>02</span><strong>Clear about uncertainty</strong></li>
+        <li><span>03</span><strong>Written for real people</strong></li>
+    </ul>
 </section>
 
 <section class="section section-wide featured-analysis" aria-labelledby="featured-analysis-title">
-    <div class="section-heading fade-in">
-        <span class="section-kicker">Featured Analysis</span>
-        <h2 id="featured-analysis-title" class="section-title">A closer read of the legal shifts worth watching.</h2>
+    <div class="section-heading section-heading-wide fade-in">
+        <div>
+            <span class="section-kicker">Featured analysis</span>
+            <h2 id="featured-analysis-title" class="section-title">The legal shifts worth a closer read.</h2>
+        </div>
+        <span class="section-index" aria-hidden="true">01 / Lead</span>
     </div>
     {% if featured_post %}
         <article class="feature-story fade-in delay-1">
-            <img src="{{ url_for('static', filename='images/lexnush-hero-editorial-1200.jpg') }}" srcset="{{ url_for('static', filename='images/lexnush-hero-editorial-640.jpg') }} 640w, {{ url_for('static', filename='images/lexnush-hero-editorial-1200.jpg') }} 1200w" sizes="(max-width: 768px) 100vw, 56vw" alt="Legal research materials on a desk" class="feature-story-image" width="1200" height="583" fetchpriority="high">
+            <figure class="feature-story-media">
+                <img src="{{ url_for('static', filename='images/lexnush-hero-editorial-1200.jpg') }}" srcset="{{ url_for('static', filename='images/lexnush-hero-editorial-640.jpg') }} 640w, {{ url_for('static', filename='images/lexnush-hero-editorial-1200.jpg') }} 1200w" sizes="(max-width: 768px) 100vw, 56vw" alt="Legal research materials on a desk" class="feature-story-image" width="1200" height="583" fetchpriority="high">
+                <figcaption>LexNush research desk &middot; Source-led analysis</figcaption>
+            </figure>
             <div class="feature-story-copy">
                 <div class="blog-card-header">
                     <span class="card-meta-label">{{ featured_post.category }}</span>
@@ -56,80 +61,91 @@
                 </div>
                 <h3>{{ featured_post.title }}</h3>
                 <p>{{ featured_post.summary }}</p>
-                <a href="{{ url_for('main.post_detail', slug=featured_post.slug) }}" class="text-link">Read the full analysis</a>
+                <a href="{{ url_for('main.post_detail', slug=featured_post.slug) }}" class="text-link">Open the full analysis <span aria-hidden="true">&rarr;</span></a>
             </div>
         </article>
     {% endif %}
 </section>
 
 <section class="section section-wide section-compact" aria-labelledby="latest-journal-title">
-    <div class="section-heading fade-in">
-        <span class="section-kicker">Latest Journal</span>
-        <h2 id="latest-journal-title" class="section-title">Reasoned reporting for consequential questions.</h2>
+    <div class="section-heading section-heading-wide fade-in">
+        <div>
+            <span class="section-kicker">Latest journal</span>
+            <h2 id="latest-journal-title" class="section-title">Reasoned writing for consequential questions.</h2>
+        </div>
+        <span class="section-index" aria-hidden="true">02 / Journal</span>
     </div>
-    <div class="content-grid">
+    <div class="journal-grid">
         {% for post in posts %}
-            <article class="blog-card stack-md fade-in">
+            <article class="journal-card fade-in">
+                <span class="journal-number" aria-hidden="true">0{{ loop.index }}</span>
                 <div class="blog-card-header">
                     <span class="card-meta-label">{{ post.category }}</span>
-                    <span class="card-meta">{{ post.read_time }}</span>
+                    <span class="card-meta">{{ post.date }} &bull; {{ post.read_time }}</span>
                 </div>
                 <h3 class="card-title">{{ post.title }}</h3>
                 <p>{{ post.summary }}</p>
-                <a href="{{ url_for('main.post_detail', slug=post.slug) }}" class="text-link">Read Analysis</a>
+                <a href="{{ url_for('main.post_detail', slug=post.slug) }}" class="text-link">Read analysis <span aria-hidden="true">&rarr;</span></a>
             </article>
         {% endfor %}
     </div>
     <div class="section-actions fade-in">
-        <a href="{{ url_for('main.blogs') }}" class="outline-link">Browse the Journal</a>
+        <a href="{{ url_for('main.blogs') }}" class="outline-link">Browse all writing</a>
     </div>
 </section>
 
-<section class="section section-wide section-compact">
-    <div class="section-heading fade-in">
-        <span class="section-kicker">What LexNush Does</span>
-        <h2 class="section-title">Legal insight that respects your time.</h2>
-        <p class="muted-copy">
-            The work is editorial, accessible, and commercially aware: less jargon theater, more judgment, structure, and practical context.
-        </p>
+<section class="section section-wide section-compact editorial-method" aria-labelledby="method-title">
+    <div class="section-heading method-intro fade-in">
+        <span class="section-kicker">The method</span>
+        <h2 id="method-title" class="section-title">Legal intelligence that respects your time.</h2>
+        <p class="muted-copy">Less jargon theatre. More judgment, structure, and useful context.</p>
     </div>
-    <div class="content-grid">
-        <article class="grid-card stack-sm fade-in delay-1">
-            <span class="card-meta-label">01</span>
-            <h2 class="card-title">Judgment Explainers</h2>
-            <p class="muted-copy">Clear breakdowns of important decisions, why they matter, and what changes after the headline fades.</p>
+    <div class="principles-list">
+        <article class="principle fade-in delay-1">
+            <span class="principle-number">01</span>
+            <div>
+                <h3>Read the source</h3>
+                <p>Important decisions, interpreted with care and anchored in the record.</p>
+            </div>
         </article>
-        <article class="grid-card stack-sm fade-in delay-2">
-            <span class="card-meta-label">02</span>
-            <h2 class="card-title">Policy Context</h2>
-            <p class="muted-copy">Thoughtful legal commentary across regulation, rights, technology, arbitration, and institutional change.</p>
+        <article class="principle fade-in delay-2">
+            <span class="principle-number">02</span>
+            <div>
+                <h3>Find the consequence</h3>
+                <p>Rights, regulation, technology, and markets—connected to the people they affect.</p>
+            </div>
         </article>
-        <article class="grid-card stack-sm fade-in delay-3">
-            <span class="card-meta-label">03</span>
-            <h2 class="card-title">Human Translation</h2>
-            <p class="muted-copy">Law explained without flattening its nuance, designed for readers who need signal instead of noise.</p>
+        <article class="principle fade-in delay-3">
+            <span class="principle-number">03</span>
+            <div>
+                <h3>Write like a human</h3>
+                <p>Complexity kept intact; needless complication removed.</p>
+            </div>
         </article>
     </div>
 </section>
 
 <section class="section section-wide editorial-mission" aria-labelledby="editorial-mission-title">
-    <div class="mission-image fade-in">
-        <img src="{{ url_for('static', filename='images/lexnush-hero-editorial-1200.jpg') }}" srcset="{{ url_for('static', filename='images/lexnush-hero-editorial-640.jpg') }} 640w, {{ url_for('static', filename='images/lexnush-hero-editorial-1200.jpg') }} 1200w" sizes="(max-width: 768px) 100vw, 50vw" alt="A legal professional reviewing source materials" loading="lazy" width="1200" height="583">
+    <div class="mission-note fade-in" aria-hidden="true">
+        <span class="mission-monogram">L/N</span>
+        <blockquote>“Clarity is not the enemy of legal precision. It is the proof of it.”</blockquote>
+        <span class="mission-rule"></span>
     </div>
     <div class="mission-copy stack-md fade-in delay-1">
-        <span class="section-kicker">Editorial Mission</span>
+        <span class="section-kicker">Editorial mission</span>
         <h2 id="editorial-mission-title" class="section-title">Law is public knowledge. It should be legible.</h2>
-        <p class="muted-copy">LexNush approaches legal writing as a public service: careful with the record, honest about uncertainty, and clear enough to be useful before the next meeting.</p>
-        <a href="{{ url_for('main.about') }}" class="text-link">How we work</a>
+        <p class="muted-copy">LexNush approaches legal writing as a public service: rigorous with the record, honest about uncertainty, and clear enough to be useful in the world beyond legal circles.</p>
+        <a href="{{ url_for('main.about') }}" class="text-link">Read the LexNush story <span aria-hidden="true">&rarr;</span></a>
     </div>
 </section>
 
 <section class="section section-compact" aria-labelledby="newsletter-title">
-    <div class="subscription-box fade-in">
-        <div class="stack-md">
+    <div class="subscription-box newsletter-editorial fade-in">
+        <span class="newsletter-mark" aria-hidden="true">L</span>
+        <div class="newsletter-copy stack-md">
             <span class="section-kicker">The LexNush Letter</span>
-            <h2 id="newsletter-title" class="section-title">A considered legal brief, when there is something worth saying.</h2>
-            <p>New analysis, editorial notes, and significant legal developments—delivered without the daily noise.</p>
+            <h2 id="newsletter-title" class="section-title">One considered legal brief. Only when it is worth your attention.</h2>
+            <p>New analysis, editorial notes, and significant legal developments—without the daily noise.</p>
             <form name="home-signup" method="post" action="{{ url_for('main.newsletter_signup') }}" class="subscription-form">
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
                 <input type="hidden" name="next" value="{{ url_for('main.home') }}">

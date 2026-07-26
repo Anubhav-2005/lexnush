@@ -2,14 +2,21 @@ from pathlib import Path
 from urllib.parse import quote
 
 import click
-from flask import Flask, current_app, url_for as flask_url_for
+from flask import Flask, current_app
+from flask import url_for as flask_url_for
 from werkzeug.middleware.proxy_fix import ProxyFix
 from werkzeug.routing import BuildError
 
 from .admin import admin_bp
 from .auth import init_login
 from .config import get_config
-from .db import backup_database, db, init_database, purge_personal_data, verify_production_database
+from .db import (
+    backup_database,
+    db,
+    init_database,
+    purge_personal_data,
+    verify_production_database,
+)
 from .mailer import retry_pending_outbox
 from .observability import init_observability
 from .rate_limit import init_rate_limiting

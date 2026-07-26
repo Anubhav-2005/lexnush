@@ -9,7 +9,7 @@ from pathlib import Path
 from alembic.runtime.migration import MigrationContext
 from alembic.script import ScriptDirectory
 from flask import current_app
-from flask_migrate import Config, Migrate
+from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Index, String, Text, inspect, select, text
 from sqlalchemy.orm import Mapped, mapped_column

@@ -1,28 +1,28 @@
 :root {
     color-scheme: dark;
 
-    --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --font-sans: "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     --font-serif: "Newsreader", Georgia, serif;
     --font-article: "Newsreader", Georgia, "Times New Roman", serif;
 
-    --color-bg: #090a0a;
-    --color-bg-soft: #111311;
-    --color-surface: rgba(19, 21, 20, 0.92);
-    --color-surface-solid: #151716;
-    --color-surface-raised: #1c1f1d;
-    --color-text: #f7f2e8;
-    --color-muted: #c8bfb0;
-    --color-subtle: #9f9585;
-    --color-accent: #d8b355;
-    --color-accent-strong: #f2d57d;
-    --color-accent-ink: #171209;
+    --color-bg: #0a0b0a;
+    --color-bg-soft: #111310;
+    --color-surface: rgba(20, 22, 19, 0.9);
+    --color-surface-solid: #151713;
+    --color-surface-raised: #1b1e19;
+    --color-text: #f3eee4;
+    --color-muted: #c4baaa;
+    --color-subtle: #998f80;
+    --color-accent: #c9a45d;
+    --color-accent-strong: #e2c47c;
+    --color-accent-ink: #161108;
     --color-support: #7fc8b1;
     --color-danger: #d86b6b;
     --color-success: #87c99a;
     --color-border: rgba(255, 255, 255, 0.1);
-    --color-border-strong: rgba(216, 179, 85, 0.38);
-    --color-focus: #f2d57d;
-    --color-focus-shadow: rgba(216, 179, 85, 0.22);
+    --color-border-strong: rgba(201, 164, 93, 0.4);
+    --color-focus: #e2c47c;
+    --color-focus-shadow: rgba(201, 164, 93, 0.22);
 
     --shadow-sm: 0 8px 24px rgba(0, 0, 0, 0.22);
     --shadow-md: 0 16px 48px rgba(0, 0, 0, 0.32);
@@ -30,8 +30,8 @@
 
     --radius-xs: 4px;
     --radius-sm: 8px;
-    --radius-md: 12px;
-    --radius-lg: 16px;
+    --radius-md: 10px;
+    --radius-lg: 18px;
     --radius-full: 999px;
 
     --space-1: 0.25rem;
@@ -62,24 +62,24 @@
 
 [data-theme="light"] {
     color-scheme: light;
-    --color-bg: #f7f5ef;
-    --color-bg-soft: #efeee7;
-    --color-surface: rgba(255, 255, 255, 0.94);
-    --color-surface-solid: #ffffff;
-    --color-surface-raised: #fbfaf7;
-    --color-text: #191817;
-    --color-muted: #4c463d;
-    --color-subtle: #736b60;
-    --color-accent: #8a600c;
-    --color-accent-strong: #664505;
+    --color-bg: #f3f0e8;
+    --color-bg-soft: #eae5da;
+    --color-surface: rgba(251, 249, 243, 0.94);
+    --color-surface-solid: #fbf9f3;
+    --color-surface-raised: #f6f2e9;
+    --color-text: #1c1b17;
+    --color-muted: #504a40;
+    --color-subtle: #756d60;
+    --color-accent: #7b5415;
+    --color-accent-strong: #5e3c08;
     --color-accent-ink: #ffffff;
     --color-support: #286f61;
     --color-danger: #a94040;
     --color-success: #367d4a;
     --color-border: rgba(24, 22, 19, 0.12);
-    --color-border-strong: rgba(138, 96, 12, 0.36);
-    --color-focus: #8a600c;
-    --color-focus-shadow: rgba(138, 96, 12, 0.16);
+    --color-border-strong: rgba(123, 84, 21, 0.38);
+    --color-focus: #7b5415;
+    --color-focus-shadow: rgba(123, 84, 21, 0.16);
     --shadow-sm: 0 6px 24px rgba(50, 42, 28, 0.07);
     --shadow-md: 0 14px 44px rgba(50, 42, 28, 0.1);
     --shadow-lg: 0 24px 64px rgba(50, 42, 28, 0.14);
