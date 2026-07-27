@@ -69,6 +69,7 @@ class BaseConfig:
     SESSION_COOKIE_SAMESITE = "Lax"
     SESSION_COOKIE_SECURE = False
     SESSION_REFRESH_EACH_REQUEST = False
+    ENFORCE_CANONICAL_HOST = False
     PERMANENT_SESSION_LIFETIME = 60 * 60 * 8
     TRUSTED_PROXY_COUNT = int(os.getenv("TRUSTED_PROXY_COUNT", "0"))
     TRUSTED_HOSTS = normalize_trusted_hosts(environment_list("LEXNUSH_TRUSTED_HOSTS"), PUBLIC_BASE_URL) or None
@@ -127,6 +128,7 @@ class TestingConfig(BaseConfig):
 
 class ProductionConfig(BaseConfig):
     DEBUG = False
+    ENFORCE_CANONICAL_HOST = True
     PREFERRED_URL_SCHEME = "https"
     SESSION_COOKIE_SECURE = True
     EMAIL_DELIVERY_ENABLED = True

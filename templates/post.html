@@ -8,8 +8,11 @@
     <span class="card-meta-label" itemprop="articleSection">{{ post.category }}</span>
     <h1 class="article-title" itemprop="headline">{{ post.title }}</h1>
     <div class="article-meta">
-        <span itemprop="author" itemscope itemtype="https://schema.org/Person">By <strong itemprop="name">{{ post.author }}</strong></span>
-        <time datetime="{{ post.date_iso }}">{{ post.date }}</time>
+        <span itemprop="author" itemscope itemtype="https://schema.org/Person">
+            By <a itemprop="url" href="{{ url_for('main.author_detail', slug=post.author_slug) }}"><strong itemprop="name">{{ post.author }}</strong></a>
+        </span>
+        <time datetime="{{ post.date_published_iso }}" itemprop="datePublished">{{ post.date }}</time>
+        <span>Updated <time datetime="{{ post.date_modified_iso }}" itemprop="dateModified">{{ post.date_modified }}</time></span>
         <span>{{ post.read_time }}</span>
     </div>
 </section>
@@ -31,6 +34,32 @@
     <div class="article-body">
         {{ post.content | safe }}
     </div>
+
+    {% if post.sources %}
+        <section class="article-sources" aria-labelledby="article-sources-title">
+            <span class="section-kicker">Primary source</span>
+            <h2 id="article-sources-title">Read the record</h2>
+            <p>This analysis is anchored in the court record below.</p>
+            <ul>
+                {% for source in post.sources %}
+                    <li>
+                        <a href="{{ source.url }}" rel="noopener noreferrer">{{ source.title }}</a>
+                        <span>{{ source.publisher }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </section>
+    {% endif %}
+
+    <aside class="article-author" aria-labelledby="article-author-title">
+        <img src="{{ url_for('static', filename='images/anushka-760.jpg') }}" alt="{{ post.author }}, founder and legal designer at LexNush" width="152" height="203" loading="lazy">
+        <div>
+            <span class="section-kicker">About the author</span>
+            <h2 id="article-author-title">{{ post.author }}</h2>
+            <p>{{ author.short_bio }}</p>
+            <a href="{{ url_for('main.author_detail', slug=post.author_slug) }}" class="text-link">View author profile <span aria-hidden="true">&rarr;</span></a>
+        </div>
+    </aside>
 
     <section class="article-share" aria-labelledby="share-title">
         <h2 id="share-title">Share this analysis</h2>

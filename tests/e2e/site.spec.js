@@ -3,7 +3,7 @@ const { test, expect } = require("@playwright/test");
 const article = "/blogs/surgery-or-autopsy-adr-award-modification";
 
 test("public routes return rendered pages", async ({ page }) => {
-    for (const path of ["/", "/about/", "/blogs/", article, "/interviews/", "/contact/", "/privacy/", "/not-found"]) {
+    for (const path of ["/", "/about/", "/authors/anushka-pandey/", "/blogs/", article, "/interviews/", "/contact/", "/privacy/", "/not-found"]) {
         const response = await page.goto(path);
         expect(response.status()).toBe(path === "/not-found" ? 404 : 200);
         await expect(page.locator("main")).toBeVisible();

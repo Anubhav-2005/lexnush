@@ -4,6 +4,20 @@ from html import unescape
 from textwrap import dedent
 
 HTML_TAG_RE = re.compile(r"<[^>]+>")
+SITE_LASTMOD_ISO = "2026-07-27"
+
+AUTHORS = {
+    "anushka-pandey": {
+        "slug": "anushka-pandey",
+        "name": "Anushka Pandey",
+        "role": "Founder and Legal Designer",
+        "short_bio": (
+            "Anushka Pandey is the founder of LexNush and a legal designer focused "
+            "on making law, policy, and institutional change clear without flattening their complexity."
+        ),
+        "image": "images/anushka-760.jpg",
+    }
+}
 
 
 def calculate_read_time(text):
@@ -19,9 +33,30 @@ BLOG_POSTS = [
         "slug": "surgery-or-autopsy-adr-award-modification",
         "title": "Surgery or Autopsy? The Supreme Court's Arbitral Scalpel",
         "author": "Anushka Pandey",
+        "author_slug": "anushka-pandey",
         "category": "ADR",
         "date": "March 2026",
         "date_iso": "2026-03-01",
+        "date_modified": "July 2026",
+        "date_published_iso": "2026-03-01T09:00:00+05:30",
+        "date_modified_iso": "2026-07-27T16:45:00+05:30",
+        "keywords": [
+            "Gayatri Balasamy v ISG Novasoft",
+            "2025 INSC 605",
+            "arbitral award modification",
+            "Section 34 Arbitration Act",
+            "Supreme Court of India",
+            "alternative dispute resolution",
+        ],
+        "image_alt": "Legal research materials arranged on a desk",
+        "sources": [
+            {
+                "title": "Gayatri Balasamy v. M/s ISG Novasoft Technologies Limited, 2025 INSC 605",
+                "publisher": "Supreme Court of India",
+                "url": "https://api.sci.gov.in/supremecourt/2021/20788/20788_2021_1_1501_61506_Judgement_30-Apr-2025.pdf",
+            }
+        ],
+        "seo_description": "LexNush analyses Gayatri Balasamy v ISG Novasoft (2025 INSC 605), where India's Supreme Court recognised a limited power to modify arbitral awards.",
         "summary": "It is the ultimate legal showdown: does this rescue people from endless litigation loops, or has the court opened the floodgates for judges to rewrite private contracts?",
         "key_takeaways": [
             "For the last thirty years, the absolute golden rule of arbitration has been finality.",
@@ -131,6 +166,7 @@ BLOG_POSTS = [
 
 for post in BLOG_POSTS:
     post["read_time"] = calculate_read_time(post["content"])
+    post["word_count"] = len(unescape(HTML_TAG_RE.sub(" ", post["content"])).split())
 
 
 INTERVIEWS = [
@@ -147,23 +183,24 @@ INTERVIEWS = [
 
 PAGE_META = {
     "home": {
-        "title": "LexNush | Law With A Pulse",
-        "description": "LexNush is a premium legal publication for clear legal analysis, policy conversations, and modern legal insight.",
+        "title": "LexNush | Clear Legal Analysis, Policy & Public Life",
+        "description": "LexNush is an independent legal publication making consequential judgments, policy shifts, and public institutions clear, contextual, and useful.",
     },
     "about": {
-        "title": "About LexNush",
-        "description": "Learn why LexNush exists and how it translates law into clear, useful, human-centered legal insight.",
+        "title": "About LexNush | Independent Legal Publication",
+        "description": "Meet LexNush and founder Anushka Pandey. Learn how the independent publication turns complex law and policy into clear, source-led editorial analysis.",
     },
     "blogs": {
-        "title": "The Journal",
-        "description": "Read LexNush essays on law, arbitration, policy, judgments, institutions, and the future of legal thinking.",
+        "title": "LexNush Journal | Legal Analysis, Judgments & Policy",
+        "description": "Read source-led LexNush analysis of important judgments, arbitration, policy, institutions, technology, business, and public life.",
     },
     "interviews": {
-        "title": "Interviews",
+        "title": "Legal Conversations & Interviews | LexNush",
         "description": "Candid LexNush conversations with legal practitioners, policy architects, and institutional voices.",
+        "robots": "noindex, follow",
     },
     "contact": {
-        "title": "Contact LexNush",
+        "title": "Contact LexNush | Editorial Pitches & Corrections",
         "description": "Contact LexNush for editorial pitches, collaboration proposals, corrections, and thoughtful legal dialogue.",
     },
     "privacy": {

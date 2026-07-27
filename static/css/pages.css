@@ -818,6 +818,12 @@
     color: var(--color-text);
 }
 
+.article-meta a {
+    color: inherit;
+    text-decoration-color: color-mix(in srgb, var(--color-accent) 55%, transparent);
+    text-underline-offset: 0.2em;
+}
+
 .article-container {
     width: min(100% - var(--gutter) * 2, var(--container-sm));
     margin-inline: auto;
@@ -924,6 +930,77 @@
     color: var(--color-muted);
 }
 
+.article-sources {
+    display: grid;
+    gap: var(--space-3);
+    margin-top: var(--space-12);
+    padding: clamp(22px, 4vw, 32px);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+}
+
+.article-sources h2,
+.article-author h2 {
+    font-family: var(--font-serif);
+    font-size: clamp(1.35rem, 2.5vw, 1.7rem);
+}
+
+.article-sources > p,
+.article-author p {
+    color: var(--color-muted);
+    line-height: 1.7;
+}
+
+.article-sources ul {
+    display: grid;
+    gap: var(--space-3);
+    padding: 0;
+    list-style: none;
+}
+
+.article-sources li {
+    display: grid;
+    gap: var(--space-1);
+}
+
+.article-sources a {
+    color: var(--color-text);
+    font-weight: 650;
+    text-decoration-color: color-mix(in srgb, var(--color-accent) 55%, transparent);
+    text-underline-offset: 0.22em;
+}
+
+.article-sources li span {
+    color: var(--color-subtle);
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.article-author {
+    display: grid;
+    grid-template-columns: 112px minmax(0, 1fr);
+    gap: var(--space-6);
+    align-items: center;
+    margin-top: var(--space-8);
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--color-border);
+}
+
+.article-author img {
+    width: 112px;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+    filter: saturate(0.78);
+}
+
+.article-author > div {
+    display: grid;
+    gap: var(--space-2);
+}
+
 .article-share {
     margin-top: var(--space-16);
     padding-top: var(--space-6);
@@ -947,6 +1024,18 @@
     margin-top: var(--space-2);
     color: var(--color-muted);
     font-size: 0.88rem;
+}
+
+@media (max-width: 560px) {
+    .article-author {
+        grid-template-columns: 76px minmax(0, 1fr);
+        gap: var(--space-4);
+        align-items: start;
+    }
+
+    .article-author img {
+        width: 76px;
+    }
 }
 
 .error-page {

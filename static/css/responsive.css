@@ -46,6 +46,7 @@
     }
 
     .site-header {
+        z-index: 1600;
         padding: var(--space-3) var(--gutter);
     }
 

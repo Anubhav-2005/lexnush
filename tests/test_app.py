@@ -64,7 +64,17 @@ class LexNushAppTests(unittest.TestCase):
         return data
 
     def test_public_pages_render(self):
-        for path in ["/", "/about/", "/blogs/", "/interviews/", "/contact/", "/privacy/", "/healthz"]:
+        for path in [
+            "/",
+            "/about/",
+            "/authors/anushka-pandey/",
+            "/blogs/",
+            "/interviews/",
+            "/contact/",
+            "/privacy/",
+            "/feed.xml",
+            "/healthz",
+        ]:
             with self.subTest(path=path):
                 self.assertEqual(self.client.get(path).status_code, 200)
 
@@ -117,6 +127,31 @@ class LexNushAppTests(unittest.TestCase):
         self.assertEqual(response.headers["X-Content-Type-Options"], "nosniff")
         self.assertEqual(response.headers["X-Frame-Options"], "DENY")
         self.assertIn("http://testserver/", response.get_data(as_text=True))
+
+    def test_public_seo_metadata_and_structured_data_are_complete(self):
+        homepage = self.client.get("/").get_data(as_text=True)
+        self.assertIn("<title>LexNush | Clear Legal Analysis, Policy &amp; Public Life</title>", homepage)
+        self.assertIn('name="robots" content="index, follow, max-image-preview:large', homepage)
+        self.assertIn('"alternateName": "LexNush Legal Journal"', homepage)
+        self.assertIn('"@type": "Organization"', homepage)
+        self.assertIn('rel="alternate" type="application/atom+xml"', homepage)
+        self.assertIn('property="og:image:alt"', homepage)
+
+        article = self.client.get("/blogs/surgery-or-autopsy-adr-award-modification").get_data(as_text=True)
+        self.assertIn('"@type": "BlogPosting"', article)
+        self.assertIn('"dateModified": "2026-07-27T16:45:00+05:30"', article)
+        self.assertIn('"wordCount":', article)
+        self.assertIn('href="/authors/anushka-pandey/"', article)
+        self.assertIn("2025 INSC 605", article)
+        self.assertIn("api.sci.gov.in", article)
+
+        author = self.client.get("/authors/anushka-pandey/").get_data(as_text=True)
+        self.assertIn('"@type": "ProfilePage"', author)
+        self.assertIn("Founder and Legal Designer", author)
+
+    def test_thin_placeholder_page_is_noindex(self):
+        interviews = self.client.get("/interviews/").get_data(as_text=True)
+        self.assertIn('name="robots" content="noindex, follow"', interviews)
 
     def test_contact_is_persisted_with_outbox_event(self):
         response = self.client.post("/contact/", data=self.contact_payload(), follow_redirects=True)
@@ -202,9 +237,41 @@ class LexNushAppTests(unittest.TestCase):
 
     def test_sitemap_and_robots_use_public_url(self):
         self.assertIn(b"http://testserver/sitemap.xml", self.client.get("/robots.txt").data)
+        self.assertIn(b"http://testserver/feed.xml", self.client.get("/robots.txt").data)
+        self.assertIn(b"Disallow: /admin/", self.client.get("/robots.txt").data)
         sitemap = self.client.get("/sitemap.xml").get_data(as_text=True)
-        self.assertIn("<lastmod>2026-03-01</lastmod>", sitemap)
+        self.assertIn("<lastmod>2026-07-27</lastmod>", sitemap)
         self.assertIn("http://testserver/blogs/", sitemap)
+        self.assertIn("http://testserver/authors/anushka-pandey/", sitemap)
+        self.assertIn('xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"', sitemap)
+        self.assertNotIn("http://testserver/interviews/", sitemap)
+
+        feed = self.client.get("/feed.xml")
+        self.assertEqual(feed.mimetype, "application/atom+xml")
+        self.assertIn(b"<title>LexNush Journal</title>", feed.data)
+        self.assertIn(b"2025 INSC 605", feed.data)
+
+    def test_production_canonical_host_redirect_preserves_path_and_query(self):
+        canonical_app = create_app(
+            "testing",
+            {
+                "SQLALCHEMY_DATABASE_URI": f"sqlite:///{Path(self.tempdir.name) / 'canonical.sqlite3'}",
+                "PUBLIC_BASE_URL": "https://lexnush.com",
+                "TRUSTED_HOSTS": ["lexnush.com", "lexnush.onrender.com"],
+                "ENFORCE_CANONICAL_HOST": True,
+            },
+        )
+        client = canonical_app.test_client()
+        response = client.get(
+            "/blogs/?utm_source=render",
+            base_url="https://lexnush.onrender.com",
+            follow_redirects=False,
+        )
+        self.assertEqual(response.status_code, 308)
+        self.assertEqual(response.headers["Location"], "https://lexnush.com/blogs/?utm_source=render")
+
+        health = client.get("/healthz", base_url="https://lexnush.onrender.com")
+        self.assertEqual(health.status_code, 200)
 
     def test_csrf_is_enforced_when_enabled(self):
         secure_app = create_app(

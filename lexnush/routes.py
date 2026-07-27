@@ -6,7 +6,7 @@ from xml.sax.saxutils import escape as xml_escape
 from flask import Blueprint, Response, abort, current_app, flash, jsonify, redirect, render_template, request, url_for
 
 from .anti_abuse import honeypot_tripped, verify_turnstile
-from .content import BLOG_POSTS, INTERVIEWS, PAGE_META
+from .content import AUTHORS, BLOG_POSTS, INTERVIEWS, PAGE_META, SITE_LASTMOD_ISO
 from .db import (
     consume_newsletter_token,
     create_newsletter_token,
@@ -39,26 +39,107 @@ PAGE_ENDPOINTS = {
     "privacy": "main.privacy",
 }
 
+PAGE_SCHEMA_TYPES = {
+    "home": "WebPage",
+    "about": "AboutPage",
+    "blogs": "CollectionPage",
+    "interviews": "CollectionPage",
+    "contact": "ContactPage",
+    "privacy": "WebPage",
+}
+
 
 def public_url(endpoint, **values):
     path = url_for(endpoint, **values)
     return f"{current_app.config['PUBLIC_BASE_URL'].rstrip('/')}{path}"
 
 
+def organization_schema():
+    home_url = public_url("main.home")
+    return {
+        "@type": "Organization",
+        "@id": f"{home_url}#organization",
+        "name": "LexNush",
+        "alternateName": "LexNush Legal Journal",
+        "url": home_url,
+        "logo": {
+            "@type": "ImageObject",
+            "url": public_url("static", filename="logo.jpg"),
+            "width": 1024,
+            "height": 1024,
+        },
+        "email": "editor@lexnush.com",
+        "sameAs": ["https://www.linkedin.com/company/thelexnush/"],
+    }
+
+
+def website_schema():
+    home_url = public_url("main.home")
+    return {
+        "@type": "WebSite",
+        "@id": f"{home_url}#website",
+        "name": "LexNush",
+        "alternateName": "LexNush Legal Journal",
+        "url": home_url,
+        "description": "Independent legal analysis of law, policy, institutions, business, technology, and public life.",
+        "inLanguage": "en",
+        "publisher": {"@id": f"{home_url}#organization"},
+    }
+
+
+def breadcrumb_schema(items):
+    return {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": position, "name": name, "item": item}
+            for position, (name, item) in enumerate(items, start=1)
+        ],
+    }
+
+
 def page_meta(name):
     meta = dict(PAGE_META[name])
     current_url = public_url(PAGE_ENDPOINTS[name])
-    breadcrumbs = [{"@type": "ListItem", "position": 1, "name": "Home", "item": public_url("main.home")}]
+    home_url = public_url("main.home")
+    breadcrumb_items = [("Home", home_url)]
     if name != "home":
-        breadcrumbs.append({"@type": "ListItem", "position": 2, "name": meta["title"], "item": current_url})
+        breadcrumb_items.append((meta["title"].split(" | ", 1)[0], current_url))
     meta["url"] = current_url
+    meta["image"] = public_url("static", filename="images/lexnush-hero-editorial-1200.jpg")
+    meta["image_alt"] = "Legal research materials arranged on a desk"
+    meta["image_width"] = 1200
+    meta["image_height"] = 583
+    page_node = {
+        "@type": PAGE_SCHEMA_TYPES[name],
+        "@id": f"{current_url}#webpage",
+        "url": current_url,
+        "name": meta["title"],
+        "description": meta["description"],
+        "isPartOf": {"@id": f"{home_url}#website"},
+        "about": {"@id": f"{home_url}#organization"},
+        "inLanguage": "en",
+    }
+    graph = [website_schema(), organization_schema(), page_node, breadcrumb_schema(breadcrumb_items)]
+    if name in {"home", "blogs"} and BLOG_POSTS:
+        graph.append(
+            {
+                "@type": "ItemList",
+                "@id": f"{current_url}#articles",
+                "name": "LexNush legal analysis",
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": position,
+                        "url": public_url("main.post_detail", slug=post["slug"]),
+                        "name": post["title"],
+                    }
+                    for position, post in enumerate(BLOG_POSTS, start=1)
+                ],
+            }
+        )
     meta["schema"] = {
         "@context": "https://schema.org",
-        "@graph": [
-            {"@type": "WebSite", "name": "LexNush", "url": public_url("main.home"), "description": "Premium legal intelligence for clear, contextual analysis of law, policy, institutions, and public life."},
-            {"@type": "Organization", "name": "LexNush", "url": public_url("main.home"), "email": "editor@lexnush.com", "sameAs": ["https://www.linkedin.com/company/thelexnush/"]},
-            {"@type": "BreadcrumbList", "itemListElement": breadcrumbs},
-        ],
+        "@graph": graph,
     }
     return meta
 
@@ -110,22 +191,114 @@ def post_detail(slug):
     post = find_post(slug)
     if post is None:
         abort(404)
+    home_url = public_url("main.home")
     article_url = public_url("main.post_detail", slug=post["slug"])
+    author_url = public_url("main.author_detail", slug=post["author_slug"])
+    image_url = public_url("static", filename="images/lexnush-hero-editorial-1200.jpg")
     meta = {
-        "title": post["title"],
-        "description": post["summary"],
+        "title": f"{post['title']} | LexNush",
+        "description": post["seo_description"],
         "type": "article",
         "url": article_url,
-        "image": public_url("static", filename="images/lexnush-hero-editorial-1200.jpg"),
+        "image": image_url,
+        "image_alt": post["image_alt"],
+        "image_width": 1200,
+        "image_height": 583,
+        "published_time": post["date_published_iso"],
+        "modified_time": post["date_modified_iso"],
+        "section": post["category"],
+        "author_name": post["author"],
         "schema": {
             "@context": "https://schema.org",
             "@graph": [
-                {"@type": "Article", "headline": post["title"], "description": post["summary"], "datePublished": post["date_iso"], "dateModified": post["date_iso"], "author": {"@type": "Person", "name": post["author"]}, "publisher": {"@type": "Organization", "name": "LexNush"}, "mainEntityOfPage": article_url, "image": public_url("static", filename="images/lexnush-hero-editorial-1200.jpg")},
-                {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": public_url("main.home")}, {"@type": "ListItem", "position": 2, "name": "Journal", "item": public_url("main.blogs")}, {"@type": "ListItem", "position": 3, "name": post["title"], "item": article_url}]},
+                website_schema(),
+                organization_schema(),
+                {
+                    "@type": "BlogPosting",
+                    "@id": f"{article_url}#article",
+                    "url": article_url,
+                    "headline": post["title"],
+                    "description": post["seo_description"],
+                    "datePublished": post["date_published_iso"],
+                    "dateModified": post["date_modified_iso"],
+                    "author": {
+                        "@type": "Person",
+                        "@id": f"{author_url}#person",
+                        "name": post["author"],
+                        "url": author_url,
+                    },
+                    "publisher": {"@id": f"{home_url}#organization"},
+                    "mainEntityOfPage": {"@type": "WebPage", "@id": article_url},
+                    "image": {
+                        "@type": "ImageObject",
+                        "url": image_url,
+                        "width": 1200,
+                        "height": 583,
+                        "caption": post["image_alt"],
+                    },
+                    "articleSection": post["category"],
+                    "keywords": post["keywords"],
+                    "wordCount": post["word_count"],
+                    "inLanguage": "en-IN",
+                    "isAccessibleForFree": True,
+                },
+                breadcrumb_schema(
+                    [
+                        ("Home", home_url),
+                        ("Journal", public_url("main.blogs")),
+                        (post["title"], article_url),
+                    ]
+                ),
             ],
         },
     }
-    return render_template("post.html", post=post, meta=meta)
+    return render_template("post.html", post=post, author=AUTHORS[post["author_slug"]], meta=meta)
+
+
+@main_bp.route("/authors/<slug>/")
+def author_detail(slug):
+    author = AUTHORS.get(slug)
+    if author is None:
+        abort(404)
+    author_url = public_url("main.author_detail", slug=slug)
+    home_url = public_url("main.home")
+    author_posts = [post for post in BLOG_POSTS if post.get("author_slug") == slug]
+    image_url = public_url("static", filename=author["image"])
+    meta = {
+        "title": f"{author['name']} | Founder & Author at LexNush",
+        "description": author["short_bio"],
+        "url": author_url,
+        "image": image_url,
+        "image_alt": f"{author['name']}, {author['role']} at LexNush",
+        "image_width": 760,
+        "image_height": 1013,
+        "schema": {
+            "@context": "https://schema.org",
+            "@graph": [
+                website_schema(),
+                organization_schema(),
+                {
+                    "@type": "ProfilePage",
+                    "@id": f"{author_url}#profile",
+                    "url": author_url,
+                    "name": f"{author['name']} | LexNush",
+                    "dateModified": SITE_LASTMOD_ISO,
+                    "mainEntity": {
+                        "@type": "Person",
+                        "@id": f"{author_url}#person",
+                        "name": author["name"],
+                        "jobTitle": author["role"],
+                        "description": author["short_bio"],
+                        "url": author_url,
+                        "image": image_url,
+                        "worksFor": {"@id": f"{home_url}#organization"},
+                    },
+                },
+                breadcrumb_schema([("Home", home_url), (author["name"], author_url)]),
+            ],
+        },
+    }
+    return render_template("author.html", author=author, posts=author_posts, meta=meta)
 
 
 @main_bp.route("/interviews/")
@@ -230,33 +403,113 @@ def healthz():
 
 @main_bp.route("/robots.txt")
 def robots_txt():
-    body = "\n".join(["User-agent: *", "Allow: /", f"Sitemap: {public_url('main.sitemap_xml')}", ""])
+    body = "\n".join(
+        [
+            "User-agent: *",
+            "Allow: /",
+            "Disallow: /admin/",
+            "Disallow: /api/",
+            "Disallow: /healthz",
+            "Disallow: /newsletter/",
+            f"Sitemap: {public_url('main.sitemap_xml')}",
+            f"Sitemap: {public_url('main.feed_xml')}",
+            "",
+        ]
+    )
     return Response(body, mimetype="text/plain")
 
 
 @main_bp.route("/sitemap.xml")
 def sitemap_xml():
-    urls = [(public_url("main.home"), None), (public_url("main.about"), None), (public_url("main.blogs"), None), (public_url("main.interviews"), None), (public_url("main.contact"), None)]
-    urls.extend((public_url("main.post_detail", slug=post["slug"]), post["date_iso"]) for post in BLOG_POSTS)
-    body = ['<?xml version="1.0" encoding="UTF-8"?>', '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
-    for url, lastmod in urls:
+    urls = [
+        (public_url("main.home"), SITE_LASTMOD_ISO, public_url("static", filename="images/lexnush-hero-editorial-1200.jpg")),
+        (public_url("main.about"), SITE_LASTMOD_ISO, public_url("static", filename="images/anushka-760.jpg")),
+        (public_url("main.blogs"), SITE_LASTMOD_ISO, None),
+        (public_url("main.contact"), SITE_LASTMOD_ISO, None),
+    ]
+    urls.extend(
+        (
+            public_url("main.author_detail", slug=author["slug"]),
+            SITE_LASTMOD_ISO,
+            public_url("static", filename=author["image"]),
+        )
+        for author in AUTHORS.values()
+    )
+    urls.extend(
+        (
+            public_url("main.post_detail", slug=post["slug"]),
+            post["date_modified_iso"].split("T", 1)[0],
+            public_url("static", filename="images/lexnush-hero-editorial-1200.jpg"),
+        )
+        for post in BLOG_POSTS
+    )
+    body = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">',
+    ]
+    for url, lastmod, image_url in urls:
         extra = f"<lastmod>{xml_escape(lastmod)}</lastmod>" if lastmod else ""
-        body.append(f"  <url><loc>{xml_escape(url)}</loc>{extra}</url>")
+        image = f"<image:image><image:loc>{xml_escape(image_url)}</image:loc></image:image>" if image_url else ""
+        body.append(f"  <url><loc>{xml_escape(url)}</loc>{extra}{image}</url>")
     body.append("</urlset>")
     return Response("\n".join(body), mimetype="application/xml")
+
+
+@main_bp.route("/feed.xml")
+def feed_xml():
+    home_url = public_url("main.home")
+    feed_updated = max(
+        (post["date_modified_iso"] for post in BLOG_POSTS),
+        default=f"{SITE_LASTMOD_ISO}T00:00:00+05:30",
+    )
+    body = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<feed xmlns="http://www.w3.org/2005/Atom">',
+        "  <title>LexNush Journal</title>",
+        f"  <id>{xml_escape(home_url)}</id>",
+        f'  <link href="{xml_escape(public_url("main.feed_xml"))}" rel="self"/>',
+        f'  <link href="{xml_escape(home_url)}"/>',
+        f"  <updated>{xml_escape(feed_updated)}</updated>",
+        "  <subtitle>Clear, source-led analysis of law, policy, institutions, and public life.</subtitle>",
+    ]
+    for post in BLOG_POSTS:
+        article_url = public_url("main.post_detail", slug=post["slug"])
+        body.extend(
+            [
+                "  <entry>",
+                f"    <title>{xml_escape(post['title'])}</title>",
+                f"    <id>{xml_escape(article_url)}</id>",
+                f'    <link href="{xml_escape(article_url)}"/>',
+                f"    <published>{xml_escape(post['date_published_iso'])}</published>",
+                f"    <updated>{xml_escape(post['date_modified_iso'])}</updated>",
+                f"    <author><name>{xml_escape(post['author'])}</name></author>",
+                f"    <summary>{xml_escape(post['seo_description'])}</summary>",
+                "  </entry>",
+            ]
+        )
+    body.append("</feed>")
+    return Response("\n".join(body), mimetype="application/atom+xml")
 
 
 @main_bp.app_errorhandler(400)
 @main_bp.app_errorhandler(404)
 @main_bp.app_errorhandler(429)
 def client_error(error):
-    meta = {"title": f"{error.code} | LexNush", "description": "The requested LexNush page could not be completed."}
+    meta = {
+        "title": f"{error.code} | LexNush",
+        "description": "The requested LexNush page could not be completed.",
+        "robots": "noindex, follow",
+    }
     return render_template("error.html", error=error, meta=meta), error.code
 
 
 @main_bp.app_errorhandler(500)
 def server_error(error):
-    meta = {"title": "Server Error | LexNush", "description": "LexNush could not complete the request."}
+    meta = {
+        "title": "Server Error | LexNush",
+        "description": "LexNush could not complete the request.",
+        "robots": "noindex, follow",
+    }
     return render_template("error.html", error=error, meta=meta), 500
 
 

@@ -9,7 +9,7 @@ module.exports = defineConfig({
         headless: true,
     },
     webServer: {
-        command: "PORT=8001 python3 app.py",
+        command: "LEXNUSH_ENV=testing PUBLIC_BASE_URL=http://127.0.0.1:8001 PORT=8001 python3 app.py",
         url: "http://127.0.0.1:8001/healthz",
         reuseExistingServer: !process.env.CI,
         timeout: 30_000,

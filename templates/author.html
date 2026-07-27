@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-hero">
+    <span class="eyebrow fade-in">LexNush Author</span>
+    <h1 class="page-title fade-in delay-1">{{ author.name }}</h1>
+    <p class="fade-in delay-1">{{ author.role }}</p>
+</section>
+
+<section class="section section-wide section-compact">
+    <div class="founder-grid fade-in delay-2">
+        <figure class="founder-media">
+            <img src="{{ url_for('static', filename=author.image) }}" alt="{{ author.name }}, {{ author.role }} at LexNush" class="founder-photo" width="760" height="1013">
+            <figcaption class="founder-caption">
+                <h2>{{ author.name }}</h2>
+                <p>{{ author.role }}<br>LexNush</p>
+            </figcaption>
+        </figure>
+
+        <div class="stack-md">
+            <span class="section-kicker">About the author</span>
+            <h2 class="section-title">Clear law, carefully designed.</h2>
+            <p class="muted-copy">{{ author.short_bio }}</p>
+            <p class="muted-copy">
+                Her work at LexNush connects court decisions and legal doctrine to the people,
+                institutions, businesses, and public questions they affect.
+            </p>
+            <a href="{{ url_for('main.about') }}" class="text-link">Read the LexNush story <span aria-hidden="true">&rarr;</span></a>
+        </div>
+    </div>
+</section>
+
+<section class="section section-wide section-compact" aria-labelledby="author-writing-title">
+    <div class="section-heading section-heading-wide">
+        <div>
+            <span class="section-kicker">Published work</span>
+            <h2 id="author-writing-title" class="section-title">Analysis by {{ author.name }}</h2>
+        </div>
+    </div>
+    <div class="journal-grid">
+        {% for post in posts %}
+            <article class="journal-card">
+                <span class="journal-number" aria-hidden="true">0{{ loop.index }}</span>
+                <div class="blog-card-header">
+                    <span class="card-meta-label">{{ post.category }}</span>
+                    <span class="card-meta">{{ post.date }} &bull; {{ post.read_time }}</span>
+                </div>
+                <h3 class="card-title">{{ post.title }}</h3>
+                <p>{{ post.summary }}</p>
+                <a href="{{ url_for('main.post_detail', slug=post.slug) }}" class="text-link">Read analysis <span aria-hidden="true">&rarr;</span></a>
+            </article>
+        {% else %}
+            <p class="muted-copy">New analysis is in preparation.</p>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

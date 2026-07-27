@@ -1,8 +1,9 @@
 from pathlib import Path
 from urllib.parse import quote
+from urllib.parse import urlsplit
 
 import click
-from flask import Flask, current_app
+from flask import Flask, current_app, redirect, request
 from flask import url_for as flask_url_for
 from werkzeug.middleware.proxy_fix import ProxyFix
 from werkzeug.routing import BuildError
@@ -67,6 +68,20 @@ def create_app(config_name=None, config_overrides=None):
             x_proto=trusted_proxy_count,
             x_host=trusted_proxy_count,
         )
+
+    if app.config.get("ENFORCE_CANONICAL_HOST"):
+        canonical_base_url = app.config["PUBLIC_BASE_URL"].rstrip("/")
+        canonical_host = urlsplit(canonical_base_url).hostname
+
+        @app.before_request
+        def redirect_to_canonical_host():
+            """Consolidate public GET traffic on the configured production host."""
+            if request.method not in {"GET", "HEAD"} or request.path == "/healthz":
+                return None
+            request_host = request.host.partition(":")[0].rstrip(".").lower()
+            if canonical_host and request_host != canonical_host:
+                return redirect(f"{canonical_base_url}{request.full_path}".rstrip("?"), code=308)
+            return None
 
     init_database(app)
     init_rate_limiting(app)
