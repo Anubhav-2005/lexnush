@@ -158,7 +158,8 @@ class LexNushAppTests(unittest.TestCase):
         self.assertIn("https://www.linkedin.com/in/anushka-pandey31", author)
 
         about = self.client.get("/about/").get_data(as_text=True)
-        self.assertIn('class="founder-role"', about)
+        self.assertNotIn('<h2 class="section-title">Anushka Pandey</h2>', about)
+        self.assertNotIn('class="founder-role"', about)
 
     def test_favicon_is_a_crawlable_png(self):
         response = self.client.get("/static/favicon.png")
