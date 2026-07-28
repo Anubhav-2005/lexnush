@@ -610,6 +610,16 @@
     line-height: 1.6;
 }
 
+.founder-role {
+    margin-top: calc(var(--space-2) * -1);
+    color: var(--color-accent);
+    font-size: clamp(0.92rem, 1.2vw, 1.05rem);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    line-height: 1.4;
+    text-transform: uppercase;
+}
+
 .centered-copy {
     max-width: 720px;
     margin-inline: auto;
