@@ -136,6 +136,8 @@ class LexNushAppTests(unittest.TestCase):
         self.assertIn('"@type": "Organization"', homepage)
         self.assertIn('rel="alternate" type="application/atom+xml"', homepage)
         self.assertIn('property="og:image:alt"', homepage)
+        self.assertIn('rel="icon" type="image/png" sizes="192x192"', homepage)
+        self.assertIn('/static/favicon.png', homepage)
 
         article = self.client.get("/blogs/surgery-or-autopsy-adr-award-modification").get_data(as_text=True)
         self.assertIn('"@type": "BlogPosting"', article)
@@ -148,6 +150,11 @@ class LexNushAppTests(unittest.TestCase):
         author = self.client.get("/authors/anushka-pandey/").get_data(as_text=True)
         self.assertIn('"@type": "ProfilePage"', author)
         self.assertIn("Founder and Legal Designer", author)
+
+    def test_favicon_is_a_crawlable_png(self):
+        response = self.client.get("/static/favicon.png")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.mimetype, "image/png")
 
     def test_thin_placeholder_page_is_noindex(self):
         interviews = self.client.get("/interviews/").get_data(as_text=True)

@@ -44,8 +44,9 @@
     <meta name="twitter:image:alt" content="{{ page_image_alt }}">
     <meta name="theme-color" content="#0b0d0c">
 
+    <link rel="icon" type="image/png" sizes="192x192" href="{{ static_url('favicon.png') }}">
     <link rel="icon" type="image/jpeg" sizes="any" href="{{ static_url('logo.jpg') }}">
-    <link rel="apple-touch-icon" href="{{ static_url('logo.jpg') }}">
+    <link rel="apple-touch-icon" sizes="192x192" href="{{ static_url('favicon.png') }}">
     {% if request.endpoint == 'main.home' %}
     <link rel="preload" as="image" href="{{ static_url('images/lexnush-hero-editorial-1200.jpg') }}" imagesrcset="{{ static_url('images/lexnush-hero-editorial-640.jpg') }} 640w, {{ static_url('images/lexnush-hero-editorial-1200.jpg') }} 1200w" imagesizes="(max-width: 768px) 100vw, 56vw">
     {% endif %}
