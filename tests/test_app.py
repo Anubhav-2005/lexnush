@@ -69,9 +69,10 @@ class LexNushAppTests(unittest.TestCase):
             "/about/",
             "/authors/anushka-pandey/",
             "/blogs/",
-            "/interviews/",
+            "/counsels-desk/",
             "/contact/",
             "/privacy/",
+            "/disclaimer/",
             "/feed.xml",
             "/healthz",
         ]:
@@ -146,10 +147,15 @@ class LexNushAppTests(unittest.TestCase):
         self.assertIn('href="/authors/anushka-pandey/"', article)
         self.assertIn("2025 INSC 605", article)
         self.assertIn("api.sci.gov.in", article)
+        self.assertIn("data-copy-link", article)
+        self.assertIn("wa.me/?text=", article)
+        self.assertIn("mailto:?subject=", article)
+        self.assertIn("linkedin.com/sharing/share-offsite", article)
 
         author = self.client.get("/authors/anushka-pandey/").get_data(as_text=True)
         self.assertIn('"@type": "ProfilePage"', author)
-        self.assertIn("Founder and Legal Designer", author)
+        self.assertIn("Founder &amp; Editor, LexNush", author)
+        self.assertIn("https://www.linkedin.com/in/anushka-pandey31", author)
 
     def test_favicon_is_a_crawlable_png(self):
         response = self.client.get("/static/favicon.png")
@@ -157,8 +163,20 @@ class LexNushAppTests(unittest.TestCase):
         self.assertEqual(response.mimetype, "image/png")
 
     def test_thin_placeholder_page_is_noindex(self):
-        interviews = self.client.get("/interviews/").get_data(as_text=True)
-        self.assertIn('name="robots" content="noindex, follow"', interviews)
+        counsel = self.client.get("/counsels-desk/").get_data(as_text=True)
+        self.assertIn('name="robots" content="noindex, follow"', counsel)
+        self.assertIn("Counsel’s Desk", counsel)
+
+    def test_legacy_interviews_route_redirects(self):
+        response = self.client.get("/interviews/", follow_redirects=False)
+        self.assertEqual(response.status_code, 301)
+        self.assertEqual(response.headers["Location"], "/counsels-desk/")
+
+    def test_disclaimer_is_explicit(self):
+        disclaimer = self.client.get("/disclaimer/").get_data(as_text=True)
+        self.assertIn('name="robots" content="index, follow', disclaimer)
+        self.assertIn("informational and educational purposes only", disclaimer)
+        self.assertIn("do not constitute legal advice", disclaimer)
 
     def test_contact_is_persisted_with_outbox_event(self):
         response = self.client.post("/contact/", data=self.contact_payload(), follow_redirects=True)
@@ -250,6 +268,7 @@ class LexNushAppTests(unittest.TestCase):
         self.assertIn("<lastmod>2026-07-27</lastmod>", sitemap)
         self.assertIn("http://testserver/blogs/", sitemap)
         self.assertIn("http://testserver/authors/anushka-pandey/", sitemap)
+        self.assertIn("http://testserver/disclaimer/", sitemap)
         self.assertIn('xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"', sitemap)
         self.assertNotIn("http://testserver/interviews/", sitemap)
 

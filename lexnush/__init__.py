@@ -103,9 +103,13 @@ def create_app(config_name=None, config_overrides=None):
                 "home": main_route_url("main.home", "/"),
                 "about": main_route_url("main.about", "/about/"),
                 "blogs": main_route_url("main.blogs", "/blogs/"),
-                "interviews": main_route_url("main.interviews", "/interviews/"),
+                "counsel": main_route_url("main.counsels_desk", "/counsels-desk/"),
+                # Keep the old key available to older templates/extensions while
+                # the public navigation uses the renamed Counsel’s Desk section.
+                "interviews": main_route_url("main.counsels_desk", "/counsels-desk/"),
                 "contact": main_route_url("main.contact", "/contact/"),
                 "privacy": main_route_url("main.privacy", "/privacy/"),
+                "disclaimer": main_route_url("main.disclaimer", "/disclaimer/"),
             },
         }
     )

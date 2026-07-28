@@ -10,12 +10,13 @@ AUTHORS = {
     "anushka-pandey": {
         "slug": "anushka-pandey",
         "name": "Anushka Pandey",
-        "role": "Founder and Legal Designer",
+        "role": "Founder & Editor, LexNush",
         "short_bio": (
-            "Anushka Pandey is the founder of LexNush and a legal designer focused "
-            "on making law, policy, and institutional change clear without flattening their complexity."
+            "Anushka Pandey is the founder and editor of LexNush, focused on making law, policy, "
+            "and public life clearer without flattening their complexity."
         ),
         "image": "images/anushka-760.jpg",
+        "same_as": "https://www.linkedin.com/in/anushka-pandey31",
     }
 }
 
@@ -169,7 +170,7 @@ for post in BLOG_POSTS:
     post["word_count"] = len(unescape(HTML_TAG_RE.sub(" ", post["content"])).split())
 
 
-INTERVIEWS = [
+COUNSEL_DESK = [
     {
         "id": 1,
         "guest": "Dr. Shashi Tharoor",
@@ -179,6 +180,9 @@ INTERVIEWS = [
         "image": "guest1.jpg",
     }
 ]
+
+# Kept as a compatibility alias for existing integrations and saved links.
+INTERVIEWS = COUNSEL_DESK
 
 
 PAGE_META = {
@@ -194,9 +198,9 @@ PAGE_META = {
         "title": "LexNush Journal | Legal Analysis, Judgments & Policy",
         "description": "Read source-led LexNush analysis of important judgments, arbitration, policy, institutions, technology, business, and public life.",
     },
-    "interviews": {
-        "title": "Legal Conversations & Interviews | LexNush",
-        "description": "Candid LexNush conversations with legal practitioners, policy architects, and institutional voices.",
+    "counsel": {
+        "title": "Counsel’s Desk | Legal Conversations | LexNush",
+        "description": "Counsel’s Desk is LexNush’s home for thoughtful conversations with legal practitioners, policy architects, and institutional voices.",
         "robots": "noindex, follow",
     },
     "contact": {
@@ -206,5 +210,9 @@ PAGE_META = {
     "privacy": {
         "title": "Privacy | LexNush",
         "description": "How LexNush handles contact inquiries and newsletter subscriptions.",
+    },
+    "disclaimer": {
+        "title": "Disclaimer | LexNush",
+        "description": "LexNush content is provided for general informational purposes only and is not legal advice.",
     },
 }

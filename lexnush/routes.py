@@ -6,7 +6,7 @@ from xml.sax.saxutils import escape as xml_escape
 from flask import Blueprint, Response, abort, current_app, flash, jsonify, redirect, render_template, request, url_for
 
 from .anti_abuse import honeypot_tripped, verify_turnstile
-from .content import AUTHORS, BLOG_POSTS, INTERVIEWS, PAGE_META, SITE_LASTMOD_ISO
+from .content import AUTHORS, BLOG_POSTS, COUNSEL_DESK, PAGE_META, SITE_LASTMOD_ISO
 from .db import (
     consume_newsletter_token,
     create_newsletter_token,
@@ -34,18 +34,20 @@ PAGE_ENDPOINTS = {
     "home": "main.home",
     "about": "main.about",
     "blogs": "main.blogs",
-    "interviews": "main.interviews",
+    "counsel": "main.counsels_desk",
     "contact": "main.contact",
     "privacy": "main.privacy",
+    "disclaimer": "main.disclaimer",
 }
 
 PAGE_SCHEMA_TYPES = {
     "home": "WebPage",
     "about": "AboutPage",
     "blogs": "CollectionPage",
-    "interviews": "CollectionPage",
+    "counsel": "CollectionPage",
     "contact": "ContactPage",
     "privacy": "WebPage",
+    "disclaimer": "WebPage",
 }
 
 
@@ -291,6 +293,7 @@ def author_detail(slug):
                         "description": author["short_bio"],
                         "url": author_url,
                         "image": image_url,
+                        "sameAs": [author["same_as"]],
                         "worksFor": {"@id": f"{home_url}#organization"},
                     },
                 },
@@ -301,9 +304,15 @@ def author_detail(slug):
     return render_template("author.html", author=author, posts=author_posts, meta=meta)
 
 
+@main_bp.route("/counsels-desk/")
+def counsels_desk():
+    return render_template("counsels_desk.html", counsel_desk=COUNSEL_DESK, meta=page_meta("counsel"))
+
+
 @main_bp.route("/interviews/")
-def interviews():
-    return render_template("interviews.html", interviews=INTERVIEWS, meta=page_meta("interviews"))
+def interviews_legacy_redirect():
+    """Preserve the old public URL while consolidating the section name."""
+    return redirect(url_for("main.counsels_desk"), code=301)
 
 
 @main_bp.route("/contact/", methods=["GET", "POST"])
@@ -391,6 +400,11 @@ def privacy():
     return render_template("privacy.html", meta=page_meta("privacy"))
 
 
+@main_bp.route("/disclaimer/")
+def disclaimer():
+    return render_template("disclaimer.html", meta=page_meta("disclaimer"))
+
+
 @main_bp.route("/healthz")
 def healthz():
     try:
@@ -426,6 +440,7 @@ def sitemap_xml():
         (public_url("main.about"), SITE_LASTMOD_ISO, public_url("static", filename="images/anushka-760.jpg")),
         (public_url("main.blogs"), SITE_LASTMOD_ISO, None),
         (public_url("main.contact"), SITE_LASTMOD_ISO, None),
+        (public_url("main.disclaimer"), SITE_LASTMOD_ISO, None),
     ]
     urls.extend(
         (
@@ -524,8 +539,8 @@ def search():
         haystack = f"{post['title']} {post['summary']} {post['category']}".lower()
         if query in haystack:
             results.append({"type": "Article", "title": post["title"], "summary": post["summary"], "url": url_for("main.post_detail", slug=post["slug"])})
-    for interview in INTERVIEWS:
-        haystack = f"{interview['guest']} {interview['title']} {interview['role']}".lower()
+    for counsel in COUNSEL_DESK:
+        haystack = f"{counsel['guest']} {counsel['title']} {counsel['role']}".lower()
         if query in haystack:
-            results.append({"type": "Interview", "title": f"Interview: {interview['guest']}", "summary": interview["title"], "url": url_for("main.interviews")})
+            results.append({"type": "Counsel’s Desk", "title": f"Counsel’s Desk: {counsel['guest']}", "summary": counsel["title"], "url": url_for("main.counsels_desk")})
     return jsonify(results[:8])

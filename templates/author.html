@@ -25,6 +25,9 @@
                 Her work at LexNush connects court decisions and legal doctrine to the people,
                 institutions, businesses, and public questions they affect.
             </p>
+            {% if author.same_as %}
+                <a href="{{ author.same_as }}" class="text-link" target="_blank" rel="noopener noreferrer">LinkedIn profile <span aria-hidden="true">&rarr;</span></a>
+            {% endif %}
             <a href="{{ url_for('main.about') }}" class="text-link">Read the LexNush story <span aria-hidden="true">&rarr;</span></a>
         </div>
     </div>

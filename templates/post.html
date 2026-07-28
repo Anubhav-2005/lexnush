@@ -52,7 +52,7 @@
     {% endif %}
 
     <aside class="article-author" aria-labelledby="article-author-title">
-        <img src="{{ url_for('static', filename='images/anushka-760.jpg') }}" alt="{{ post.author }}, founder and legal designer at LexNush" width="152" height="203" loading="lazy">
+        <img src="{{ url_for('static', filename='images/anushka-760.jpg') }}" alt="{{ post.author }}, founder and editor at LexNush" width="152" height="203" loading="lazy">
         <div>
             <span class="section-kicker">About the author</span>
             <h2 id="article-author-title">{{ post.author }}</h2>
@@ -62,9 +62,15 @@
     </aside>
 
     <section class="article-share" aria-labelledby="share-title">
+        <span class="section-kicker">Pass it on</span>
         <h2 id="share-title">Share this analysis</h2>
+        <p class="muted-copy">Clearer law travels further when it is shared.</p>
         <div class="article-share-actions">
-            <button type="button" class="outline-button" data-copy-link>Copy Link</button>
+            <button type="button" class="outline-button" data-native-share data-share-title="{{ post.title }} | LexNush" data-share-text="Read this LexNush analysis: {{ post.title }}">Share</button>
+            <a class="outline-button" href="https://wa.me/?text={{ ('Read on LexNush: ' ~ post.title ~ ' ' ~ meta.url)|urlencode }}" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+            <a class="outline-button" href="mailto:?subject={{ (post.title ~ ' | LexNush')|urlencode }}&amp;body={{ ('I thought you might find this LexNush analysis useful: ' ~ meta.url)|urlencode }}">Email</a>
+            <a class="outline-button" href="https://www.linkedin.com/sharing/share-offsite/?url={{ meta.url|urlencode }}" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            <button type="button" class="outline-button" data-copy-link>Copy link</button>
         </div>
         <p class="copy-feedback" aria-live="polite"></p>
     </section>

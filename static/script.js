@@ -114,9 +114,9 @@
     }
 
     function initDisclaimer() {
-        const panel = qs("#legal-notice");
-        const dismissButton = qs("#dismiss-legal-notice");
-        const storageKey = "lexnush_legal_notice_dismissed";
+        const panel = qs("#disclaimer-panel");
+        const dismissButton = qs("#dismiss-disclaimer");
+        const storageKey = "lexnush_disclaimer_dismissed";
         if (!panel || !dismissButton) return;
 
         const hasDismissed = () => {
@@ -187,6 +187,31 @@
                     if (feedback) feedback.textContent = "Link copied.";
                 } catch {
                     if (feedback) feedback.textContent = "Copy failed. Please copy the browser address.";
+                }
+            });
+        });
+    }
+
+    function initNativeShare() {
+        qsa("[data-native-share]").forEach((button) => {
+            if (!("share" in navigator)) {
+                button.hidden = true;
+                return;
+            }
+
+            button.addEventListener("click", async () => {
+                try {
+                    await navigator.share({
+                        title: button.dataset.shareTitle || document.title,
+                        text: button.dataset.shareText || "",
+                        url: window.location.href,
+                    });
+                } catch (error) {
+                    // Closing the native share sheet is an expected user action.
+                    if (error && error.name !== "AbortError") {
+                        const feedback = qs(".copy-feedback", button.closest(".article-share") || document);
+                        if (feedback) feedback.textContent = "Sharing is unavailable on this device.";
+                    }
                 }
             });
         });
@@ -353,6 +378,7 @@
         initDisclaimer();
         initFadeIns();
         initCopyLinks();
+        initNativeShare();
         initReadingProgress();
         initCharacterCounters();
         initSearch();

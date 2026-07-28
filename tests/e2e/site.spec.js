@@ -3,11 +3,27 @@ const { test, expect } = require("@playwright/test");
 const article = "/blogs/surgery-or-autopsy-adr-award-modification";
 
 test("public routes return rendered pages", async ({ page }) => {
-    for (const path of ["/", "/about/", "/authors/anushka-pandey/", "/blogs/", article, "/interviews/", "/contact/", "/privacy/", "/not-found"]) {
+    for (const path of ["/", "/about/", "/authors/anushka-pandey/", "/blogs/", article, "/counsels-desk/", "/contact/", "/privacy/", "/disclaimer/", "/not-found"]) {
         const response = await page.goto(path);
         expect(response.status()).toBe(path === "/not-found" ? 404 : 200);
         await expect(page.locator("main")).toBeVisible();
     }
+});
+
+test("legacy interviews route redirects to Counsel’s Desk", async ({ page }) => {
+    const response = await page.goto("/interviews/");
+    expect(response.status()).toBe(200);
+    expect(page.url()).toContain("/counsels-desk/");
+    await expect(page.getByRole("heading", { name: "The people shaping the law." })).toBeVisible();
+});
+
+test("article exposes useful sharing destinations", async ({ page }) => {
+    await page.goto(article);
+    await expect(page.getByRole("link", { name: "WhatsApp" })).toHaveAttribute("href", /wa\.me/);
+    await expect(page.getByRole("link", { name: "Email" })).toHaveAttribute("href", /mailto:/);
+    const share = page.locator(".article-share");
+    await expect(share.getByRole("link", { name: "LinkedIn" })).toHaveAttribute("href", /linkedin\.com\/sharing/);
+    await expect(share.getByRole("button", { name: "Copy link" })).toBeVisible();
 });
 
 for (const width of [320, 360, 375, 390, 414, 768, 1024, 1440]) {
