@@ -545,6 +545,42 @@
 .pulse-manifesto p:first-child { font-size: clamp(0.95rem, 1.25vw, 1.12rem); }
 .founder-copy h2 { font-size: clamp(1.8rem, 2.8vw, 2.65rem); }
 
+/* On larger screens, retain the portrait-and-copy editorial composition while
+   letting the copy sit a little lower against the portrait. */
+.founder-section {
+    grid-template-columns: minmax(250px, 0.7fr) minmax(0, 1.3fr);
+    grid-template-areas:
+        "photo heading"
+        "photo copy";
+    column-gap: clamp(42px, 9vw, 142px);
+    row-gap: 22px;
+    align-items: start;
+}
+
+.founder-heading { grid-area: heading; max-width: 650px; padding-top: clamp(1.5rem, 3.5vw, 3.25rem); }
+.founder-heading h2 {
+    margin-top: 17px;
+    color: var(--color-text);
+    font-family: var(--font-serif);
+    font-size: clamp(1.8rem, 2.8vw, 2.65rem);
+    font-weight: 500;
+    line-height: 1.12;
+}
+
+.founder-photo-wrap {
+    grid-area: photo;
+    width: 100%;
+    justify-self: stretch;
+    margin-top: 0;
+    box-shadow: none;
+}
+
+.founder-photo-wrap img {
+    display: block;
+}
+
+.founder-copy { grid-area: copy; max-width: 650px; }
+
 /* Compact, utility-first footer: it remains at the end of the shell but no
    longer takes the visual weight of a content section. */
 .site-footer {
@@ -579,8 +615,9 @@
 .footer-legal { font-size: 0.68rem; }
 
 @media (max-width: 1200px) {
-    .nav-links { gap: 9px; }
-    .nav-link { font-size: 0.56rem; }
+    .nav-container { gap: clamp(10px, 1.5vw, 18px); }
+    .nav-links { gap: clamp(10px, 1.2vw, 14px); padding-inline: var(--space-3); }
+    .nav-link { font-size: 0.6rem; }
     .nav-subscribe { padding-inline: 11px; font-size: 0.58rem; }
     .what-grid.five-items { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 }
@@ -598,6 +635,9 @@
     .about-strip, .about-statement, .founder-section { grid-template-columns: 1fr; }
     .about-values { max-width: 740px; }
     .what-grid, .what-grid.five-items { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .founder-section { grid-template-areas: "heading" "photo" "copy"; gap: 28px; }
+    .founder-heading { padding-top: 0; }
+    .founder-photo-wrap { width: min(100%, 290px); justify-self: start; margin-top: 0; }
     .footer-inner { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px 28px; }
     .footer-brand { grid-column: 1 / -1; max-width: 360px; }
 }
