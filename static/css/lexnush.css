@@ -479,7 +479,7 @@
     text-align: center;
 }
 
-.bottom-line h2 { margin-top: 14px; font-size: clamp(1.6rem, 3vw, 2.5rem); text-transform: none; }
+.bottom-line h2 { margin-top: 0; font-size: clamp(1.6rem, 3vw, 2.5rem); text-transform: none; }
 .brief-signup { width: min(100% - var(--gutter) * 2, 600px); margin: 10px auto 5rem; padding: 24px; border: 1px solid var(--color-border-strong); background: var(--color-surface-raised); }
 
 .about-statement { display: grid; grid-template-columns: minmax(0, 1.22fr) minmax(300px, 0.78fr); gap: clamp(42px, 8vw, 120px); padding-block: clamp(4rem, 8vw, 7rem); }
