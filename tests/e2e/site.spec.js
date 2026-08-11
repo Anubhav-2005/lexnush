@@ -3,7 +3,7 @@ const { test, expect } = require("@playwright/test");
 const article = "/blogs/surgery-or-autopsy-adr-award-modification";
 
 test("public routes return rendered pages", async ({ page }) => {
-    for (const path of ["/", "/about/", "/authors/anushka-pandey/", "/blogs/", article, "/counsels-desk/", "/contact/", "/privacy/", "/disclaimer/", "/not-found"]) {
+    for (const path of ["/", "/about/", "/analysis/", "/law-explained/", "/judgment-explained/", "/authors/anushka-pandey/", "/blogs/", article, "/counsels-desk/", "/contact/", "/privacy/", "/disclaimer/", "/not-found"]) {
         const response = await page.goto(path);
         expect(response.status()).toBe(path === "/not-found" ? 404 : 200);
         await expect(page.locator("main")).toBeVisible();
@@ -14,7 +14,7 @@ test("legacy interviews route redirects to Counsel’s Desk", async ({ page }) =
     const response = await page.goto("/interviews/");
     expect(response.status()).toBe(200);
     expect(page.url()).toContain("/counsels-desk/");
-    await expect(page.getByRole("heading", { name: "The people shaping the law." })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "FROM THE COUNSEL'S DESK" })).toBeVisible();
 });
 
 test("article exposes useful sharing destinations", async ({ page }) => {

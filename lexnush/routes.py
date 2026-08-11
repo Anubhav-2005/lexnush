@@ -38,6 +38,9 @@ PAGE_ENDPOINTS = {
     "contact": "main.contact",
     "privacy": "main.privacy",
     "disclaimer": "main.disclaimer",
+    "analysis": "main.analysis",
+    "law_explained": "main.law_explained",
+    "judgment_explained": "main.judgment_explained",
 }
 
 PAGE_SCHEMA_TYPES = {
@@ -48,6 +51,9 @@ PAGE_SCHEMA_TYPES = {
     "contact": "ContactPage",
     "privacy": "WebPage",
     "disclaimer": "WebPage",
+    "analysis": "CollectionPage",
+    "law_explained": "CollectionPage",
+    "judgment_explained": "CollectionPage",
 }
 
 
@@ -107,10 +113,10 @@ def page_meta(name):
     if name != "home":
         breadcrumb_items.append((meta["title"].split(" | ", 1)[0], current_url))
     meta["url"] = current_url
-    meta["image"] = public_url("static", filename="images/lexnush-hero-editorial-1200.jpg")
-    meta["image_alt"] = "Legal research materials arranged on a desk"
-    meta["image_width"] = 1200
-    meta["image_height"] = 583
+    meta["image"] = public_url("static", filename="images/supreme-court-hero.jpg")
+    meta["image_alt"] = "Supreme Court of India"
+    meta["image_width"] = 1704
+    meta["image_height"] = 923
     page_node = {
         "@type": PAGE_SCHEMA_TYPES[name],
         "@id": f"{current_url}#webpage",
@@ -186,6 +192,21 @@ def about():
 @main_bp.route("/blogs/")
 def blogs():
     return render_template("blogs.html", posts=BLOG_POSTS, meta=page_meta("blogs"))
+
+
+@main_bp.route("/analysis/")
+def analysis():
+    return render_template("section_page.html", section="analysis", meta=page_meta("analysis"))
+
+
+@main_bp.route("/law-explained/")
+def law_explained():
+    return render_template("section_page.html", section="law_explained", meta=page_meta("law_explained"))
+
+
+@main_bp.route("/judgment-explained/")
+def judgment_explained():
+    return render_template("section_page.html", section="judgment_explained", meta=page_meta("judgment_explained"))
 
 
 @main_bp.route("/blogs/<slug>")

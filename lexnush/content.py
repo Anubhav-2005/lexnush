@@ -187,21 +187,32 @@ INTERVIEWS = COUNSEL_DESK
 
 PAGE_META = {
     "home": {
-        "title": "LexNush | Clear Legal Analysis, Policy & Public Life",
-        "description": "LexNush is an independent legal publication making consequential judgments, policy shifts, and public institutions clear, contextual, and useful.",
+        "title": "LexNush | Law with a Pulse.",
+        "description": "LexNush is an independent legal publication exploring judgments, legislation, legal developments, ideas, and the stories shaping the law around us.",
     },
     "about": {
-        "title": "About LexNush | Independent Legal Publication",
-        "description": "Meet LexNush and founder Anushka Pandey. Learn how the independent publication turns complex law and policy into clear, source-led editorial analysis.",
+        "title": "About LexNush | Law with a Pulse.",
+        "description": "LexNush explores the law as it moves through courts, Parliament, institutions, businesses, and everyday life.",
     },
     "blogs": {
         "title": "LexNush Journal | Legal Analysis, Judgments & Policy",
         "description": "Read source-led LexNush analysis of important judgments, arbitration, policy, institutions, technology, business, and public life.",
     },
+    "analysis": {
+        "title": "Analysis | LexNush",
+        "description": "LexNush Analysis examines the legal and institutional questions behind the developments making news.",
+    },
+    "law_explained": {
+        "title": "Law Explained | LexNush",
+        "description": "Clear, accessible explanations of legal concepts, procedures, rights, and terminology.",
+    },
+    "judgment_explained": {
+        "title": "Judgment Explained | LexNush",
+        "description": "Significant court decisions broken down into their essential parts and reasoning.",
+    },
     "counsel": {
-        "title": "Counsel’s Desk | Legal Conversations | LexNush",
-        "description": "Counsel’s Desk is LexNush’s home for thoughtful conversations with legal practitioners, policy architects, and institutional voices.",
-        "robots": "noindex, follow",
+        "title": "From the Counsel's Desk | LexNush",
+        "description": "From the Counsel's Desk is LexNush's space for reflection on books, ideas, experiences, and questions that shape the legal profession.",
     },
     "contact": {
         "title": "Contact LexNush | Editorial Pitches & Corrections",

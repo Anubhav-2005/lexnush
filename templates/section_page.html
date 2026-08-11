@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% set pages = {
+    'analysis': {
+        'title': 'ANALYSIS', 'subtitle': 'Beyond the headline. Into the law.',
+        'description': 'LexNush Analysis examines the legal and institutional questions behind the developments making news. From major judgments and legislative changes to constitutional questions and emerging policy issues, these pieces go beyond what happened to ask why it happened, what it means, and what comes next.',
+        'heading': "What you'll find here", 'items': [('Judicial Analysis', 'Examining important judgments, judicial reasoning, and their wider implications.'), ('Legislative Analysis', 'Understanding Bills, Acts, amendments, and the policy choices behind them.'), ('Constitution & Institutions', 'Exploring questions concerning courts, Parliament, governance, rights, and constitutional structures.'), ('Law & Society', 'Looking at how legal developments intersect with technology, business, culture, and everyday life.')],
+        'bottom': 'For readers who want more than the ruling.'
+    },
+    'law_explained': {
+        'title': 'LAW EXPLAINED', 'subtitle': 'Complex law. Clear answers.',
+        'description': 'Law can be difficult to navigate- not because every concept is complicated, but because legal language often makes simple ideas harder to understand. Law Explained breaks down legal concepts, procedures, rights, and terminology into clear, accessible language without losing the substance of the law.',
+        'heading': "What you'll find here", 'items': [('Legal Concepts', 'The principles and doctrines you encounter in law but rarely see explained simply.'), ('Courtroom Basics', 'Understand terms such as notice, interim relief, admission, appeal, bail, and more.'), ('Everyday Law', 'Legal questions that affect individuals, consumers, employees, businesses, and families.'), ('Legal Systems & Processes', 'How courts, Parliament, tribunals, and regulatory institutions actually work.')],
+        'bottom': 'No unnecessary jargon. No oversimplification. Just law, clearly explained.'
+    },
+    'judgment_explained': {
+        'title': 'JUDGMENT EXPLAINED', 'subtitle': 'Read the judgment. Understand the reasoning.',
+        'description': 'Court judgments can run into hundreds of pages. Their significance can sometimes be buried beneath procedural history, legal submissions, and technical language. Judgment Explained breaks down significant decisions into their essential parts—so readers can understand not only the outcome, but the reasoning that led to it.',
+        'heading': 'Every breakdown covers', 'items': [('THE CASE', 'Who are the parties and what brought the dispute to court?'), ('THE ISSUE', 'What legal question did the Court have to answer?'), ('THE REASONING', 'How did the Court approach and resolve the issue?'), ('THE DECISION', 'What did the Court ultimately hold?'), ('WHY IT MATTERS', 'What could this decision mean for law, institutions, businesses, or individuals?')],
+        'bottom': "Because knowing the outcome isn't the same as understanding the judgment."
+    },
+} %}
+{% set page = pages[section] %}
+
+{% block content %}
+<section class="content-hero section-hero" aria-labelledby="section-title">
+    <p class="section-kicker">LEXNUSH</p>
+    <h1 id="section-title">{{ page['title'] }}</h1>
+    <p class="page-subtitle">{{ page['subtitle'] }}</p>
+    {% if page['description'] %}<p class="section-description">{{ page['description'] }}</p>{% endif %}
+</section>
+
+{% if page['items'] %}
+<section class="what-section" aria-labelledby="what-title">
+    <div class="section-title-block fade-in"><h2 id="what-title">{{ page['heading'] }}</h2><span class="gold-rule" aria-hidden="true"></span></div>
+    <div class="what-grid {{ 'five-items' if page['items']|length == 5 else '' }}">
+        {% for item in page['items'] %}<article class="what-card fade-in"><span class="what-number">0{{ loop.index }}</span><h3>{{ item[0] }}</h3><p>{{ item[1] }}</p></article>{% endfor %}
+    </div>
+</section>
+{% endif %}
+
+{% if page['bottom'] %}<section class="bottom-line fade-in"><p class="section-kicker">Bottom line</p><h2>{{ page['bottom'] }}</h2></section>{% endif %}
+{% endblock %}

@@ -67,6 +67,9 @@ class LexNushAppTests(unittest.TestCase):
         for path in [
             "/",
             "/about/",
+            "/analysis/",
+            "/law-explained/",
+            "/judgment-explained/",
             "/authors/anushka-pandey/",
             "/blogs/",
             "/counsels-desk/",
@@ -113,14 +116,11 @@ class LexNushAppTests(unittest.TestCase):
 
     def test_home_uses_editorial_experience_without_redundant_final_cta(self):
         homepage = self.client.get("/")
-        self.assertIn(b"Independent legal editorial", homepage.data)
-        self.assertIn(b"Law, policy, and public life", homepage.data)
-        self.assertIn(b"Our editorial approach", homepage.data)
-        self.assertIn(b"Careful with the record", homepage.data)
-        self.assertNotIn(b"Law, in the language of", homepage.data)
-        self.assertNotIn(b"dossier-orbit", homepage.data)
-        self.assertNotIn(b"Indian law, explained", homepage.data)
-        self.assertNotIn(b"Read law like it belongs in the real world.", homepage.data)
+        self.assertIn(b"Law with a Pulse.", homepage.data)
+        self.assertIn(b"LATEST FROM LEXNUSH", homepage.data)
+        self.assertIn(b"Stay Informed. Every Week.", homepage.data)
+        self.assertIn(b"ABOUT LEXNUSH", homepage.data)
+        self.assertIn(b"supreme-court-hero.jpg", homepage.data)
 
     def test_security_headers_and_canonical_url_are_present(self):
         response = self.client.get("/")
@@ -131,7 +131,7 @@ class LexNushAppTests(unittest.TestCase):
 
     def test_public_seo_metadata_and_structured_data_are_complete(self):
         homepage = self.client.get("/").get_data(as_text=True)
-        self.assertIn("<title>LexNush | Clear Legal Analysis, Policy &amp; Public Life</title>", homepage)
+        self.assertIn("<title>LexNush | Law with a Pulse.</title>", homepage)
         self.assertIn('name="robots" content="index, follow, max-image-preview:large', homepage)
         self.assertIn('"alternateName": "LexNush Legal Journal"', homepage)
         self.assertIn('"@type": "Organization"', homepage)
@@ -168,8 +168,8 @@ class LexNushAppTests(unittest.TestCase):
 
     def test_thin_placeholder_page_is_noindex(self):
         counsel = self.client.get("/counsels-desk/").get_data(as_text=True)
-        self.assertIn('name="robots" content="noindex, follow"', counsel)
-        self.assertIn("Counsel’s Desk", counsel)
+        self.assertIn('name="robots" content="index, follow', counsel)
+        self.assertIn("FROM THE COUNSEL'S DESK", counsel)
 
     def test_legacy_interviews_route_redirects(self):
         response = self.client.get("/interviews/", follow_redirects=False)

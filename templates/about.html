@@ -1,46 +1,37 @@
 {% extends "base.html" %}
 
 {% block content %}
-<section class="page-hero fade-in">
-    <span class="eyebrow">About LexNush</span>
-    <h1 class="page-title">Clear law. <span class="gold-text">Better understanding.</span></h1>
-    <p>Law shouldn’t feel like a language spoken only by lawyers.</p>
+<section class="content-hero about-hero" aria-labelledby="about-title">
+    <p class="section-kicker">ABOUT LEXNUSH</p>
+    <h1 id="about-title">Law with a Pulse.</h1>
+    <p class="page-subtitle">Law doesn't exist in isolation. Neither should the way we read it.</p>
 </section>
 
-<section class="section section-wide">
-    <div class="founder-grid fade-in delay-1">
-        <figure class="founder-media">
-            <img src="{{ url_for('static', filename='images/anushka-760.jpg') }}" alt="Anushka Pandey, Founder and Editor of LexNush" class="founder-photo" loading="lazy" width="760" height="1013">
-            <figcaption class="founder-caption">
-                <h2>Anushka Pandey</h2>
-                <p>Founder &amp; Editor, LexNush</p>
-            </figcaption>
-        </figure>
-
-        <div class="stack-md">
-            <span class="section-kicker">The person behind LexNush</span>
-            <p class="muted-copy">Law shouldn’t feel like a language spoken only by lawyers.</p>
-            <p class="muted-copy">While studying law, Anushka Pandey realized that many important legal conversations were inaccessible—not because the ideas were too complex, but because they were explained in ways that excluded most people.</p>
-            <p class="muted-copy">That realization led to LexNush: a platform built to make legal information clearer, more engaging, and easier to navigate. Through thoughtful writing and legal design, she aims to turn complex judgments, policies, and legal concepts into content that informs without overwhelming.</p>
-            <a class="text-link" href="https://www.linkedin.com/in/anushka-pandey31" target="_blank" rel="noopener noreferrer">Connect with Anushka on LinkedIn <span aria-hidden="true">&rarr;</span></a>
-        </div>
+<section class="about-statement">
+    <div class="about-reading fade-in">
+        <p>LexNush was created from a simple belief: law is too important to remain inaccessible, and too alive to be treated as just text on a page.</p>
+        <p>A judgment is more than its final order. A Bill is more than its provisions. A legal development is more than a headline.</p>
+        <p>Behind every legal question are people, institutions, history, competing interests, and consequences.</p>
+        <p>That is where LexNush looks.</p>
+        <p>We explore the law not only as it is written, but as it moves through courts, Parliament, institutions, businesses, and everyday life.</p>
+        <p>Through Analysis, Law Explained, Judgment Explained, and From the Counsel's Desk, we bring together legal developments, context, commentary, and ideas that help readers understand what is happening, and why it matters.</p>
     </div>
+    <aside class="questions-card fade-in delay-1" aria-labelledby="questions-title">
+        <p class="section-kicker">OUR WORK ASKS FOUR SIMPLE QUESTIONS:</p>
+        <h2 id="questions-title" class="sr-only">Our work asks four simple questions</h2>
+        <ol>
+            <li><strong>What happened?</strong><span>The development itself.</span></li>
+            <li><strong>Why did it happen?</strong><span>The law and context behind it.</span></li>
+            <li><strong>Why does it matter?</strong><span>Its impact beyond the immediate headline.</span></li>
+            <li><strong>What should we be thinking about next?</strong><span>The questions that remain after the judgment, Bill, or headline ends.</span></li>
+        </ol>
+    </aside>
 </section>
 
-<section class="section section-narrow centered-copy fade-in delay-2">
-    <div class="stack-md">
-        <span class="section-kicker">Why LexNush Exists</span>
-        <h2 class="section-title">Law is too important to remain inaccessible.</h2>
-        <p>Every day, legal decisions shape businesses, public policy, and individual rights, yet much of that information is presented in ways that are difficult to understand. Complexity should never be a barrier to knowledge.</p>
-        <p>LexNush was created to bridge that gap. We translate legal developments into clear, reliable, and engaging insights without compromising on accuracy. Whether it’s a landmark judgment, a regulatory update, or a practical legal concept, our goal is simple: make the law easier to understand and more meaningful to those it serves.</p>
-        <p class="gold-text"><strong>Clear law. Better understanding.</strong></p>
-    </div>
-</section>
+<section class="pulse-manifesto fade-in" aria-label="LexNush philosophy"><p>Because the law is not static.</p><p>It evolves.</p><p>It argues.</p><p>It responds.</p><p>It affects people.</p><p>It has a pulse.</p><strong>LEXNUSH</strong><span>Law with a Pulse.</span></section>
 
-<section class="section section-narrow centered-copy fade-in delay-3">
-    <div class="cta-actions">
-        <a href="{{ site_urls.blogs }}" class="primary-button">Read The Journal</a>
-        <a href="{{ site_urls.contact }}" class="outline-link">Contact LexNush</a>
-    </div>
+<section class="founder-section" aria-labelledby="founder-title">
+    <div class="founder-photo-wrap fade-in"><img src="{{ static_url('images/anushka-760.jpg') }}" alt="Anushka Pandey" width="760" height="1013" loading="lazy"></div>
+    <div class="founder-copy fade-in delay-1"><p class="section-kicker">THE PERSON BEHIND LEXNUSH</p><h2 id="founder-title">Law shouldn’t feel like a language spoken only by lawyers.</h2><p>While studying law, Anushka Pandey found herself increasingly interested in the space beyond the text of a judgment, the questions behind it, the people affected by it, and the conversations it creates.</p><p>That curiosity became LexNush.</p><p>What began as a space to make legal information easier to understand has evolved into an independent legal publication exploring judgments, legislation, legal developments, ideas, and the stories shaping the law around us.</p><p>Through analysis, explainers, legal journalism, and thoughtful reflections, Anushka aims to make legal conversations clear without making them simplistic, analytical without making them inaccessible, and engaging without losing sight of accuracy.</p><p>Because the law does not exist only inside courtrooms or law reports. It moves through people, institutions, businesses, technology, and everyday life.</p><p>And that is what LexNush hopes to capture.</p><p class="founder-signoff">Law with a Pulse.</p></div>
 </section>
 {% endblock %}

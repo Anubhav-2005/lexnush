@@ -103,6 +103,9 @@ def create_app(config_name=None, config_overrides=None):
                 "home": main_route_url("main.home", "/"),
                 "about": main_route_url("main.about", "/about/"),
                 "blogs": main_route_url("main.blogs", "/blogs/"),
+                "analysis": main_route_url("main.analysis", "/analysis/"),
+                "law_explained": main_route_url("main.law_explained", "/law-explained/"),
+                "judgment_explained": main_route_url("main.judgment_explained", "/judgment-explained/"),
                 "counsel": main_route_url("main.counsels_desk", "/counsels-desk/"),
                 # Keep the old key available to older templates/extensions while
                 # the public navigation uses the renamed Counsel’s Desk section.

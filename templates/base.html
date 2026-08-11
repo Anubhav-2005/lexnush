@@ -7,7 +7,7 @@
     {% set page_description = meta.description if meta is defined and meta.description else "Premium legal insights from LexNush." %}
     {% set base_url = public_base_url|default('', true)|trim('/') %}
     {% set request_path = request.path|default('/', true) %}
-    {% set page_image = meta.image if meta is defined and meta.image else base_url ~ static_url('images/lexnush-hero-editorial-1200.jpg') %}
+    {% set page_image = meta.image if meta is defined and meta.image else base_url ~ static_url('images/supreme-court-hero.jpg') %}
     {% set page_image_alt = meta.image_alt if meta is defined and meta.image_alt else "LexNush independent legal editorial" %}
     {% set page_image_width = meta.image_width if meta is defined and meta.image_width else 1200 %}
     {% set page_image_height = meta.image_height if meta is defined and meta.image_height else 583 %}
@@ -47,19 +47,20 @@
     <link rel="icon" type="image/png" sizes="192x192" href="{{ static_url('favicon.png') }}">
     <link rel="apple-touch-icon" sizes="192x192" href="{{ static_url('favicon.png') }}">
     {% if request.endpoint == 'main.home' %}
-    <link rel="preload" as="image" href="{{ static_url('images/lexnush-hero-editorial-1200.jpg') }}" imagesrcset="{{ static_url('images/lexnush-hero-editorial-640.jpg') }} 640w, {{ static_url('images/lexnush-hero-editorial-1200.jpg') }} 1200w" imagesizes="(max-width: 768px) 100vw, 56vw">
+    <link rel="preload" as="image" href="{{ static_url('images/supreme-court-hero.jpg') }}" imagesizes="(max-width: 900px) 100vw, 58vw">
     {% endif %}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&display=swap" rel="stylesheet">
 
-    {% set asset_version = "20260728-editorial1" %}
+    {% set asset_version = "20260811-lexnush-contact-nav" %}
     <link rel="stylesheet" href="{{ static_url('css/variables.css') }}?v={{ asset_version }}">
     <link rel="stylesheet" href="{{ static_url('css/reset.css') }}?v={{ asset_version }}">
     <link rel="stylesheet" href="{{ static_url('css/layout.css') }}?v={{ asset_version }}">
     <link rel="stylesheet" href="{{ static_url('css/components.css') }}?v={{ asset_version }}">
     <link rel="stylesheet" href="{{ static_url('css/pages.css') }}?v={{ asset_version }}">
     <link rel="stylesheet" href="{{ static_url('css/responsive.css') }}?v={{ asset_version }}">
+    <link rel="stylesheet" href="{{ static_url('css/lexnush.css') }}?v={{ asset_version }}">
     <script src="{{ static_url('theme.js') }}?v={{ asset_version }}"></script>
     {% if meta is defined and meta.schema is defined %}
         <script type="application/ld+json">{{ meta.schema | tojson }}</script>
@@ -84,9 +85,11 @@
 
                 {% set nav_items = [
                     ('home', 'main.home', 'Home'),
-                    ('about', 'main.about', 'About LexNush'),
-                    ('blogs', 'main.blogs', 'Journal'),
-                    ('counsel', 'main.counsels_desk', 'Counsel’s Desk'),
+                    ('analysis', 'main.analysis', 'Analysis'),
+                    ('law_explained', 'main.law_explained', 'Law Explained'),
+                    ('judgment_explained', 'main.judgment_explained', 'Judgment Explained'),
+                    ('counsel', 'main.counsels_desk', "Counsel's Desk"),
+                    ('about', 'main.about', 'About'),
                     ('contact', 'main.contact', 'Contact')
                 ] %}
                 <nav class="nav-links" aria-label="Primary navigation">
@@ -96,6 +99,7 @@
                 </nav>
 
                 <div class="nav-actions">
+                    <a href="{{ site_urls.home }}#newsletter" class="nav-subscribe">Subscribe</a>
                     <button id="search-trigger" class="icon-button" type="button" aria-label="Search LexNush">
                         <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="11" cy="11" r="8"></circle>
@@ -103,7 +107,7 @@
                         </svg>
                         <span class="search-shortcut" aria-hidden="true">⌘K</span>
                     </button>
-                    <button id="theme-toggle" type="button" aria-label="Switch to light theme">
+                    <button id="theme-toggle" type="button" aria-label="Switch to dark theme">
                         <svg class="icon sun" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path></svg>
                         <svg class="icon moon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
                     </button>
@@ -141,23 +145,24 @@
             <meta itemprop="name" content="LexNush">
             <div class="footer-inner">
                 <div class="footer-brand">
-                    <img src="{{ static_url('logo.jpg') }}" alt="LexNush" class="footer-logo" width="120" height="44">
-                    <p class="footer-tagline">Law, policy, and public life—explained with clarity and context for founders, professionals, and curious readers.</p>
+                    <a href="{{ site_urls.home }}" class="footer-logo-link" aria-label="LexNush home"><img src="{{ static_url('logo.jpg') }}" alt="LexNush" class="footer-logo" width="120" height="44"></a>
+                    <p class="footer-tagline">Law doesn't exist in isolation. Neither should the way we read it.</p>
                 </div>
                 <nav class="footer-nav" aria-label="Footer navigation">
-                    <span class="footer-nav-title">Explore</span>
+                    <span class="footer-nav-title">Quick Links</span>
                     <div class="footer-nav-links">
-                        <a href="{{ site_urls.about }}">About LexNush</a>
-                        <a href="{{ site_urls.blogs }}">The Journal</a>
-                        <a href="{{ site_urls.counsel }}">Counsel’s Desk</a>
-                        <a href="{{ site_urls.privacy }}">Privacy</a>
-                        <a href="{{ site_urls.disclaimer }}">Disclaimer</a>
+                        <a href="{{ site_urls.home }}">Home</a>
+                        <a href="{{ site_urls.analysis }}">Analysis</a>
+                        <a href="{{ site_urls.law_explained }}">Law Explained</a>
+                        <a href="{{ site_urls.judgment_explained }}">Judgment Explained</a>
+                        <a href="{{ site_urls.counsel }}">Counsel's Desk</a>
+                        <a href="{{ site_urls.about }}">About</a>
                     </div>
                 </nav>
                 <nav class="footer-nav" aria-label="Footer contact">
                     <span class="footer-nav-title">Connect</span>
                     <div class="footer-nav-links">
-                        <a href="{{ site_urls.contact }}">Contact</a>
+                        <a href="mailto:hello@lexnush.com">hello@lexnush.com</a>
                         <a href="{{ site_urls.privacy }}">Privacy</a>
                         <a href="{{ site_urls.disclaimer }}">Disclaimer</a>
                         <a href="mailto:editor@lexnush.com">editor@lexnush.com</a>
@@ -166,8 +171,8 @@
                 </nav>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 LexNush. Independent legal editorial.</p>
-                <span class="footer-legal">Information only. Not legal advice.</span>
+                <p>&copy; 2026 LexNush. All rights reserved.</p>
+                <span class="footer-legal"><a href="{{ site_urls.privacy }}">Privacy Policy</a><span aria-hidden="true">|</span><a href="{{ site_urls.disclaimer }}">Terms of Use</a></span>
             </div>
         </footer>
     </div>
