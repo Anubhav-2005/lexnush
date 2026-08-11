@@ -571,7 +571,7 @@
     grid-area: photo;
     width: 100%;
     justify-self: stretch;
-    margin-top: 0;
+    margin-top: clamp(1.5rem, 3.5vw, 3.25rem);
     box-shadow: none;
 }
 
