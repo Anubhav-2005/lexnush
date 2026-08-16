@@ -37,7 +37,7 @@ Store the generated values only in Render's encrypted environment-variable inter
 | `ADMIN_PASSWORD_HASH` | Argon2 hash generated above |
 | `SENTRY_DSN` | Sentry Flask DSN |
 
-Optional: `TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY`, `TURNSTILE_REQUIRED=true`, `DATA_RETENTION_DAYS=365`.
+Optional: `GOOGLE_ANALYTICS_MEASUREMENT_ID` (GA4 measurement ID; loaded only after reader consent), `CONTACT_ADDRESS` (approved public correspondence address), `TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY`, `TURNSTILE_REQUIRED=true`, `DATA_RETENTION_DAYS=365`.
 
 ## 4. Deploy and verify
 
@@ -57,6 +57,7 @@ Optional: `TURNSTILE_SITE_KEY`, `TURNSTILE_SECRET_KEY`, `TURNSTILE_REQUIRED=true
 - [ ] Set one canonical host and redirect the alternative host.
 - [ ] Enable Resend domain records before sending public email.
 - [ ] Submit `https://your-real-domain.example/sitemap.xml` in Google Search Console and Bing Webmaster Tools.
+- [ ] If using Google Analytics, add `GOOGLE_ANALYTICS_MEASUREMENT_ID`, accept analytics in the cookie banner, and verify a real-time page view in GA4.
 - [ ] Ensure the privacy page and contact address are correct for your business/jurisdiction.
 
 Render Blueprints support Postgres and Key Value connection-string references, and Render recommends internal Key Value URLs for colocated services. Verify the current Blueprint schema before applying it. [Render Blueprint reference](https://render.com/docs/blueprint-spec), [Render Key Value guide](https://render.com/docs/key-value).

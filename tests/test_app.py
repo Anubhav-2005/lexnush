@@ -75,7 +75,9 @@ class LexNushAppTests(unittest.TestCase):
             "/counsels-desk/",
             "/contact/",
             "/privacy/",
+            "/terms/",
             "/disclaimer/",
+            "/thank-you/",
             "/feed.xml",
             "/healthz",
         ]:
@@ -113,6 +115,10 @@ class LexNushAppTests(unittest.TestCase):
         contact = self.client.get("/contact/")
         self.assertIn(b'data-character-counter="message-counter"', contact.data)
         self.assertIn(b'maxlength="3000"', contact.data)
+        self.assertIn(b'data-submit-state', contact.data)
+        homepage = self.client.get("/")
+        self.assertIn(b'class="mobile-subscribe-cta"', homepage.data)
+        self.assertIn(b'id="cookie-consent"', homepage.data)
 
     def test_home_uses_editorial_experience_without_redundant_final_cta(self):
         homepage = self.client.get("/")
@@ -125,6 +131,7 @@ class LexNushAppTests(unittest.TestCase):
     def test_security_headers_and_canonical_url_are_present(self):
         response = self.client.get("/")
         self.assertIn("default-src 'self'", response.headers["Content-Security-Policy"])
+        self.assertIn("https://www.googletagmanager.com", response.headers["Content-Security-Policy"])
         self.assertEqual(response.headers["X-Content-Type-Options"], "nosniff")
         self.assertEqual(response.headers["X-Frame-Options"], "DENY")
         self.assertIn("http://testserver/", response.get_data(as_text=True))
@@ -182,9 +189,25 @@ class LexNushAppTests(unittest.TestCase):
         self.assertIn("informational and educational purposes only", disclaimer)
         self.assertIn("do not constitute legal advice", disclaimer)
 
+    def test_terms_and_thank_you_pages_have_expected_indexing(self):
+        terms = self.client.get("/terms/").get_data(as_text=True)
+        self.assertIn('name="robots" content="index, follow', terms)
+        self.assertIn("The terms for using LexNush.", terms)
+        thank_you = self.client.get("/thank-you/").get_data(as_text=True)
+        self.assertIn('name="robots" content="noindex, nofollow"', thank_you)
+        self.assertIn("Thank you for getting in touch.", thank_you)
+        self.assertIn("We aim to respond to substantive inquiries", thank_you)
+
+    def test_analytics_is_configured_but_not_rendered_until_consent(self):
+        self.app.config["GOOGLE_ANALYTICS_MEASUREMENT_ID"] = "G-TEST123456"
+        homepage = self.client.get("/").get_data(as_text=True)
+        self.assertIn('data-google-analytics-id="G-TEST123456"', homepage)
+        self.assertNotIn("googletagmanager.com/gtag/js", homepage)
+
     def test_contact_is_persisted_with_outbox_event(self):
         response = self.client.post("/contact/", data=self.contact_payload(), follow_redirects=True)
         self.assertEqual(response.status_code, 200)
+        self.assertIn(b"Thank you for getting in touch.", response.data)
         with self.app.app_context():
             contact = db.session.query(ContactSubmission).one()
             event = db.session.query(EmailOutboxEvent).one()
@@ -212,7 +235,8 @@ class LexNushAppTests(unittest.TestCase):
             self.assertEqual(event.provider_message_id, "email_123")
 
     def test_newsletter_requires_confirmation_before_confirmed(self):
-        self.client.post("/newsletter/", data={"email": "reader@example.com", "next": "/blogs/"})
+        signup = self.client.post("/newsletter/", data={"email": "reader@example.com", "next": "/blogs/"}, follow_redirects=True)
+        self.assertIn(b"Please check your inbox.", signup.data)
         with self.app.app_context():
             subscription = db.session.query(NewsletterSubscription).one()
             event = db.session.query(EmailOutboxEvent).one()
@@ -268,6 +292,7 @@ class LexNushAppTests(unittest.TestCase):
         self.assertIn(b"http://testserver/sitemap.xml", self.client.get("/robots.txt").data)
         self.assertIn(b"http://testserver/feed.xml", self.client.get("/robots.txt").data)
         self.assertIn(b"Disallow: /admin/", self.client.get("/robots.txt").data)
+        self.assertIn(b"Disallow: /thank-you/", self.client.get("/robots.txt").data)
         sitemap = self.client.get("/sitemap.xml").get_data(as_text=True)
         self.assertIn("<lastmod>2026-07-27</lastmod>", sitemap)
         self.assertIn("http://testserver/blogs/", sitemap)
@@ -277,6 +302,7 @@ class LexNushAppTests(unittest.TestCase):
         self.assertIn("http://testserver/counsels-desk/", sitemap)
         self.assertIn("http://testserver/authors/anushka-pandey/", sitemap)
         self.assertIn("http://testserver/privacy/", sitemap)
+        self.assertIn("http://testserver/terms/", sitemap)
         self.assertIn("http://testserver/disclaimer/", sitemap)
         self.assertIn("http://testserver/static/images/supreme-court-hero.jpg", sitemap)
         self.assertIn('xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"', sitemap)

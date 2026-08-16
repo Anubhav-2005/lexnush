@@ -56,7 +56,7 @@
 <section id="newsletter" class="home-section newsletter-banner fade-in" aria-labelledby="newsletter-title">
     <div class="newsletter-symbol" aria-hidden="true">✉</div>
     <div><h2 id="newsletter-title">Stay Informed. Every Week.</h2><p>Subscribe and get the week's most important legal updates delivered to your inbox.</p></div>
-    <form name="home-signup" method="post" action="{{ url_for('main.newsletter_signup') }}" class="newsletter-form">
+    <form name="home-signup" method="post" action="{{ url_for('main.newsletter_signup') }}" class="newsletter-form" data-submit-state data-submit-label="Sending…">
         <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
         <input type="hidden" name="next" value="{{ url_for('main.home') }}">
         <div class="honeypot" aria-hidden="true"><label for="home-website">Website</label><input id="home-website" name="website" type="text" tabindex="-1" autocomplete="off"></div>

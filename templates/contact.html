@@ -28,6 +28,12 @@
             <p>Follow LexNush on LinkedIn for editorial updates, legal commentary, institutional announcements, and perspectives shaping contemporary legal discourse.</p>
             <a href="https://www.linkedin.com/company/thelexnush/posts/?feedView=all" class="contact-link" rel="noopener noreferrer">LinkedIn &nearr;</a>
         </article>
+        {% if contact_address %}
+        <article class="contact-card stack-sm">
+            <h2 class="card-title">Correspondence</h2>
+            <p>{{ contact_address }}</p>
+        </article>
+        {% endif %}
     </div>
 </section>
 
@@ -38,7 +44,7 @@
             <h2 class="section-title">Send a considered note.</h2>
             <p>Use this form for editorial pitches, collaboration ideas, correction requests, or thoughtful questions.</p>
 
-            <form method="post" action="{{ url_for('main.contact') }}" class="form" novalidate>
+            <form method="post" action="{{ url_for('main.contact') }}" class="form" novalidate data-submit-state data-submit-label="Sending…">
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
                 <div class="honeypot" aria-hidden="true">
                     <label for="website">Website</label>

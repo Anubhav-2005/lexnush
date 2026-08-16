@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-hero page-hero-centered">
+    <span class="eyebrow">{{ message.eyebrow }}</span>
+    <h1 class="page-title">{{ message.title }}</h1>
+    <p>{{ message["copy"] }}</p>
+    <a class="primary-button" href="{{ message.url }}">{{ message.label }}</a>
+</section>
+{% endblock %}

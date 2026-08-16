@@ -97,6 +97,8 @@ def create_app(config_name=None, config_overrides=None):
     app.context_processor(
         lambda: {
             "public_base_url": app.config["PUBLIC_BASE_URL"],
+            "google_analytics_measurement_id": app.config.get("GOOGLE_ANALYTICS_MEASUREMENT_ID", ""),
+            "contact_address": app.config.get("CONTACT_ADDRESS", ""),
             "turnstile_site_key": app.config.get("TURNSTILE_SITE_KEY", ""),
             "static_url": static_asset_url,
             "site_urls": {
@@ -112,6 +114,7 @@ def create_app(config_name=None, config_overrides=None):
                 "interviews": main_route_url("main.counsels_desk", "/counsels-desk/"),
                 "contact": main_route_url("main.contact", "/contact/"),
                 "privacy": main_route_url("main.privacy", "/privacy/"),
+                "terms": main_route_url("main.terms", "/terms/"),
                 "disclaimer": main_route_url("main.disclaimer", "/disclaimer/"),
             },
         }

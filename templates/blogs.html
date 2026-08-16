@@ -35,7 +35,7 @@
         <div class="stack-md">
             <h2 class="section-title">Do not miss the launch.</h2>
             <p>Join the reader list for new analysis, editorial notes, and occasional legal briefings.</p>
-            <form name="journal-signup" method="post" action="{{ url_for('main.newsletter_signup') }}" class="subscription-form">
+            <form name="journal-signup" method="post" action="{{ url_for('main.newsletter_signup') }}" class="subscription-form" data-submit-state data-submit-label="Sending…">
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
                 <input type="hidden" name="next" value="{{ url_for('main.blogs') }}">
                 <div class="honeypot" aria-hidden="true"><label for="journal-website">Website</label><input id="journal-website" name="website" type="text" tabindex="-1" autocomplete="off"></div>

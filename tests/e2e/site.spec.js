@@ -3,7 +3,7 @@ const { test, expect } = require("@playwright/test");
 const article = "/blogs/surgery-or-autopsy-adr-award-modification";
 
 test("public routes return rendered pages", async ({ page }) => {
-    for (const path of ["/", "/about/", "/analysis/", "/law-explained/", "/judgment-explained/", "/authors/anushka-pandey/", "/blogs/", article, "/counsels-desk/", "/contact/", "/privacy/", "/disclaimer/", "/not-found"]) {
+    for (const path of ["/", "/about/", "/analysis/", "/law-explained/", "/judgment-explained/", "/authors/anushka-pandey/", "/blogs/", article, "/counsels-desk/", "/contact/", "/privacy/", "/terms/", "/disclaimer/", "/thank-you/", "/not-found"]) {
         const response = await page.goto(path);
         expect(response.status()).toBe(path === "/not-found" ? 404 : 200);
         await expect(page.locator("main")).toBeVisible();
@@ -50,4 +50,16 @@ test("mobile menu and search dialog expose accessible state", async ({ page }) =
     await expect(page.getByRole("dialog", { name: "Search" })).toBeVisible();
     await page.keyboard.press("Escape");
     await expect(page.getByRole("dialog", { name: "Search" })).not.toBeVisible();
+});
+
+test("mobile subscribe CTA and cookie choices are clear", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 900 });
+    await page.goto("/");
+    await expect(page.getByRole("link", { name: "Subscribe" })).toBeVisible();
+    const consent = page.getByRole("complementary", { name: "Your privacy choices" });
+    await expect(consent).toBeVisible();
+    await consent.getByRole("button", { name: "Essential only" }).click();
+    await expect(consent).not.toBeVisible();
+    const dimensions = await page.locator("html").evaluate((html) => ({ width: html.clientWidth, scroll: html.scrollWidth }));
+    expect(dimensions.scroll).toBeLessThanOrEqual(dimensions.width);
 });

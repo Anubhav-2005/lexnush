@@ -37,7 +37,9 @@ PAGE_ENDPOINTS = {
     "counsel": "main.counsels_desk",
     "contact": "main.contact",
     "privacy": "main.privacy",
+    "terms": "main.terms",
     "disclaimer": "main.disclaimer",
+    "thank_you": "main.thank_you",
     "analysis": "main.analysis",
     "law_explained": "main.law_explained",
     "judgment_explained": "main.judgment_explained",
@@ -50,7 +52,9 @@ PAGE_SCHEMA_TYPES = {
     "counsel": "CollectionPage",
     "contact": "ContactPage",
     "privacy": "WebPage",
+    "terms": "WebPage",
     "disclaimer": "WebPage",
+    "thank_you": "WebPage",
     "analysis": "CollectionPage",
     "law_explained": "CollectionPage",
     "judgment_explained": "CollectionPage",
@@ -351,8 +355,7 @@ def contact():
         event = queue_contact_notification(contact_submission)
         db.session.commit()
         deliver_outbox_event(event)
-        flash("Thank you. Your message has been received. We aim to respond within 3–5 business days.", "success")
-        return redirect(url_for("main.contact"))
+        return redirect(url_for("main.thank_you", kind="contact"))
     return render_template("contact.html", form_data={}, errors={}, meta=page_meta("contact"))
 
 
@@ -378,8 +381,7 @@ def newsletter_signup():
     event = queue_newsletter_confirmation(subscription, signed_token)
     db.session.commit()
     deliver_outbox_event(event)
-    flash("Check your email to confirm your LexNush subscription.", "success")
-    return redirect(target)
+    return redirect(url_for("main.thank_you", kind="newsletter"))
 
 
 @main_bp.route("/newsletter/confirm/<signed_token>")
@@ -421,6 +423,34 @@ def privacy():
     return render_template("privacy.html", meta=page_meta("privacy"))
 
 
+@main_bp.route("/terms/")
+def terms():
+    return render_template("terms.html", meta=page_meta("terms"))
+
+
+@main_bp.route("/thank-you/")
+def thank_you():
+    kind = request.args.get("kind", "contact")
+    messages = {
+        "contact": {
+            "eyebrow": "Message received",
+            "title": "Thank you for getting in touch.",
+            "copy": "Your note has been received. We aim to respond to substantive inquiries within 3–5 business days.",
+            "label": "Return Home",
+            "url": url_for("main.home"),
+        },
+        "newsletter": {
+            "eyebrow": "One final step",
+            "title": "Please check your inbox.",
+            "copy": "We have sent a confirmation link to your email address. Your subscription will begin once you confirm it.",
+            "label": "Explore LexNush",
+            "url": url_for("main.blogs"),
+        },
+    }
+    message = messages.get(kind, messages["contact"])
+    return render_template("thank_you.html", message=message, meta=page_meta("thank_you"))
+
+
 @main_bp.route("/disclaimer/")
 def disclaimer():
     return render_template("disclaimer.html", meta=page_meta("disclaimer"))
@@ -446,6 +476,7 @@ def robots_txt():
             "Disallow: /api/",
             "Disallow: /healthz",
             "Disallow: /newsletter/",
+            "Disallow: /thank-you/",
             f"Sitemap: {public_url('main.sitemap_xml')}",
             f"Sitemap: {public_url('main.feed_xml')}",
             "",
@@ -466,6 +497,7 @@ def sitemap_xml():
         (public_url("main.counsels_desk"), SITE_LASTMOD_ISO, None),
         (public_url("main.contact"), SITE_LASTMOD_ISO, None),
         (public_url("main.privacy"), SITE_LASTMOD_ISO, None),
+        (public_url("main.terms"), SITE_LASTMOD_ISO, None),
         (public_url("main.disclaimer"), SITE_LASTMOD_ISO, None),
     ]
     urls.extend(

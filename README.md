@@ -64,6 +64,8 @@ CONTACT_RECIPIENT_EMAIL=owner@your-domain.example
 ADMIN_EMAIL=owner@your-domain.example
 ADMIN_PASSWORD_HASH=<Argon2 hash>
 SENTRY_DSN=<Sentry DSN>
+GOOGLE_ANALYTICS_MEASUREMENT_ID=<optional GA4 measurement ID>
+CONTACT_ADDRESS=<optional approved public correspondence address>
 ```
 
 Optional bot protection:

@@ -113,44 +113,51 @@
         button.addEventListener("click", () => window.scrollTo({ top: 0, behavior: prefersReducedMotion ? "auto" : "smooth" }));
     }
 
-    function initDisclaimer() {
-        const panel = qs("#disclaimer-panel");
-        const dismissButton = qs("#dismiss-disclaimer");
-        const storageKey = "lexnush_disclaimer_dismissed";
-        if (!panel || !dismissButton) return;
+    function initCookieConsent() {
+        const panel = qs("#cookie-consent");
+        if (!panel) return;
 
-        const hasDismissed = () => {
-            try {
-                return sessionStorage.getItem(storageKey) === "true";
-            } catch {
-                return false;
-            }
+        const storageKey = "lexnush_cookie_consent";
+        const analyticsId = (document.body.dataset.googleAnalyticsId || "").trim();
+        const readConsent = () => {
+            const match = document.cookie.match(new RegExp(`(?:^|; )${storageKey}=([^;]*)`));
+            return match ? decodeURIComponent(match[1]) : "";
         };
-
-        const rememberDismissed = () => {
-            try {
-                sessionStorage.setItem(storageKey, "true");
-            } catch {
-                // Browsers may deny sessionStorage in strict privacy modes.
-            }
+        const writeConsent = (choice) => {
+            const secure = window.location.protocol === "https:" ? "; Secure" : "";
+            document.cookie = `${storageKey}=${encodeURIComponent(choice)}; Max-Age=31536000; Path=/; SameSite=Lax${secure}`;
         };
-
         const setOpen = (isOpen) => {
             panel.classList.toggle("is-visible", isOpen);
             panel.setAttribute("aria-hidden", String(!isOpen));
         };
-
-        if (!hasDismissed()) {
-            window.setTimeout(() => setOpen(true), prefersReducedMotion ? 0 : 1800);
-        }
-
-        dismissButton.addEventListener("click", () => {
-            rememberDismissed();
+        const loadAnalytics = () => {
+            if (!analyticsId || window.__lexnushAnalyticsLoaded) return;
+            window.__lexnushAnalyticsLoaded = true;
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = window.gtag || function gtag() { window.dataLayer.push(arguments); };
+            window.gtag("js", new Date());
+            window.gtag("config", analyticsId, { anonymize_ip: true });
+            const script = document.createElement("script");
+            script.async = true;
+            script.src = `https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(analyticsId)}`;
+            document.head.append(script);
+        };
+        const choose = (choice) => {
+            writeConsent(choice);
+            if (choice === "analytics") loadAnalytics();
             setOpen(false);
-        });
+        };
 
-        document.addEventListener("keydown", (event) => {
-            if (event.key === "Escape" && panel.classList.contains("is-visible")) setOpen(false);
+        const savedChoice = readConsent();
+        if (savedChoice === "analytics") loadAnalytics();
+        if (!savedChoice) setOpen(true);
+
+        qsa("[data-cookie-consent]").forEach((button) => {
+            button.addEventListener("click", () => choose(button.dataset.cookieConsent));
+        });
+        qsa("[data-cookie-preferences]").forEach((button) => {
+            button.addEventListener("click", () => setOpen(true));
         });
     }
 
@@ -249,6 +256,20 @@
             };
             sync();
             field.addEventListener("input", sync);
+        });
+    }
+
+    function initFormSubmissionStates() {
+        qsa("form[data-submit-state]").forEach((form) => {
+            form.addEventListener("submit", () => {
+                if (!form.checkValidity()) return;
+                const button = qs('button[type="submit"]', form);
+                if (!button || button.disabled) return;
+                button.disabled = true;
+                button.classList.add("is-loading");
+                button.setAttribute("aria-busy", "true");
+                button.textContent = form.dataset.submitLabel || "Sending…";
+            });
         });
     }
 
@@ -375,12 +396,13 @@
         initMobileMenu();
         initTheme();
         initBackToTop();
-        initDisclaimer();
+        initCookieConsent();
         initFadeIns();
         initCopyLinks();
         initNativeShare();
         initReadingProgress();
         initCharacterCounters();
+        initFormSubmissionStates();
         initSearch();
     });
 })();

@@ -220,10 +220,19 @@ PAGE_META = {
     },
     "privacy": {
         "title": "Privacy | LexNush",
-        "description": "How LexNush handles contact inquiries and newsletter subscriptions.",
+        "description": "How LexNush handles contact inquiries, newsletter subscriptions, cookies, and optional analytics.",
+    },
+    "terms": {
+        "title": "Terms of Use | LexNush",
+        "description": "The terms that apply when you access and use LexNush.",
     },
     "disclaimer": {
         "title": "Disclaimer | LexNush",
         "description": "LexNush content is provided for general informational purposes only and is not legal advice.",
+    },
+    "thank_you": {
+        "title": "Thank You | LexNush",
+        "description": "Your LexNush submission has been received.",
+        "robots": "noindex, nofollow",
     },
 }
