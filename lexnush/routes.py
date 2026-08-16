@@ -457,10 +457,15 @@ def robots_txt():
 @main_bp.route("/sitemap.xml")
 def sitemap_xml():
     urls = [
-        (public_url("main.home"), SITE_LASTMOD_ISO, public_url("static", filename="images/lexnush-hero-editorial-1200.jpg")),
+        (public_url("main.home"), SITE_LASTMOD_ISO, public_url("static", filename="images/supreme-court-hero.jpg")),
         (public_url("main.about"), SITE_LASTMOD_ISO, public_url("static", filename="images/anushka-760.jpg")),
         (public_url("main.blogs"), SITE_LASTMOD_ISO, None),
+        (public_url("main.analysis"), SITE_LASTMOD_ISO, None),
+        (public_url("main.law_explained"), SITE_LASTMOD_ISO, None),
+        (public_url("main.judgment_explained"), SITE_LASTMOD_ISO, None),
+        (public_url("main.counsels_desk"), SITE_LASTMOD_ISO, None),
         (public_url("main.contact"), SITE_LASTMOD_ISO, None),
+        (public_url("main.privacy"), SITE_LASTMOD_ISO, None),
         (public_url("main.disclaimer"), SITE_LASTMOD_ISO, None),
     ]
     urls.extend(
