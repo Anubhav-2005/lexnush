@@ -200,7 +200,8 @@ def blogs():
 
 @main_bp.route("/analysis/")
 def analysis():
-    return render_template("section_page.html", section="analysis", meta=page_meta("analysis"))
+    posts = [post for post in BLOG_POSTS if post["category"].lower() == "analysis"]
+    return render_template("section_page.html", section="analysis", posts=posts, meta=page_meta("analysis"))
 
 
 @main_bp.route("/law-explained/")

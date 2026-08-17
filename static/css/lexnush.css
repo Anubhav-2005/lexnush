@@ -189,6 +189,10 @@
     gap: clamp(14px, 2vw, 24px);
 }
 
+.latest-journal-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .latest-card {
     display: grid;
     overflow: hidden;
@@ -268,6 +272,27 @@
     font-size: 1.2rem;
     font-weight: 500;
     line-height: 1.25;
+}
+
+.latest-card-copy p {
+    margin-top: 12px;
+    color: var(--color-muted);
+    font-size: 0.82rem;
+    line-height: 1.65;
+}
+
+.latest-card-copy small {
+    display: block;
+    margin-top: 18px;
+    color: var(--color-muted);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+.latest-journal-link {
+    margin: 18px auto 0;
 }
 
 .format-section {
@@ -783,6 +808,7 @@ button.is-loading::before {
     .hero-background .hero-grid { gap: var(--space-8); }
     .hero-background .hero-dossier { max-width: 560px; }
     .latest-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .latest-journal-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .format-section { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .newsletter-banner { grid-template-columns: 64px 1fr; }
     .newsletter-form { grid-column: 1 / -1; }
@@ -817,6 +843,7 @@ button.is-loading::before {
     .hero-background .hero-folio { margin-bottom: 28px; }
     .hero-background .hero-grid { gap: 24px; }
     .latest-grid { grid-template-columns: 1fr; }
+    .latest-journal-grid { grid-template-columns: 1fr; }
     .latest-card { grid-template-columns: 120px 1fr; }
     .latest-card-art { min-height: 125px; border-right: 1px solid var(--color-border); border-bottom: 0; }
     .latest-card-copy { min-height: 0; padding: 18px 16px; }

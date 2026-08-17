@@ -124,6 +124,8 @@ class LexNushAppTests(unittest.TestCase):
         homepage = self.client.get("/")
         self.assertIn(b"Law with a Pulse.", homepage.data)
         self.assertIn(b"LATEST FROM LEXNUSH", homepage.data)
+        self.assertIn(b"When the State Watches You: AI Surveillance &amp; Constitutional Privacy", homepage.data)
+        self.assertIn(b"Surgery or Autopsy? The Supreme Court&#39;s Arbitral Scalpel", homepage.data)
         self.assertIn(b"Stay Informed. Every Week.", homepage.data)
         self.assertIn(b"ABOUT LEXNUSH", homepage.data)
         self.assertIn(b"supreme-court-hero.jpg", homepage.data)
@@ -305,6 +307,8 @@ class LexNushAppTests(unittest.TestCase):
         self.assertIn("http://testserver/terms/", sitemap)
         self.assertIn("http://testserver/disclaimer/", sitemap)
         self.assertIn("http://testserver/static/images/supreme-court-hero.jpg", sitemap)
+        self.assertIn("when-the-state-watches-you-ai-surveillance-constitutional-privacy", sitemap)
+        self.assertIn("<lastmod>2026-08-17</lastmod>", sitemap)
         self.assertIn('xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"', sitemap)
         self.assertNotIn("http://testserver/interviews/", sitemap)
 

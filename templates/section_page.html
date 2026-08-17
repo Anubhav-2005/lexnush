@@ -30,6 +30,29 @@
     {% if page['description'] %}<p class="section-description">{{ page['description'] }}</p>{% endif %}
 </section>
 
+{% if posts is defined and posts %}
+<section class="section section-wide section-compact" aria-labelledby="latest-analysis-title">
+    <div class="section-title-block fade-in">
+        <span class="section-kicker">Latest analysis</span>
+        <h2 id="latest-analysis-title">In focus</h2>
+        <span class="gold-rule" aria-hidden="true"></span>
+    </div>
+    <div class="content-grid fade-in delay-1">
+        {% for post in posts %}
+            <article class="blog-card stack-md">
+                <div class="blog-card-header">
+                    <span class="card-meta-label">{{ post.category }}</span>
+                    <span class="card-meta">{{ post.date }} &bull; {{ post.read_time }}</span>
+                </div>
+                <h3 class="card-title">{{ post.title }}</h3>
+                <p>{{ post.summary }}</p>
+                <a href="{{ url_for('main.post_detail', slug=post.slug) }}" class="text-link">Read Analysis</a>
+            </article>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
 {% if page['items'] %}
 <section class="what-section" aria-labelledby="what-title">
     <div class="section-title-block fade-in"><h2 id="what-title">{{ page['heading'] }}</h2><span class="gold-rule" aria-hidden="true"></span></div>

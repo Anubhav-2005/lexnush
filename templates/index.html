@@ -27,24 +27,20 @@
         <h2 id="latest-title">LATEST FROM LEXNUSH</h2>
         <span class="gold-rule" aria-hidden="true"></span>
     </div>
-    <div class="latest-grid">
-        <a class="latest-card fade-in" href="{{ site_urls.analysis }}">
-            <div class="latest-card-art art-analysis" aria-hidden="true"><span>⚖</span></div>
-            <div class="latest-card-copy"><span>ANALYSIS</span><h3>Beyond the headline. Into the law.</h3></div>
-        </a>
-        <a class="latest-card fade-in delay-1" href="{{ site_urls.law_explained }}">
-            <div class="latest-card-art art-law" aria-hidden="true"><span>§</span></div>
-            <div class="latest-card-copy"><span>LAW EXPLAINED</span><h3>Complex law. Clear answers.</h3></div>
-        </a>
-        <a class="latest-card fade-in delay-2" href="{{ site_urls.judgment_explained }}">
-            <div class="latest-card-art art-judgment" aria-hidden="true"><span>⌁</span></div>
-            <div class="latest-card-copy"><span>JUDGMENT EXPLAINED</span><h3>Read the judgment. Understand the reasoning.</h3></div>
-        </a>
-        <a class="latest-card fade-in delay-3" href="{{ site_urls.counsel }}">
-            <div class="latest-card-art art-counsel" aria-hidden="true"><span>✦</span></div>
-            <div class="latest-card-copy"><span>FROM THE COUNSEL'S DESK</span><h3>Thoughts from beyond the case law.</h3></div>
-        </a>
+    <div class="latest-grid latest-journal-grid">
+        {% for post in posts %}
+            <a class="latest-card fade-in {{ 'delay-' ~ loop.index if loop.index > 1 else '' }}" href="{{ url_for('main.post_detail', slug=post.slug) }}">
+                <div class="latest-card-art {{ 'art-analysis' if post.category == 'Analysis' else 'art-judgment' }}" aria-hidden="true"><span>{{ '%02d'|format(loop.index) }}</span></div>
+                <div class="latest-card-copy">
+                    <span>{{ post.category }}</span>
+                    <h3>{{ post.title }}</h3>
+                    <p>{{ post.summary }}</p>
+                    <small>{{ post.date }} &bull; {{ post.read_time }}</small>
+                </div>
+            </a>
+        {% endfor %}
     </div>
+    <a class="text-link latest-journal-link" href="{{ site_urls.blogs }}">View all journal</a>
 </section>
 
 <section class="home-section format-section" aria-label="Explore LexNush">

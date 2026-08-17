@@ -4,7 +4,7 @@ from html import unescape
 from textwrap import dedent
 
 HTML_TAG_RE = re.compile(r"<[^>]+>")
-SITE_LASTMOD_ISO = "2026-07-27"
+SITE_LASTMOD_ISO = "2026-08-17"
 
 AUTHORS = {
     "anushka-pandey": {
@@ -29,6 +29,95 @@ def calculate_read_time(text):
 
 
 BLOG_POSTS = [
+    {
+        "id": 2,
+        "slug": "when-the-state-watches-you-ai-surveillance-constitutional-privacy",
+        "title": "When the State Watches You: AI Surveillance & Constitutional Privacy",
+        "author": "Anushka Pandey",
+        "author_slug": "anushka-pandey",
+        "category": "Analysis",
+        "date": "17 August 2026",
+        "date_iso": "2026-08-17",
+        "date_modified": "17 August 2026",
+        "date_published_iso": "2026-08-17T09:00:00+05:30",
+        "date_modified_iso": "2026-08-17T09:00:00+05:30",
+        "keywords": [
+            "AI surveillance",
+            "constitutional privacy",
+            "facial recognition technology",
+            "K.S. Puttaswamy v. Union of India",
+            "Digital Personal Data Protection Act 2023",
+            "India",
+        ],
+        "image_alt": "Supreme Court of India",
+        "sources": [],
+        "seo_description": "An analysis of AI surveillance, facial recognition, and constitutional privacy in India.",
+        "summary": "Constitutional privacy was built for searches and warrants. India has quietly moved into a world of continuous, automated watching without fully updating the law to match.",
+        "key_takeaways": [],
+        "content": dedent(
+            """
+            <p>There's a CCTV camera above the ticket counter at pretty much every railway station I’ve ever passed through, and until a few years ago I never thought twice about it. It’s just there, doing what cameras do, recording, in case something goes wrong. What I didn't think about, and what most people still don’t, is that a lot of those cameras are no longer just recording. They're matching faces against a database in real time. Nobody asked me. Nobody asked you either, probably. And that, in a sentence, is the problem this essay is trying to sit with: constitutional privacy was built for a world of searches and warrants, and we’ve quietly moved into a world of continuous, automated watching, without really updating the law to match.</p>
+
+            <p>I want to try and work through why that mismatch matters, using India’s own privacy jurisprudence as the spine of the argument, because I think it’s actually one of the more interesting doctrinal experiments happening anywhere right now, even if, as I’ll get to, the follow-through has been shaky.</p>
+
+            <h2>Puttaswamy and the promise it made</h2>
+
+            <p>Everyone studying constitutional law in India in the last few years has had <em>K.S. Puttaswamy v. Union of India</em> (2017) practically tattooed into their revision notes, and for good reason. A nine-judge bench, unanimously, which is rare enough on its own, held that privacy is part of the right to life and personal liberty under Article 21. It wasn’t just symbolic. The Court gave us an actual test: state action that touches privacy has to (a) be backed by law, (b) serve a legitimate aim, and (c) be proportionate, the least intrusive option reasonably available, with safeguards against misuse.</p>
+
+            <p>Read that test again and notice what it assumes. It assumes the state does something discreet, taps a phone, searches a house, intercepts a letter, to a specific person it has already decided to look at. That's the model the whole doctrine is built on. And that model just doesn't describe how AI surveillance actually works.</p>
+
+            <h2>Why the old test keeps slipping</h2>
+
+            <p>Three things, I think, break the fit.</p>
+
+            <p>The first is sequencing. A wiretap needs a suspect before it needs a warrant. A facial recognition system at a metro station scans thousands of unconnected, un-suspected people in order to maybe find the one person it's looking for. The privacy intrusion happens to everyone, upfront, before anyone has done anything to warrant suspicion. Proportionality doctrine wasn't written for that order of operations.</p>
+
+            <p>The second is the “least restrictive means” limb, which honestly starts to feel almost circular once you apply it to AI tools. The whole pitch behind mass surveillance systems is that they’re comprehensive - that's the feature, not the bug. So when a court asks “was there a less invasive way to do this,” the honest answer from the state is usually “yes, but it would have caught fewer people,” which isn't really the kind of answer proportionality analysis knows how to reject.</p>
+
+            <p>The third is harder to put a finger on, and it's the one that bothers me most. A predictive-policing tool or a risk score doesn't “search” you the way we've traditionally understood searches. It just quietly nudges your name up a list. Nothing happens to you until, one day, something does, and by then it's very hard to trace the harm back to the moment the algorithm decided you were worth watching a little more closely. Our doctrine is good at naming injuries. It’s much worse at naming a slowly accumulating suspicion that never quite becomes an event.</p>
+
+            <h2>What's actually on the books in India (and the hole in it)</h2>
+
+            <p>For a while India didn’t really have a comprehensive data protection statute at all, just fragments under the IT Act and its 2011 rules. That changed, on paper, with the Digital Personal Data Protection Act, 2023, whose Rules were finally notified in November 2025 and are now being rolled out over an eighteen-month phase-in. It’s a genuine step forward: purpose limitation, data minimisation, storage limits, a Data Protection Board with actual enforcement teeth.</p>
+
+            <p>But there's a provision in that Act that I keep coming back to, because it more or less undoes the promise of everything else in it. Section 17(2)(a) lets the central government exempt any “instrumentality of the State” from almost the whole Act, including the purpose limitation and data minimisation rules on the strength of an executive notification citing something like national security or public order, with no named agency responsible for it, no judicial check built in, and no sunset clause forcing it to expire. Think about what that means next to <em>Puttaswamy</em>’s proportionality test. The judgment said the state has to justify its intrusions. Section 17(2)(a) lets the state exempt itself from having to justify anything, by writing itself a note.</p>
+
+            <p>Facial recognition is where you can watch this play out in real time. Most deployments by police and other public agencies haven't come through a specific law defining who can use the technology, on whom, for what purpose, or under whose supervision, they’ve come through procurement decisions and executive notifications instead. There's actually a private member’s bill sitting in Parliament that would require magistrate-level sign-off before police could use FRT, but private member bills almost never become law in India, and this one hasn’t moved. Even NITI Aayog’s own policy paper on responsible AI recommended that law enforcement shouldn't get a free pass from data protection oversight, which is exactly the recommendation Section 17 ignores.</p>
+
+            <p>So you end up with this slightly absurd asymmetry. A private company running facial recognition for office access control has to get consent, state a purpose, and delete the data when it's no longer needed. A state police department running the same technology across an entire city, at a scale no private company could match, can be carved out of most of those obligations by notification. The bigger the surveillance, the less law applies to it.</p>
+
+            <h2>Running the test on an actual case</h2>
+
+            <p>Take something concrete: a state government using AI-linked CCTV with facial recognition to identify people at a protest. Push it through the <em>Puttaswamy</em> test and see where it holds.</p>
+
+            <p>Backed by law weakly, if at all, since most of these systems arrive via procurement and notification rather than a statute written for this specific purpose. Legitimate aim, almost trivially yes, “public order” clears that bar without much resistance, and courts have generally been reluctant to interrogate the state’s own characterisation of a security interest. Proportionate, with safeguards, this is the part that should matter most and matters least in practice. No independent authorisation before deployment. No retention limit tied to the specific use. No real audit trail a surveilled person could ever actually access. And because of Section 17(2)(a), possibly no statutory minimisation obligation binding the agency at all.</p>
+
+            <p>The test isn't broken. It’s just not being applied before the fact, only, sometimes, years later, after a controversy forces someone to litigate it.</p>
+
+            <h2>A quick look elsewhere, because it's not just us</h2>
+
+            <p>The EU offers a useful contrast, even if I don’t think it’s a perfect model. Its framework subjects government surveillance to controls broadly comparable to what it imposes on private companies, rather than letting the state write its own exceptions. The AI Act treats real-time biometric identification by law enforcement in public spaces as high-risk, in some cases outright prohibited, and generally requires independent or judicial authorisation before it's used.</p>
+
+            <p>The US got there through a completely different door, Fourth Amendment doctrine, built around “reasonable expectation of privacy,” had to stretch to cover bulk data collection, and did so in <em>Carpenter v. United States</em> (2018), where the Court held that pulling someone's historical cell-site location data counts as a search requiring a warrant, precisely because aggregating that data tells you far more than any single data point ever could.</p>
+
+            <p>Three very different legal traditions, and they’re all arriving at roughly the same conclusion: once surveillance becomes automated and cumulative, it stops being a smaller version of an old problem and becomes a new one.</p>
+
+            <h2>What would actually fix this</h2>
+
+            <p>I don’t think the answer is a completely new theory of privacy, <em>Puttaswamy</em> gives us more than enough doctrinal room to work with. What's missing is mostly institutional follow-through, and a few specific legislative choices:</p>
+
+            <p>First, a dedicated law for algorithmic and biometric surveillance, separate from the general data protection statute, that actually names what facial recognition and similar tools can be used for, requires sign-off from someone independent of the agency deploying it, and sets binding limits on retention, instead of leaving all of this to be decided by procurement departments and executive notifications after the fact.</p>
+
+            <p>Second, narrowing the state's blanket exemption under Section 17(2)(a) down to something that looks like an actual necessity-and-proportionality test, reviewable by a court or an independent body, rather than a notification the government issues to itself and answers to no one.</p>
+
+            <p>Third, and this is the one I feel least confident courts are ready for, but think matters most, some way of treating ongoing algorithmic monitoring as a legally cognisable injury in its own right, even when it hasn’t yet led to an arrest or a denied benefit. Otherwise we keep waiting for the harm to fully materialise before anyone's allowed to challenge it, by which point it's usually too late to matter.</p>
+
+            <h2>Where that leaves us</h2>
+
+            <p>None of this is really about the technology being evil. Cameras and algorithms don't have intentions. What they do have is scale, and scale is exactly what constitutional privacy doctrine was never really tested against until now. <em>Puttaswamy</em> gave India the vocabulary to demand that the state justify itself before it watches its citizens. What we haven’t yet built is the habit- legislative, judicial, institutional, of actually making it do so before the cameras go up, rather than years later, in a courtroom, after the watching has already happened.</p>
+            """
+        ).strip(),
+    },
     {
         "id": 1,
         "slug": "surgery-or-autopsy-adr-award-modification",
