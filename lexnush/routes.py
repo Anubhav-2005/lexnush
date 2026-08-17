@@ -200,7 +200,7 @@ def blogs():
 
 @main_bp.route("/analysis/")
 def analysis():
-    posts = [post for post in BLOG_POSTS if post["category"].lower() == "analysis"]
+    posts = [post for post in BLOG_POSTS if post.get("section") == "analysis"]
     return render_template("section_page.html", section="analysis", posts=posts, meta=page_meta("analysis"))
 
 

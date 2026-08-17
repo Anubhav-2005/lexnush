@@ -130,6 +130,10 @@ class LexNushAppTests(unittest.TestCase):
         self.assertIn(b"ABOUT LEXNUSH", homepage.data)
         self.assertIn(b"supreme-court-hero.jpg", homepage.data)
 
+        analysis = self.client.get("/analysis/").data
+        self.assertIn(b"When the State Watches You: AI Surveillance &amp; Constitutional Privacy", analysis)
+        self.assertIn(b"Surgery or Autopsy? The Supreme Court&#39;s Arbitral Scalpel", analysis)
+
     def test_security_headers_and_canonical_url_are_present(self):
         response = self.client.get("/")
         self.assertIn("default-src 'self'", response.headers["Content-Security-Policy"])
