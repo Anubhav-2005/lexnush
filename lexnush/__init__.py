@@ -18,6 +18,7 @@ from .db import (
     purge_personal_data,
     verify_production_database,
 )
+from .keepalive import start_keepalive
 from .mailer import retry_pending_outbox
 from .observability import init_observability
 from .rate_limit import init_rate_limiting
@@ -122,6 +123,7 @@ def create_app(config_name=None, config_overrides=None):
     app.register_blueprint(main_bp)
     app.register_blueprint(api_bp)
     app.register_blueprint(admin_bp)
+    start_keepalive(app)
 
     @app.cli.command("init-db")
     def init_db_command():

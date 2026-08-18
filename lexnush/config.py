@@ -100,6 +100,11 @@ class BaseConfig:
     TURNSTILE_SECRET_KEY = os.getenv("TURNSTILE_SECRET_KEY", "")
     TURNSTILE_REQUIRED = environment_bool("TURNSTILE_REQUIRED", False)
     TURNSTILE_SITE_KEY = os.getenv("TURNSTILE_SITE_KEY", "")
+    # Render marks deployed services with RENDER=true. Local and test apps stay
+    # silent unless this is explicitly switched on.
+    SELF_PING_ENABLED = environment_bool("SELF_PING_ENABLED", os.getenv("RENDER", "").lower() == "true")
+    # Render's free service idle window is 15 minutes; leave a five-minute buffer.
+    SELF_PING_INTERVAL_SECONDS = 600
 
     @staticmethod
     def init_app(app):

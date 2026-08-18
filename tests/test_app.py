@@ -84,6 +84,27 @@ class LexNushAppTests(unittest.TestCase):
             with self.subTest(path=path):
                 self.assertEqual(self.client.get(path).status_code, 200)
 
+    def test_keepalive_is_disabled_by_default_outside_render(self):
+        self.assertNotIn("render_keepalive", self.app.extensions)
+
+    @patch("lexnush.keepalive.Thread")
+    def test_keepalive_starts_for_render_when_enabled(self, thread_class):
+        thread = Mock()
+        thread_class.return_value = thread
+        keepalive_app = create_app(
+            "testing",
+            {
+                "SQLALCHEMY_DATABASE_URI": f"sqlite:///{Path(self.tempdir.name) / 'keepalive.sqlite3'}",
+                "PUBLIC_BASE_URL": "https://lexnush.example.test",
+                "SELF_PING_ENABLED": True,
+                "SELF_PING_INTERVAL_SECONDS": 600,
+            },
+        )
+
+        thread_class.assert_called_once()
+        thread.start.assert_called_once_with()
+        self.assertIs(keepalive_app.extensions["render_keepalive"]["thread"], thread)
+
     def test_error_pages_render_with_static_asset_and_home_fallbacks(self):
         self.assertTrue(callable(self.app.jinja_env.globals["url_for"]))
         with self.app.app_context():
