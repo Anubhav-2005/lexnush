@@ -39,9 +39,9 @@ BLOG_POSTS = [
         "section": "analysis",
         "date": "17 August 2026",
         "date_iso": "2026-08-17",
-        "date_modified": "17 August 2026",
+        "date_modified": "18 August 2026",
         "date_published_iso": "2026-08-17T09:00:00+05:30",
-        "date_modified_iso": "2026-08-17T09:00:00+05:30",
+        "date_modified_iso": "2026-08-18T09:00:00+05:30",
         "keywords": [
             "AI surveillance",
             "constitutional privacy",
@@ -81,7 +81,7 @@ BLOG_POSTS = [
 
             <p>For a while India didn’t really have a comprehensive data protection statute at all, just fragments under the IT Act and its 2011 rules. That changed, on paper, with the Digital Personal Data Protection Act, 2023, whose Rules were finally notified in November 2025 and are now being rolled out over an eighteen-month phase-in. It’s a genuine step forward: purpose limitation, data minimisation, storage limits, a Data Protection Board with actual enforcement teeth.</p>
 
-            <p>But there's a provision in that Act that I keep coming back to, because it more or less undoes the promise of everything else in it. Section 17(2)(a) lets the central government exempt any “instrumentality of the State” from almost the whole Act, including the purpose limitation and data minimisation rules on the strength of an executive notification citing something like national security or public order, with no named agency responsible for it, no judicial check built in, and no sunset clause forcing it to expire. Think about what that means next to <em>Puttaswamy</em>’s proportionality test. The judgment said the state has to justify its intrusions. Section 17(2)(a) lets the state exempt itself from having to justify anything, by writing itself a note.</p>
+            <p>But there's a provision in that Act that I keep coming back to, because it more or less undoes the promise of everything else in it. Section 17(1)(a) lets the central government exempt any “instrumentality of the State” from almost the whole Act, including the purpose limitation and data minimisation rules on the strength of an executive notification citing something like national security or public order, with no named agency responsible for it, no judicial check built in, and no sunset clause forcing it to expire. Think about what that means next to <em>Puttaswamy</em>’s proportionality test. The judgment said the state has to justify its intrusions. Section 17(1)(a) lets the state exempt itself from having to justify anything, by writing itself a note.</p>
 
             <p>Facial recognition is where you can watch this play out in real time. Most deployments by police and other public agencies haven't come through a specific law defining who can use the technology, on whom, for what purpose, or under whose supervision, they’ve come through procurement decisions and executive notifications instead. There's actually a private member’s bill sitting in Parliament that would require magistrate-level sign-off before police could use FRT, but private member bills almost never become law in India, and this one hasn’t moved. Even NITI Aayog’s own policy paper on responsible AI recommended that law enforcement shouldn't get a free pass from data protection oversight, which is exactly the recommendation Section 17 ignores.</p>
 
@@ -91,7 +91,7 @@ BLOG_POSTS = [
 
             <p>Take something concrete: a state government using AI-linked CCTV with facial recognition to identify people at a protest. Push it through the <em>Puttaswamy</em> test and see where it holds.</p>
 
-            <p>Backed by law weakly, if at all, since most of these systems arrive via procurement and notification rather than a statute written for this specific purpose. Legitimate aim, almost trivially yes, “public order” clears that bar without much resistance, and courts have generally been reluctant to interrogate the state’s own characterisation of a security interest. Proportionate, with safeguards, this is the part that should matter most and matters least in practice. No independent authorisation before deployment. No retention limit tied to the specific use. No real audit trail a surveilled person could ever actually access. And because of Section 17(2)(a), possibly no statutory minimisation obligation binding the agency at all.</p>
+            <p>Backed by law weakly, if at all, since most of these systems arrive via procurement and notification rather than a statute written for this specific purpose. Legitimate aim, almost trivially yes, “public order” clears that bar without much resistance, and courts have generally been reluctant to interrogate the state’s own characterisation of a security interest. Proportionate, with safeguards, this is the part that should matter most and matters least in practice. No independent authorisation before deployment. No retention limit tied to the specific use. No real audit trail a surveilled person could ever actually access. And because of Section 17(1)(a), possibly no statutory minimisation obligation binding the agency at all.</p>
 
             <p>The test isn't broken. It’s just not being applied before the fact, only, sometimes, years later, after a controversy forces someone to litigate it.</p>
 
@@ -109,7 +109,7 @@ BLOG_POSTS = [
 
             <p>First, a dedicated law for algorithmic and biometric surveillance, separate from the general data protection statute, that actually names what facial recognition and similar tools can be used for, requires sign-off from someone independent of the agency deploying it, and sets binding limits on retention, instead of leaving all of this to be decided by procurement departments and executive notifications after the fact.</p>
 
-            <p>Second, narrowing the state's blanket exemption under Section 17(2)(a) down to something that looks like an actual necessity-and-proportionality test, reviewable by a court or an independent body, rather than a notification the government issues to itself and answers to no one.</p>
+            <p>Second, narrowing the state's blanket exemption under Section 17(1)(a) down to something that looks like an actual necessity-and-proportionality test, reviewable by a court or an independent body, rather than a notification the government issues to itself and answers to no one.</p>
 
             <p>Third, and this is the one I feel least confident courts are ready for, but think matters most, some way of treating ongoing algorithmic monitoring as a legally cognisable injury in its own right, even when it hasn’t yet led to an arrest or a denied benefit. Otherwise we keep waiting for the harm to fully materialise before anyone's allowed to challenge it, by which point it's usually too late to matter.</p>
 
