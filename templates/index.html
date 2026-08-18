@@ -27,10 +27,10 @@
         <h2 id="latest-title">LATEST FROM LEXNUSH</h2>
         <span class="gold-rule" aria-hidden="true"></span>
     </div>
-    <div class="latest-grid latest-journal-grid">
+    <div class="latest-grid latest-journal-grid {{ 'latest-journal-grid-three' if posts|length == 3 else '' }}">
         {% for post in posts %}
             <a class="latest-card fade-in {{ 'delay-' ~ loop.index if loop.index > 1 else '' }}" href="{{ url_for('main.post_detail', slug=post.slug) }}">
-                <div class="latest-card-art {{ 'art-analysis' if post.category == 'Analysis' else 'art-judgment' }}" aria-hidden="true"><span>{{ '%02d'|format(loop.index) }}</span></div>
+                <div class="latest-card-art {{ 'art-analysis' if post.category == 'Analysis' else 'art-law' if post.category == 'Law Explained' else 'art-judgment' }}" aria-hidden="true"><span>{{ '%02d'|format(loop.index) }}</span></div>
                 <div class="latest-card-copy">
                     <span>{{ post.category }}</span>
                     <h3>{{ post.title }}</h3>

@@ -4,7 +4,7 @@ from html import unescape
 from textwrap import dedent
 
 HTML_TAG_RE = re.compile(r"<[^>]+>")
-SITE_LASTMOD_ISO = "2026-08-17"
+SITE_LASTMOD_ISO = "2026-08-18"
 
 AUTHORS = {
     "anushka-pandey": {
@@ -29,6 +29,69 @@ def calculate_read_time(text):
 
 
 BLOG_POSTS = [
+    {
+        "id": 3,
+        "slug": "the-clause-you-skipped-final-and-binding",
+        "title": "The Clause You Skipped",
+        "author": "Anushka Pandey",
+        "author_slug": "anushka-pandey",
+        "category": "Law Explained",
+        "section": "law_explained",
+        "date": "18 August 2026",
+        "date_iso": "2026-08-18",
+        "date_modified": "18 August 2026",
+        "date_published_iso": "2026-08-18T09:00:00+05:30",
+        "date_modified_iso": "2026-08-18T09:00:00+05:30",
+        "keywords": [
+            "arbitration clause",
+            "final and binding",
+            "arbitration award",
+            "New York Convention",
+            "contract law",
+            "law explained",
+        ],
+        "image_alt": "Supreme Court of India",
+        "sources": [],
+        "seo_description": "Law Explained: what a final and binding arbitration clause means before a dispute begins.",
+        "summary": "Ep. 1 “Final and binding”: the two scariest words in your contract",
+        "key_takeaways": [],
+        "content": dedent(
+            """
+            <p><strong>Ep. 1 “Final and binding”: the two scariest words in your contract</strong></p>
+
+            <p><em>A new weekly series decoding the legal clauses nobody reads - until they need to.</em></p>
+
+            <p>You’ve signed contracts before. Job offer, freelance agreement, vendor deal, maybe even a flat lease. Somewhere near the bottom, in the section your eyes glaze over for, there's usually a line like:</p>
+
+            <blockquote>“Any dispute shall be referred to arbitration, and the decision of the arbitrator shall be final and binding.”</blockquote>
+
+            <p>Most people skim right past it. Here’s the thing though, that one sentence just quietly gave up your right to walk into a courtroom if things ever go wrong. No judge. No jury. No appeal, in almost all cases. Just one clause, agreed to before any dispute even existed.</p>
+
+            <h2>So what did you actually sign up for?</h2>
+
+            <p><strong>It’s called arbitration</strong>, a private way of resolving disputes, outside the court system. Instead of a judge, both sides agree on a neutral person (or panel) called an <strong>arbitrator</strong>, who hears the case and makes a binding call. Think of it as a courtroom you and the other side built yourselves, with your own referee.</p>
+
+            <h2>Why do companies love putting this in contracts?</h2>
+
+            <ul>
+                <li>⏱ <strong>It’s faster.</strong> Courts can take years. Arbitration often wraps up in months.</li>
+                <li>🔒 <strong>It’s private.</strong> No public record, no headlines- whatever happens, stays between the parties.</li>
+                <li>🧠 <strong>It’s specialised.</strong> You can pick an arbitrator who actually understands your industry, instead of a judge juggling a hundred unrelated cases.</li>
+                <li>🌍 <strong>It travels.</strong> Thanks to a treaty called the New York Convention, an arbitration award from one country can be enforced in over 170 others. A court judgment usually can’t say the same.</li>
+            </ul>
+
+            <h2>So what does it actually look like when a dispute happens?</h2>
+
+            <p>No lawsuit gets filed. Instead, an arbitrator (or three) is appointed, both sides present their case - documents, witnesses, arguments, much like a mini-trial, and the arbitrator issues an <strong>award</strong>. That award is final. Courts step in only in very narrow situations, either to enforce it, or, rarely, to set it aside.</p>
+
+            <p><strong>Here’s the catch:</strong> none of this works unless you agreed to it <em>before</em> the dispute started. Which is exactly why that clause you skimmed past is doing more work than almost anything else in the contract.</p>
+
+            <p>Next Tuesday, we go clause-hunting. How to actually spot and read an arbitration clause, and the one word inside it that can quietly change your entire legal position.</p>
+
+            <p><em>This is a general explainer, not legal advice for any specific situation. New post every Tuesday.</em></p>
+            """
+        ).strip(),
+    },
     {
         "id": 2,
         "slug": "when-the-state-watches-you-ai-surveillance-constitutional-privacy",

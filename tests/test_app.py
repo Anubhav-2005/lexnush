@@ -126,6 +126,7 @@ class LexNushAppTests(unittest.TestCase):
         self.assertIn(b"LATEST FROM LEXNUSH", homepage.data)
         self.assertIn(b"When the State Watches You: AI Surveillance &amp; Constitutional Privacy", homepage.data)
         self.assertIn(b"Surgery or Autopsy? The Supreme Court&#39;s Arbitral Scalpel", homepage.data)
+        self.assertIn(b"The Clause You Skipped", homepage.data)
         self.assertIn(b"Stay Informed. Every Week.", homepage.data)
         self.assertIn(b"ABOUT LEXNUSH", homepage.data)
         self.assertIn(b"supreme-court-hero.jpg", homepage.data)
@@ -133,6 +134,9 @@ class LexNushAppTests(unittest.TestCase):
         analysis = self.client.get("/analysis/").data
         self.assertIn(b"When the State Watches You: AI Surveillance &amp; Constitutional Privacy", analysis)
         self.assertIn(b"Surgery or Autopsy? The Supreme Court&#39;s Arbitral Scalpel", analysis)
+
+        law_explained = self.client.get("/law-explained/").data
+        self.assertIn(b"The Clause You Skipped", law_explained)
 
     def test_security_headers_and_canonical_url_are_present(self):
         response = self.client.get("/")
@@ -312,7 +316,8 @@ class LexNushAppTests(unittest.TestCase):
         self.assertIn("http://testserver/disclaimer/", sitemap)
         self.assertIn("http://testserver/static/images/supreme-court-hero.jpg", sitemap)
         self.assertIn("when-the-state-watches-you-ai-surveillance-constitutional-privacy", sitemap)
-        self.assertIn("<lastmod>2026-08-17</lastmod>", sitemap)
+        self.assertIn("<lastmod>2026-08-18</lastmod>", sitemap)
+        self.assertIn("the-clause-you-skipped-final-and-binding", sitemap)
         self.assertIn('xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"', sitemap)
         self.assertNotIn("http://testserver/interviews/", sitemap)
 

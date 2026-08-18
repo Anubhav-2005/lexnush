@@ -883,6 +883,30 @@
     margin-top: 1.25em;
 }
 
+.article-body ul,
+.article-body ol {
+    display: grid;
+    gap: 0.7em;
+    margin: 1.35em 0;
+    padding-left: 1.35em;
+}
+
+.article-body li {
+    padding-left: 0.25em;
+}
+
+.article-body blockquote {
+    margin: 1.4em 0;
+    padding: 0.85em 1.1em;
+    border-left: 3px solid var(--color-accent);
+    background: color-mix(in srgb, var(--color-accent) 8%, transparent);
+    color: var(--color-text);
+    font-family: var(--font-serif);
+    font-size: 1.08em;
+    font-style: italic;
+    line-height: 1.6;
+}
+
 .article-body h2 {
     font-family: var(--font-serif);
     font-size: clamp(1.5rem, 2.5vw, 1.85rem);
