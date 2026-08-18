@@ -188,7 +188,7 @@ BLOG_POSTS = [
         "title": "Surgery or Autopsy? The Supreme Court's Arbitral Scalpel",
         "author": "Anushka Pandey",
         "author_slug": "anushka-pandey",
-        "category": "ADR",
+        "category": "Analysis",
         "section": "analysis",
         "date": "March 2026",
         "date_iso": "2026-03-01",
