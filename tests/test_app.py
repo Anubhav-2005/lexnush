@@ -145,14 +145,15 @@ class LexNushAppTests(unittest.TestCase):
         homepage = self.client.get("/")
         self.assertIn(b"Law with a Pulse.", homepage.data)
         self.assertIn(b"LATEST FROM LEXNUSH", homepage.data)
+        self.assertIn(b"One Year at the Bar, Two Years Before the Bench: Has the Supreme Court Reimagined Judicial Experience?", homepage.data)
         self.assertIn(b"When the State Watches You: AI Surveillance &amp; Constitutional Privacy", homepage.data)
-        self.assertIn(b"Surgery or Autopsy? The Supreme Court&#39;s Arbitral Scalpel", homepage.data)
         self.assertIn(b"The Clause You Skipped", homepage.data)
         self.assertIn(b"Stay Informed. Every Week.", homepage.data)
         self.assertIn(b"ABOUT LEXNUSH", homepage.data)
         self.assertIn(b"supreme-court-hero.jpg", homepage.data)
 
         analysis = self.client.get("/analysis/").data
+        self.assertIn(b"One Year at the Bar, Two Years Before the Bench: Has the Supreme Court Reimagined Judicial Experience?", analysis)
         self.assertIn(b"When the State Watches You: AI Surveillance &amp; Constitutional Privacy", analysis)
         self.assertIn(b"Surgery or Autopsy? The Supreme Court&#39;s Arbitral Scalpel", analysis)
 
