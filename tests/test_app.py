@@ -145,7 +145,7 @@ class LexNushAppTests(unittest.TestCase):
         homepage = self.client.get("/")
         self.assertIn(b"Law with a Pulse.", homepage.data)
         self.assertIn(b"LATEST FROM LEXNUSH", homepage.data)
-        self.assertIn(b"The Clause You Skipped: \xe2\x80\x9cShall\xe2\x80\x9d vs. \xe2\x80\x9cmay\xe2\x80\x9d", homepage.data)
+        self.assertIn(b"Ep. 2 \xe2\x80\x9cShall\xe2\x80\x9d vs. \xe2\x80\x9cMay\xe2\x80\x9d", homepage.data)
         self.assertIn(b"One Year at the Bar, Two Years Before the Bench: Has the Supreme Court Reimagined Judicial Experience?", homepage.data)
         self.assertIn(b"The Clause You Skipped", homepage.data)
         self.assertIn(b"Stay Informed. Every Week.", homepage.data)
@@ -158,7 +158,7 @@ class LexNushAppTests(unittest.TestCase):
         self.assertIn(b"Surgery or Autopsy? The Supreme Court&#39;s Arbitral Scalpel", analysis)
 
         law_explained = self.client.get("/law-explained/").data
-        self.assertIn(b"The Clause You Skipped: \xe2\x80\x9cShall\xe2\x80\x9d vs. \xe2\x80\x9cmay\xe2\x80\x9d", law_explained)
+        self.assertIn(b"Ep. 2 \xe2\x80\x9cShall\xe2\x80\x9d vs. \xe2\x80\x9cMay\xe2\x80\x9d", law_explained)
         self.assertIn(b"The Clause You Skipped", law_explained)
         self.assertIn(b"Latest from Law Explained", law_explained)
         self.assertIn(b"Read explainer", law_explained)

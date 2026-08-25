@@ -32,7 +32,7 @@ BLOG_POSTS = [
     {
         "id": 5,
         "slug": "the-clause-you-skipped-shall-vs-may",
-        "title": "The Clause You Skipped: “Shall” vs. “may”",
+        "title": "The Clause You Skipped",
         "author": "Anushka Pandey",
         "author_slug": "anushka-pandey",
         "category": "Law Explained",
@@ -53,11 +53,11 @@ BLOG_POSTS = [
         "image_alt": "Supreme Court of India",
         "sources": [],
         "seo_description": "Law Explained Episode 2: how 'shall' and 'may' change the effect of an arbitration clause.",
-        "summary": "Ep. 2 “Shall” vs. “may”: the one word that decides whether you even have a choice.",
+        "summary": "Ep. 2 “Shall” vs. “May”: the one word that decides whether you even have a choice.",
         "key_takeaways": [],
         "content": dedent(
             """
-            <p><strong>Ep. 2 “Shall” vs. “may”: the one word that decides whether you even have a choice.</strong></p>
+            <p><strong>Ep. 2 “Shall” vs. “May”: the one word that decides whether you even have a choice.</strong></p>
 
             <p><em>A weekly series decoding the legal clauses nobody reads- until they need to.</em></p>
 
