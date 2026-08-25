@@ -8,12 +8,12 @@
     <span class="card-meta-label" itemprop="articleSection">{{ post.category }}</span>
     <h1 class="article-title" itemprop="headline">{{ post.title }}</h1>
     <div class="article-meta">
-        <span itemprop="author" itemscope itemtype="https://schema.org/Person">
+        <span class="article-by" itemprop="author" itemscope itemtype="https://schema.org/Person">
             By <a itemprop="url" href="{{ url_for('main.author_detail', slug=post.author_slug) }}"><strong itemprop="name">{{ post.author }}</strong></a>
         </span>
-        <time datetime="{{ post.date_published_iso }}" itemprop="datePublished">{{ post.date }}</time>
-        <span>Updated <time datetime="{{ post.date_modified_iso }}" itemprop="dateModified">{{ post.date_modified }}</time></span>
-        <span>{{ post.read_time }}</span>
+        <time class="article-date" datetime="{{ post.date_published_iso }}" itemprop="datePublished">{{ post.date }}</time>
+        <span class="article-reading-time">{{ post.read_time }}</span>
+        {% if post.date_modified_iso != post.date_published_iso %}<span class="article-updated">Updated <time datetime="{{ post.date_modified_iso }}" itemprop="dateModified">{{ post.date_modified }}</time></span>{% endif %}
     </div>
 </section>
 

@@ -72,11 +72,17 @@
         };
 
         toggle.addEventListener("click", () => setOpen(!menu.classList.contains("is-active")));
-        qsa(".mobile-links a", menu).forEach((link) => link.addEventListener("click", () => setOpen(false)));
+        qsa("a", menu).forEach((link) => link.addEventListener("click", () => setOpen(false)));
         document.addEventListener("keydown", (event) => {
             if (event.key === "Escape" && menu.classList.contains("is-active")) setOpen(false);
             if (menu.classList.contains("is-active")) trapFocus(event, menu);
         });
+
+        const mobileNavigation = window.matchMedia("(max-width: 1100px)");
+        const closeAtDesktop = (event) => {
+            if (!event.matches && menu.classList.contains("is-active")) setOpen(false);
+        };
+        mobileNavigation.addEventListener?.("change", closeAtDesktop);
     }
 
     function initTheme() {
@@ -107,7 +113,13 @@
         const button = qs("#back-to-top");
         if (!button) return;
 
-        const sync = () => button.classList.toggle("is-visible", window.scrollY > 360);
+        const sync = () => {
+            const isVisible = window.scrollY > 360;
+            button.classList.toggle("is-visible", isVisible);
+            button.setAttribute("aria-hidden", String(!isVisible));
+            button.inert = !isVisible;
+            button.tabIndex = isVisible ? 0 : -1;
+        };
         sync();
         window.addEventListener("scroll", sync, { passive: true });
         button.addEventListener("click", () => window.scrollTo({ top: 0, behavior: prefersReducedMotion ? "auto" : "smooth" }));
@@ -130,6 +142,7 @@
         const setOpen = (isOpen) => {
             panel.classList.toggle("is-visible", isOpen);
             panel.setAttribute("aria-hidden", String(!isOpen));
+            panel.inert = !isOpen;
         };
         const loadAnalytics = () => {
             if (!analyticsId || window.__lexnushAnalyticsLoaded) return;
@@ -227,12 +240,22 @@
     function initReadingProgress() {
         const bar = qs("#reading-progress-bar");
         if (!bar) return;
+        const articleBody = qs(".article-body");
 
         let scheduled = false;
         const sync = () => {
             scheduled = false;
-            const maximum = document.documentElement.scrollHeight - window.innerHeight;
-            const progress = maximum > 0 ? Math.min(1, Math.max(0, window.scrollY / maximum)) : 0;
+            let progress = 0;
+            if (articleBody) {
+                const rect = articleBody.getBoundingClientRect();
+                const start = rect.top + window.scrollY;
+                const length = Math.max(1, rect.height);
+                const readingPosition = window.scrollY + window.innerHeight * 0.34;
+                progress = Math.min(1, Math.max(0, (readingPosition - start) / length));
+            } else {
+                const maximum = document.documentElement.scrollHeight - window.innerHeight;
+                progress = maximum > 0 ? Math.min(1, Math.max(0, window.scrollY / maximum)) : 0;
+            }
             bar.style.transform = `scaleX(${progress})`;
         };
         const schedule = () => {

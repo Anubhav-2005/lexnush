@@ -138,7 +138,8 @@ class LexNushAppTests(unittest.TestCase):
         self.assertIn(b'maxlength="3000"', contact.data)
         self.assertIn(b'data-submit-state', contact.data)
         homepage = self.client.get("/")
-        self.assertIn(b'class="mobile-subscribe-cta"', homepage.data)
+        self.assertIn(b'class="mobile-menu-subscribe"', homepage.data)
+        self.assertNotIn(b'class="mobile-subscribe-cta"', homepage.data)
         self.assertIn(b'id="cookie-consent"', homepage.data)
 
     def test_home_uses_editorial_experience_without_redundant_final_cta(self):

@@ -38,13 +38,14 @@ for (const width of [320, 360, 375, 390, 414, 768, 1024, 1440]) {
 }
 
 test("mobile menu and search dialog expose accessible state", async ({ page }) => {
-    await page.setViewportSize({ width: 390, height: 900 });
+    await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/");
     const menu = page.getByRole("button", { name: "Open menu" });
     await menu.click();
     const closeMenu = page.getByRole("button", { name: "Close menu" });
     await expect(closeMenu).toHaveAttribute("aria-expanded", "true");
     await expect(page.getByRole("navigation", { name: "Mobile navigation" })).toBeVisible();
+    await expect(page.locator(".mobile-menu-subscribe")).toBeVisible();
     await closeMenu.click();
     await page.getByRole("button", { name: "Search LexNush" }).click();
     await expect(page.getByRole("dialog", { name: "Search" })).toBeVisible();
@@ -52,14 +53,81 @@ test("mobile menu and search dialog expose accessible state", async ({ page }) =
     await expect(page.getByRole("dialog", { name: "Search" })).not.toBeVisible();
 });
 
-test("mobile subscribe CTA and cookie choices are clear", async ({ page }) => {
-    await page.setViewportSize({ width: 390, height: 900 });
+test("mobile subscription and cookie choices stay out of the reading surface", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
     await page.goto("/");
-    await expect(page.getByRole("link", { name: "Subscribe" })).toBeVisible();
-    const consent = page.getByRole("complementary", { name: "Your privacy choices" });
+    await expect(page.locator(".mobile-subscribe-cta")).toHaveCount(0);
+    const consent = page.locator("#cookie-consent");
     await expect(consent).toBeVisible();
     await consent.getByRole("button", { name: "Essential only" }).click();
     await expect(consent).not.toBeVisible();
+    await expect(consent).toHaveAttribute("inert", "");
     const dimensions = await page.locator("html").evaluate((html) => ({ width: html.clientWidth, scroll: html.scrollWidth }));
     expect(dimensions.scroll).toBeLessThanOrEqual(dimensions.width);
 });
+
+test("mobile navigation remains reachable in landscape", async ({ page }) => {
+    await page.setViewportSize({ width: 568, height: 320 });
+    await page.goto("/");
+    await page.getByRole("button", { name: "Open menu" }).click();
+
+    const menu = page.locator("#mobile-menu");
+    const geometry = await menu.evaluate((element) => ({
+        clientHeight: element.clientHeight,
+        scrollHeight: element.scrollHeight,
+        overflowY: getComputedStyle(element).overflowY,
+    }));
+    expect(["auto", "scroll"]).toContain(geometry.overflowY);
+
+    const finalAction = page.locator(".mobile-menu-subscribe");
+    await finalAction.scrollIntoViewIfNeeded();
+    const box = await finalAction.boundingBox();
+    expect(box.y).toBeGreaterThanOrEqual(0);
+    expect(box.y + box.height).toBeLessThanOrEqual(320);
+});
+
+test("primary mobile controls meet touch target sizing", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/");
+
+    for (const selector of ["#search-trigger", "#theme-toggle", ".mobile-toggle"]) {
+        const box = await page.locator(selector).boundingBox();
+        expect(box.width).toBeGreaterThanOrEqual(44);
+        expect(box.height).toBeGreaterThanOrEqual(44);
+    }
+
+    await page.getByRole("button", { name: "Search LexNush" }).click();
+    const closeBox = await page.locator("#close-search").boundingBox();
+    expect(closeBox.width).toBeGreaterThanOrEqual(44);
+    expect(closeBox.height).toBeGreaterThanOrEqual(44);
+    await page.keyboard.press("Escape");
+
+    await page.evaluate(() => window.scrollTo(0, 600));
+    const backToTop = page.locator("#back-to-top");
+    await expect(backToTop).toBeVisible();
+    const backBox = await backToTop.boundingBox();
+    expect(backBox.width).toBeGreaterThanOrEqual(44);
+    expect(backBox.height).toBeGreaterThanOrEqual(44);
+});
+
+for (const width of [320, 390, 559, 561, 768, 899, 901]) {
+    test(`home cards retain deliberate proportions at ${width}px`, async ({ page }) => {
+        await page.emulateMedia({ reducedMotion: "reduce" });
+        await page.setViewportSize({ width, height: width < 600 ? 844 : 1024 });
+        await page.goto("/");
+
+        const cards = page.locator("#latest .latest-card");
+        await expect(cards.first()).toBeVisible();
+        const boxes = await cards.evaluateAll((elements) => elements.map((element) => {
+            const rect = element.getBoundingClientRect();
+            return { left: rect.left, right: rect.right, width: rect.width, height: rect.height };
+        }));
+        for (const box of boxes) {
+            expect(box.left).toBeGreaterThanOrEqual(0);
+            expect(box.right).toBeLessThanOrEqual(width + 0.5);
+            expect(box.width).toBeGreaterThan(0);
+        }
+        if (width <= 640) expect(Math.max(...boxes.map((box) => box.height))).toBeLessThan(330);
+    });
+}
