@@ -21,6 +21,10 @@
     },
 } %}
 {% set page = pages[section] %}
+{% set archive = {
+    'analysis': {'eyebrow': 'Latest analysis', 'title': 'In focus', 'link': 'Read Analysis'},
+    'law_explained': {'eyebrow': 'Latest from Law Explained', 'title': 'New explainers', 'link': 'Read explainer'}
+}[section] %}
 
 {% block content %}
 <section class="content-hero section-hero" aria-labelledby="section-title">
@@ -31,10 +35,10 @@
 </section>
 
 {% if posts is defined and posts %}
-<section class="section section-wide section-compact" aria-labelledby="latest-analysis-title">
+<section class="section section-wide section-compact" aria-labelledby="latest-section-title">
     <div class="section-title-block fade-in">
-        <span class="section-kicker">Latest analysis</span>
-        <h2 id="latest-analysis-title">In focus</h2>
+        <span class="section-kicker">{{ archive['eyebrow'] }}</span>
+        <h2 id="latest-section-title">{{ archive['title'] }}</h2>
         <span class="gold-rule" aria-hidden="true"></span>
     </div>
     <div class="content-grid fade-in delay-1">
@@ -46,7 +50,7 @@
                 </div>
                 <h3 class="card-title">{{ post.title }}</h3>
                 <p>{{ post.summary }}</p>
-                <a href="{{ url_for('main.post_detail', slug=post.slug) }}" class="text-link">Read Analysis</a>
+                <a href="{{ url_for('main.post_detail', slug=post.slug) }}" class="text-link">{{ archive['link'] }}</a>
             </article>
         {% endfor %}
     </div>

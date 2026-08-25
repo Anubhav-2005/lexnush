@@ -4,7 +4,7 @@ from html import unescape
 from textwrap import dedent
 
 HTML_TAG_RE = re.compile(r"<[^>]+>")
-SITE_LASTMOD_ISO = "2026-08-24"
+SITE_LASTMOD_ISO = "2026-08-25"
 
 AUTHORS = {
     "anushka-pandey": {
@@ -29,6 +29,76 @@ def calculate_read_time(text):
 
 
 BLOG_POSTS = [
+    {
+        "id": 5,
+        "slug": "the-clause-you-skipped-shall-vs-may",
+        "title": "The Clause You Skipped: “Shall” vs. “may”",
+        "author": "Anushka Pandey",
+        "author_slug": "anushka-pandey",
+        "category": "Law Explained",
+        "section": "law_explained",
+        "date": "25 August 2026",
+        "date_iso": "2026-08-25",
+        "date_modified": "25 August 2026",
+        "date_published_iso": "2026-08-25T09:00:00+05:30",
+        "date_modified_iso": "2026-08-25T09:00:00+05:30",
+        "keywords": [
+            "arbitration clause",
+            "shall versus may",
+            "dispute resolution",
+            "seat of arbitration",
+            "venue of arbitration",
+            "law explained",
+        ],
+        "image_alt": "Supreme Court of India",
+        "sources": [],
+        "seo_description": "Law Explained Episode 2: how 'shall' and 'may' change the effect of an arbitration clause.",
+        "summary": "Ep. 2 “Shall” vs. “may”: the one word that decides whether you even have a choice.",
+        "key_takeaways": [],
+        "content": dedent(
+            """
+            <p><strong>Ep. 2 “Shall” vs. “may”: the one word that decides whether you even have a choice.</strong></p>
+
+            <p><em>A weekly series decoding the legal clauses nobody reads- until they need to.</em></p>
+
+            <p>Last Tuesday we talked about what arbitration actually is, and why that “final and binding” line at the bottom of your contract matters more than it looks. This week, how do you actually find that clause, and read it properly once you have?</p>
+
+            <p>Most arbitration clauses hide in a section called something forgettable: “Dispute Resolution,” “Governing Law,” sometimes just “Miscellaneous,” tucked in right after the boilerplate about notices and severability. It’s usually four or five lines. Nobody’s fault for skimming past it- it’s written to be skimmed past.</p>
+
+            <p>Here’s what to actually look for once you’ve found it.</p>
+
+            <h2>Is it mandatory, or optional?</h2>
+
+            <p>This is the one word that changes everything: <em>shall</em> versus <em>may</em>.</p>
+
+            <p>“Any dispute <strong>shall</strong> be referred to arbitration” means arbitration is your only route. You’ve given up the option to sue, full stop.</p>
+
+            <p>“Any dispute <strong>may</strong> be referred to arbitration” is a completely different animal, it usually means either side can choose arbitration, but going to court is still on the table. That single word is the difference between a locked door and one that's just unlocked.</p>
+
+            <h2>Who’s the arbitrator, and who picks them?</h2>
+
+            <p>Look for how the arbitrator gets appointed. Sometimes it’s a named institution (say, the Mumbai Centre for International Arbitration, or the ICC) running the whole process under its own rules. Sometimes it's “ad hoc” - the parties pick someone themselves, with no institution overseeing it. Institutional tends to be more structured and predictable. Ad hoc can be cheaper, but only if both sides actually cooperate - which, if you’re in a dispute, they often don’t.</p>
+
+            <h2>Where is the “seat”?</h2>
+
+            <p>Not the “venue” - the <strong>seat</strong>. These sound interchangeable and they are not. The seat is the legal home of the arbitration - it decides which country’s courts can supervise the process, hear a challenge to the award, or step in for interim relief. The venue is just where people physically sit in a room, or log into a call. A clause can say the venue is Singapore but the seat is Delhi, and that distinction alone can decide which country's law governs the entire dispute.</p>
+
+            <h2>What’s actually covered?</h2>
+
+            <p>Check the scope language closely. “Any dispute arising out of this agreement” is broad, it sweeps in almost everything. “Any dispute regarding payment under Clause 4” is narrow - and disputes outside that clause might not be covered at all, meaning you could end up doing <em>both</em> arbitration and litigation, on different issues, at the same time.</p>
+
+            <h2>How many arbitrators?</h2>
+
+            <p>One or three. One is faster and cheaper. Three is generally seen as more balanced, since each side typically nominates one and the two nominees agree on a third - but it triples the fees. Contracts rarely explain why they picked one over the other, but it's rarely random.</p>
+
+            <p>None of this requires being a lawyer to spot. It requires reading five lines properly instead of skimming past them, and knowing that <em>shall</em> and <em>may</em> are doing very different jobs.</p>
+
+            <p>Next Tuesday: what actually happens when one side tries to walk away from arbitration and go straight to court instead, and why that almost never works the way people think it will.</p>
+
+            <p><em>This is a general explainer, not legal advice for any specific situation. New post every Tuesday.</em></p>
+            """
+        ).strip(),
+    },
     {
         "id": 4,
         "slug": "one-year-at-the-bar-two-years-before-the-bench",
