@@ -146,6 +146,8 @@ class LexNushAppTests(unittest.TestCase):
         homepage = self.client.get("/")
         self.assertIn(b"Law with a Pulse.", homepage.data)
         self.assertIn(b"LATEST FROM LEXNUSH", homepage.data)
+        self.assertIn(b"Every File Has a Story", homepage.data)
+        self.assertIn(b"art-counsel", homepage.data)
         self.assertIn(b"Ep. 2 \xe2\x80\x9cShall\xe2\x80\x9d vs. \xe2\x80\x9cMay\xe2\x80\x9d", homepage.data)
         self.assertIn(b"One Year at the Bar, Two Years Before the Bench: Has the Supreme Court Reimagined Judicial Experience?", homepage.data)
         self.assertIn(b"The Clause You Skipped", homepage.data)
@@ -163,6 +165,27 @@ class LexNushAppTests(unittest.TestCase):
         self.assertIn(b"The Clause You Skipped", law_explained)
         self.assertIn(b"Latest from Law Explained", law_explained)
         self.assertIn(b"Read explainer", law_explained)
+
+        counsel = self.client.get("/counsels-desk/").data
+        self.assertIn(b"Every File Has a Story", counsel)
+        self.assertIn(b"27 August 2026", counsel)
+        self.assertIn(b"Latest from the desk", counsel)
+        self.assertIn(b"Read article", counsel)
+
+    def test_counsels_desk_article_preserves_source_copy_and_metadata(self):
+        article = self.client.get("/blogs/every-file-has-a-story")
+        self.assertEqual(article.status_code, 200)
+        page = article.get_data(as_text=True)
+        self.assertIn("Every File Has a Story", page)
+        self.assertIn("Counsel&#39;s Desk", page)
+        self.assertIn("The story arrives before the law does", page)
+        self.assertIn("Drafting is storytelling with consequences", page)
+        self.assertIn("The names the law gives people", page)
+        self.assertIn("The file that seems routine", page)
+        self.assertIn("A file may have a number. A case may have a title.", page)
+        self.assertIn('"articleSection": "Counsel\\u0027s Desk"', page)
+        self.assertIn('"datePublished": "2026-08-27T09:00:00+05:30"', page)
+        self.assertIn("Share this article", page)
 
     def test_security_headers_and_canonical_url_are_present(self):
         response = self.client.get("/")
@@ -343,6 +366,8 @@ class LexNushAppTests(unittest.TestCase):
         self.assertIn("http://testserver/static/images/supreme-court-hero.jpg", sitemap)
         self.assertIn("when-the-state-watches-you-ai-surveillance-constitutional-privacy", sitemap)
         self.assertIn("<lastmod>2026-08-18</lastmod>", sitemap)
+        self.assertIn("every-file-has-a-story", sitemap)
+        self.assertIn("<lastmod>2026-08-27</lastmod>", sitemap)
         self.assertIn("the-clause-you-skipped-final-and-binding", sitemap)
         self.assertIn('xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"', sitemap)
         self.assertNotIn("http://testserver/interviews/", sitemap)
@@ -350,6 +375,7 @@ class LexNushAppTests(unittest.TestCase):
         feed = self.client.get("/feed.xml")
         self.assertEqual(feed.mimetype, "application/atom+xml")
         self.assertIn(b"<title>LexNush Journal</title>", feed.data)
+        self.assertIn(b"Every File Has a Story", feed.data)
         self.assertIn(b"2025 INSC 605", feed.data)
 
     def test_production_canonical_host_redirect_preserves_path_and_query(self):

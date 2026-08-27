@@ -1,13 +1,31 @@
 const { test, expect } = require("@playwright/test");
 
 const article = "/blogs/surgery-or-autopsy-adr-award-modification";
+const counselArticle = "/blogs/every-file-has-a-story";
 
 test("public routes return rendered pages", async ({ page }) => {
-    for (const path of ["/", "/about/", "/analysis/", "/law-explained/", "/judgment-explained/", "/authors/anushka-pandey/", "/blogs/", article, "/counsels-desk/", "/contact/", "/privacy/", "/terms/", "/disclaimer/", "/thank-you/", "/not-found"]) {
+    for (const path of ["/", "/about/", "/analysis/", "/law-explained/", "/judgment-explained/", "/authors/anushka-pandey/", "/blogs/", article, counselArticle, "/counsels-desk/", "/contact/", "/privacy/", "/terms/", "/disclaimer/", "/thank-you/", "/not-found"]) {
         const response = await page.goto(path);
         expect(response.status()).toBe(path === "/not-found" ? 404 : 200);
         await expect(page.locator("main")).toBeVisible();
     }
+});
+
+test("Counsel's Desk publishes the latest reflection and links to its article", async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/counsels-desk/");
+
+    const card = page.locator(".single-post-grid .blog-card");
+    await expect(card).toContainText("Every File Has a Story");
+    await expect(card).toContainText("Counsel's Desk");
+    await expect(card).toContainText("27 August 2026");
+    await card.getByRole("link", { name: "Read article" }).click();
+
+    expect(page.url()).toContain(counselArticle);
+    await expect(page.getByRole("heading", { name: "Every File Has a Story" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "The story arrives before the law does" })).toBeVisible();
+    const dimensions = await page.locator("html").evaluate((html) => ({ width: html.clientWidth, scroll: html.scrollWidth }));
+    expect(dimensions.scroll).toBeLessThanOrEqual(dimensions.width);
 });
 
 test("legacy interviews route redirects to Counsel’s Desk", async ({ page }) => {

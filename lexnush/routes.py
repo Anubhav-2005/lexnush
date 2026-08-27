@@ -132,12 +132,17 @@ def page_meta(name):
         "inLanguage": "en",
     }
     graph = [website_schema(), organization_schema(), page_node, breadcrumb_schema(breadcrumb_items)]
-    if name in {"home", "blogs"} and BLOG_POSTS:
+    if name in {"home", "blogs", "counsel"} and BLOG_POSTS:
+        listed_posts = (
+            [post for post in BLOG_POSTS if post.get("section") == "counsels_desk"]
+            if name == "counsel"
+            else BLOG_POSTS
+        )
         graph.append(
             {
                 "@type": "ItemList",
                 "@id": f"{current_url}#articles",
-                "name": "LexNush legal analysis",
+                "name": "LexNush Counsel's Desk" if name == "counsel" else "LexNush legal analysis",
                 "itemListElement": [
                     {
                         "@type": "ListItem",
@@ -145,7 +150,7 @@ def page_meta(name):
                         "url": public_url("main.post_detail", slug=post["slug"]),
                         "name": post["title"],
                     }
-                    for position, post in enumerate(BLOG_POSTS, start=1)
+                    for position, post in enumerate(listed_posts, start=1)
                 ],
             }
         )
@@ -333,7 +338,13 @@ def author_detail(slug):
 
 @main_bp.route("/counsels-desk/")
 def counsels_desk():
-    return render_template("counsels_desk.html", counsel_desk=COUNSEL_DESK, meta=page_meta("counsel"))
+    posts = [post for post in BLOG_POSTS if post.get("section") == "counsels_desk"]
+    return render_template(
+        "counsels_desk.html",
+        counsel_desk=COUNSEL_DESK,
+        posts=posts,
+        meta=page_meta("counsel"),
+    )
 
 
 @main_bp.route("/interviews/")

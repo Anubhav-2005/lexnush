@@ -32,7 +32,7 @@ CSP = {
 }
 
 ARTICLE_TAGS = [
-    "p", "h2", "h3", "strong", "em", "ul", "ol", "li", "a", "blockquote", "br",
+    "p", "h2", "h3", "strong", "em", "ul", "ol", "li", "a", "blockquote", "br", "hr",
     "div", "table", "thead", "tbody", "tr", "th", "td", "caption",
 ]
 ARTICLE_ATTRIBUTES = {"a": ["href", "title", "rel"], "th": ["scope"], "div": ["class"]}

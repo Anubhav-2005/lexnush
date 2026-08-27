@@ -2,6 +2,30 @@
 
 {% block content %}
 <section class="content-hero section-hero" aria-labelledby="counsel-title"><p class="section-kicker">LEXNUSH</p><h1 id="counsel-title">FROM THE COUNSEL'S DESK</h1><p class="page-subtitle">Thoughts from beyond the case law.</p><p class="section-description">From the Counsel's Desk is LexNush's space for reflection. It explores the books, ideas, experiences, and questions that shape the way we think about law and the profession of being a lawyer.</p><p class="section-description">Not every lesson a lawyer needs can be found in a judgment. Some come from literature. Some from history. Some from conversations, failures, observations, and the books we return to years later.</p></section>
+
+{% if posts %}
+<section class="section section-wide section-compact" aria-labelledby="counsel-latest-title">
+    <div class="section-title-block fade-in">
+        <span class="section-kicker">Latest from the desk</span>
+        <h2 id="counsel-latest-title">Reflections and essays</h2>
+        <span class="gold-rule" aria-hidden="true"></span>
+    </div>
+    <div class="content-grid single-post-grid fade-in delay-1">
+        {% for post in posts %}
+            <article class="blog-card stack-md">
+                <div class="blog-card-header">
+                    <span class="card-meta-label">{{ post.category }}</span>
+                    <span class="card-meta">{{ post.date }} &bull; {{ post.read_time }}</span>
+                </div>
+                <h3 class="card-title">{{ post.title }}</h3>
+                <p>{{ post.summary }}</p>
+                <a href="{{ url_for('main.post_detail', slug=post.slug) }}" class="text-link">Read article</a>
+            </article>
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
 <section class="what-section" aria-labelledby="counsel-what-title"><div class="section-title-block fade-in"><h2 id="counsel-what-title">What you'll find here</h2><span class="gold-rule" aria-hidden="true"></span></div><div class="what-grid"><article class="what-card fade-in"><span class="what-number">01</span><h3>Books &amp; Reading</h3><p>Reviews and reflections on books worth reading—inside and outside the law.</p></article><article class="what-card fade-in delay-1"><span class="what-number">02</span><h3>The Legal Profession</h3><p>Thoughts on advocacy, learning, writing, curiosity, and the realities of building a life in law.</p></article><article class="what-card fade-in delay-2"><span class="what-number">03</span><h3>Ideas &amp; Reflections</h3><p>Essays exploring the relationship between law, people, institutions, and society.</p></article><article class="what-card fade-in delay-3"><span class="what-number">04</span><h3>Lessons Beyond Law</h3><p>Perspectives that challenge the idea that becoming a better lawyer is only about knowing more law.</p></article></div></section>
 <section class="bottom-line fade-in"><h2>Because a lawyer's education doesn't end with the law reports.</h2></section>
 {% endblock %}

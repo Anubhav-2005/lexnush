@@ -19,7 +19,7 @@
                 </div>
                 <h2 class="card-title">{{ post.title }}</h2>
                 <p>{{ post.summary }}</p>
-                <a href="{{ url_for('main.post_detail', slug=post.slug) }}" class="text-link">Read Analysis</a>
+                <a href="{{ url_for('main.post_detail', slug=post.slug) }}" class="text-link">Read Article</a>
             </article>
         {% else %}
             <article class="grid-card full-span centered stack-sm">

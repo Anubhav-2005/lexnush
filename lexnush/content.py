@@ -4,7 +4,7 @@ from html import unescape
 from textwrap import dedent
 
 HTML_TAG_RE = re.compile(r"<[^>]+>")
-SITE_LASTMOD_ISO = "2026-08-25"
+SITE_LASTMOD_ISO = "2026-08-27"
 
 AUTHORS = {
     "anushka-pandey": {
@@ -29,6 +29,74 @@ def calculate_read_time(text):
 
 
 BLOG_POSTS = [
+    {
+        "id": 6,
+        "slug": "every-file-has-a-story",
+        "title": "Every File Has a Story",
+        "author": "Anushka Pandey",
+        "author_slug": "anushka-pandey",
+        "category": "Counsel's Desk",
+        "section": "counsels_desk",
+        "date": "27 August 2026",
+        "date_iso": "2026-08-27",
+        "date_modified": "27 August 2026",
+        "date_published_iso": "2026-08-27T09:00:00+05:30",
+        "date_modified_iso": "2026-08-27T09:00:00+05:30",
+        "keywords": [
+            "legal profession",
+            "lawyer and client",
+            "legal storytelling",
+            "legal drafting",
+            "professional empathy",
+            "Counsel's Desk",
+        ],
+        "image_alt": "Legal research materials arranged on a desk",
+        "sources": [],
+        "seo_description": "A file may have a number. A case may have a title. But somewhere behind both is a story that mattered enough for someone to seek the law.",
+        "summary": "The file is only the legal version of the story.",
+        "key_takeaways": [],
+        "content": dedent(
+            """
+            <p>A lawyer sees a file. A case number. A cause title. A few hundred pages of pleadings. Affidavits, annexures, judgments and dates.</p>
+
+            <p>But the client doesn’t see a file.</p>
+
+            <p>They see the business they spent twenty years building. The marriage that fell apart. The property their parents left behind. The employee who was dismissed. The contract they thought they could trust. The accusation they insist they never deserved.</p>
+
+            <p>The file is only the legal version of the story.</p>
+
+            <hr>
+
+            <h2>The story arrives before the law does</h2>
+
+            <p>Perhaps one of the first things a lawyer learns is that the law rarely arrives in neat paragraphs. Real people don’t walk into chambers saying, “I have a Section 138 issue.” They tell you what happened, sometimes badly, sometimes emotionally, sometimes leaving out the one detail that matters most, not because they’re hiding it, but because to them it doesn’t feel like the important part.</p>
+
+            <p>The lawyer’s job is not merely to find the provision. It is to listen long enough to understand the story, separate fact from emotion, identify the legal problem hidden inside it, and then translate that story into something the law can understand.</p>
+
+            <p>That translation is harder than it sounds. A client’s account is rarely chronological. It loops back, contradicts itself, circles the one thing that hurts most before finally naming it. Somewhere in that account is a cause of action, but it doesn't arrive labelled. Finding it is the first real work of a lawyer, before a single section is cited.</p>
+
+            <h2>Drafting is storytelling with consequences</h2>
+
+            <p>Every pleading is, in some sense, a story being told for the second time, first to the lawyer, in the client’s own words, and then to the court, in the law’s words. What gets included, what gets left out, what gets emphasised and what gets softened, these are not just legal choices. They are narrative choices, made by someone who has to be both careful and honest, because unlike other storytelling, this version has consequences. A misplaced fact, a wrong date, an emotion allowed to overpower a fact, any of it can change how the story is received by the one audience that matters most.</p>
+
+            <h2>The names the law gives people</h2>
+
+            <p>Somewhere in that translation, a person also becomes something else. Petitioner. Respondent. Accused. Plaintiff. Defendant. These are useful words, the law needs them to function, but they are also a kind of quiet reduction. The woman fighting for custody of her child becomes “the petitioner.” The man defending twenty years of work becomes “the respondent.” The law has to speak this way. But the lawyer doesn't have to think this way.</p>
+
+            <p>A good lawyer holds two things at once: the professional distance to see the matter clearly, and the memory that the file has a name attached to it, and that name has a life outside the pleadings. Losing either one is a failure, objectivity without empathy turns a person into a case number; empathy without objectivity clouds the judgment the client is paying for.</p>
+
+            <h2>The file that seems routine</h2>
+
+            <p>It’s easy to reserve this kind of attention for the dramatic files, the ones with high stakes, sharp facts, a story that reads like it belongs in a courtroom drama. But most files don’t look like that. Most are a recovery suit, a routine dismissal, a property dispute that has dragged on longer than anyone expected. It’s tempting to let “routine” quietly become “less important.”</p>
+
+            <p>It rarely is, to the person it belongs to. The client filing what looks, from the outside, like an unremarkable recovery suit may be trying to recover the only savings they have. What is routine to a lawyer who has seen a hundred similar matters is very often the first and only time the client has been through anything like it. That asymmetry is worth remembering on the files that don't announce their own importance.</p>
+
+            <hr>
+
+            <p>A file may have a number. A case may have a title. But somewhere behind both is a story that mattered enough for someone to seek the law.</p>
+            """
+        ).strip(),
+    },
     {
         "id": 5,
         "slug": "the-clause-you-skipped-shall-vs-may",

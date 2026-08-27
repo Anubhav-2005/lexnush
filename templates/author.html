@@ -37,7 +37,7 @@
     <div class="section-heading section-heading-wide">
         <div>
             <span class="section-kicker">Published work</span>
-            <h2 id="author-writing-title" class="section-title">Analysis by {{ author.name }}</h2>
+            <h2 id="author-writing-title" class="section-title">Writing by {{ author.name }}</h2>
         </div>
     </div>
     <div class="journal-grid">
@@ -50,7 +50,7 @@
                 </div>
                 <h3 class="card-title">{{ post.title }}</h3>
                 <p>{{ post.summary }}</p>
-                <a href="{{ url_for('main.post_detail', slug=post.slug) }}" class="text-link">Read analysis <span aria-hidden="true">&rarr;</span></a>
+                <a href="{{ url_for('main.post_detail', slug=post.slug) }}" class="text-link">Read article <span aria-hidden="true">&rarr;</span></a>
             </article>
         {% else %}
             <p class="muted-copy">New analysis is in preparation.</p>

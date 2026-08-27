@@ -2,8 +2,8 @@
 
 {% block content %}
 <section class="article-hero" itemscope itemtype="https://schema.org/Article">
-    <meta itemprop="datePublished" content="{{ post.date_iso }}">
-    <meta itemprop="dateModified" content="{{ post.date_iso }}">
+    <meta itemprop="datePublished" content="{{ post.date_published_iso }}">
+    <meta itemprop="dateModified" content="{{ post.date_modified_iso }}">
     <meta itemprop="mainEntityOfPage" content="{{ meta.url }}">
     <span class="card-meta-label" itemprop="articleSection">{{ post.category }}</span>
     <h1 class="article-title" itemprop="headline">{{ post.title }}</h1>
@@ -63,12 +63,12 @@
 
     <section class="article-share" aria-labelledby="share-title">
         <span class="section-kicker">Pass it on</span>
-        <h2 id="share-title">Share this analysis</h2>
+        <h2 id="share-title">Share this article</h2>
         <p class="muted-copy">Clearer law travels further when it is shared.</p>
         <div class="article-share-actions">
-            <button type="button" class="outline-button" data-native-share data-share-title="{{ post.title }} | LexNush" data-share-text="Read this LexNush analysis: {{ post.title }}">Share</button>
+            <button type="button" class="outline-button" data-native-share data-share-title="{{ post.title }} | LexNush" data-share-text="Read this LexNush article: {{ post.title }}">Share</button>
             <a class="outline-button" href="https://wa.me/?text={{ ('Read on LexNush: ' ~ post.title ~ ' ' ~ meta.url)|urlencode }}" target="_blank" rel="noopener noreferrer">WhatsApp</a>
-            <a class="outline-button" href="mailto:?subject={{ (post.title ~ ' | LexNush')|urlencode }}&amp;body={{ ('I thought you might find this LexNush analysis useful: ' ~ meta.url)|urlencode }}">Email</a>
+            <a class="outline-button" href="mailto:?subject={{ (post.title ~ ' | LexNush')|urlencode }}&amp;body={{ ('I thought you might find this LexNush article useful: ' ~ meta.url)|urlencode }}">Email</a>
             <a class="outline-button" href="https://www.linkedin.com/sharing/share-offsite/?url={{ meta.url|urlencode }}" target="_blank" rel="noopener noreferrer">LinkedIn</a>
             <button type="button" class="outline-button" data-copy-link>Copy link</button>
         </div>

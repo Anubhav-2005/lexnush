@@ -208,6 +208,12 @@ body::before {
     align-items: stretch;
 }
 
+.content-grid.single-post-grid {
+    width: min(100%, 900px);
+    margin-inline: auto;
+    grid-template-columns: minmax(0, 1fr);
+}
+
 .two-column {
     display: grid;
     grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
