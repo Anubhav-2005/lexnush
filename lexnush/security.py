@@ -111,11 +111,19 @@ def apply_security_headers(response):
     response.headers.setdefault("Referrer-Policy", "strict-origin-when-cross-origin")
     response.headers.setdefault("X-Content-Type-Options", "nosniff")
     response.headers.setdefault("X-Frame-Options", "DENY")
+    response.headers.setdefault("X-Permitted-Cross-Domain-Policies", "none")
     response.headers.setdefault("X-XSS-Protection", "0")
     response.headers.setdefault("Cross-Origin-Opener-Policy", "same-origin")
     response.headers.setdefault("Cross-Origin-Resource-Policy", "same-origin")
-    if response.mimetype == "text/html":
-        response.headers.setdefault("Cache-Control", "no-store, max-age=0")
+    is_admin_request = request.path == "/admin" or request.path.startswith("/admin/")
+    if is_admin_request:
+        response.headers["Cache-Control"] = "no-store, max-age=0"
+        response.headers.setdefault("Pragma", "no-cache")
+        response.headers.setdefault("X-Robots-Tag", "noindex, nofollow, noarchive")
+    elif response.mimetype == "text/html":
+        # Public HTML can contain a session-bound CSRF token. Browsers may retain
+        # it, but shared caches must not reuse it and every use must revalidate.
+        response.headers.setdefault("Cache-Control", "private, no-cache, max-age=0, must-revalidate")
     if current_app.config["SESSION_COOKIE_SECURE"]:
         response.headers.setdefault("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
     return response

@@ -3,7 +3,7 @@
 import csv
 import io
 
-from flask import Blueprint, Response, abort, current_app, flash, redirect, render_template, request, url_for
+from flask import Blueprint, Response, abort, current_app, flash, redirect, render_template, request, session, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 from sqlalchemy import or_, select
 
@@ -32,6 +32,10 @@ def login():
         email = (request.form.get("email") or "").strip().lower()
         password = request.form.get("password") or ""
         if email == current_app.config["ADMIN_EMAIL"] and verify_admin_password(password):
+            # Replace all pre-authentication session state before elevating the
+            # session, then enforce the configured eight-hour lifetime.
+            session.clear()
+            session.permanent = True
             login_user(ConfigAdmin(email), remember=False, fresh=True)
             audit_admin_action(email, "login", ip_hash=hashed_client_ip())
             db.session.commit()

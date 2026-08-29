@@ -19,7 +19,7 @@
                 </div>
                 <h3 class="card-title">{{ post.title }}</h3>
                 <p>{{ post.summary }}</p>
-                <a href="{{ url_for('main.post_detail', slug=post.slug) }}" class="text-link">Read article</a>
+                <a href="{{ url_for('main.post_detail', slug=post.slug) }}" class="text-link" aria-label="Read article: {{ post.title }}">Read article</a>
             </article>
         {% endfor %}
     </div>

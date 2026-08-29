@@ -41,16 +41,16 @@
         <h2 id="latest-section-title">{{ archive['title'] }}</h2>
         <span class="gold-rule" aria-hidden="true"></span>
     </div>
-    <div class="content-grid fade-in delay-1">
+    <div class="content-grid section-story-grid fade-in delay-1">
         {% for post in posts %}
-            <article class="blog-card stack-md">
+            <article class="blog-card section-story-card stack-md">
                 <div class="blog-card-header">
                     <span class="card-meta-label">{{ post.category }}</span>
                     <span class="card-meta">{{ post.date }} &bull; {{ post.read_time }}</span>
                 </div>
                 <h3 class="card-title">{{ post.title }}</h3>
                 <p>{{ post.summary }}</p>
-                <a href="{{ url_for('main.post_detail', slug=post.slug) }}" class="text-link">{{ archive['link'] }}</a>
+                <a href="{{ url_for('main.post_detail', slug=post.slug) }}" class="text-link" aria-label="{{ archive['link'] }}: {{ post.title }}">{{ archive['link'] }}</a>
             </article>
         {% endfor %}
     </div>
@@ -60,8 +60,8 @@
 {% if page['items'] %}
 <section class="what-section" aria-labelledby="what-title">
     <div class="section-title-block fade-in"><h2 id="what-title">{{ page['heading'] }}</h2><span class="gold-rule" aria-hidden="true"></span></div>
-    <div class="what-grid {{ 'five-items' if page['items']|length == 5 else '' }}">
-        {% for item in page['items'] %}<article class="what-card fade-in"><span class="what-number">0{{ loop.index }}</span><h3>{{ item[0] }}</h3><p>{{ item[1] }}</p></article>{% endfor %}
+    <div class="what-grid fade-in {{ 'five-items' if page['items']|length == 5 else '' }}">
+        {% for item in page['items'] %}<article class="what-card"><span class="what-number">0{{ loop.index }}</span><h3>{{ item[0] }}</h3><p>{{ item[1] }}</p></article>{% endfor %}
     </div>
 </section>
 {% endif %}

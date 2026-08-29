@@ -1,5 +1,7 @@
 """Public pages, lead capture, newsletter lifecycle, and public API routes."""
 
+import re
+from html import unescape
 from urllib.parse import urlsplit
 from xml.sax.saxutils import escape as xml_escape
 
@@ -39,6 +41,8 @@ PAGE_ENDPOINTS = {
     "privacy": "main.privacy",
     "terms": "main.terms",
     "disclaimer": "main.disclaimer",
+    "editorial_standards": "main.editorial_standards",
+    "accessibility": "main.accessibility",
     "thank_you": "main.thank_you",
     "analysis": "main.analysis",
     "law_explained": "main.law_explained",
@@ -54,6 +58,8 @@ PAGE_SCHEMA_TYPES = {
     "privacy": "WebPage",
     "terms": "WebPage",
     "disclaimer": "WebPage",
+    "editorial_standards": "WebPage",
+    "accessibility": "WebPage",
     "thank_you": "WebPage",
     "analysis": "CollectionPage",
     "law_explained": "CollectionPage",
@@ -132,28 +138,44 @@ def page_meta(name):
         "inLanguage": "en",
     }
     graph = [website_schema(), organization_schema(), page_node, breadcrumb_schema(breadcrumb_items)]
-    if name in {"home", "blogs", "counsel"} and BLOG_POSTS:
-        listed_posts = (
-            [post for post in BLOG_POSTS if post.get("section") == "counsels_desk"]
-            if name == "counsel"
-            else BLOG_POSTS
-        )
-        graph.append(
-            {
-                "@type": "ItemList",
-                "@id": f"{current_url}#articles",
-                "name": "LexNush Counsel's Desk" if name == "counsel" else "LexNush legal analysis",
-                "itemListElement": [
-                    {
-                        "@type": "ListItem",
-                        "position": position,
-                        "url": public_url("main.post_detail", slug=post["slug"]),
-                        "name": post["title"],
-                    }
-                    for position, post in enumerate(listed_posts, start=1)
-                ],
-            }
-        )
+    collection_sections = {
+        "analysis": "analysis",
+        "law_explained": "law_explained",
+        "judgment_explained": "judgment_explained",
+        "counsel": "counsels_desk",
+    }
+    if name in {"home", "blogs", *collection_sections} and BLOG_POSTS:
+        if name == "home":
+            listed_posts = BLOG_POSTS[:3]
+        elif name == "blogs":
+            listed_posts = BLOG_POSTS
+        else:
+            listed_posts = [post for post in BLOG_POSTS if post.get("section") == collection_sections[name]]
+        collection_names = {
+            "home": "Latest from LexNush",
+            "blogs": "LexNush Journal",
+            "analysis": "LexNush Analysis",
+            "law_explained": "LexNush Law Explained",
+            "judgment_explained": "LexNush Judgment Explained",
+            "counsel": "LexNush Counsel's Desk",
+        }
+        if listed_posts:
+            graph.append(
+                {
+                    "@type": "ItemList",
+                    "@id": f"{current_url}#articles",
+                    "name": collection_names[name],
+                    "itemListElement": [
+                        {
+                            "@type": "ListItem",
+                            "position": position,
+                            "url": public_url("main.post_detail", slug=post["slug"]),
+                            "name": post["title"],
+                        }
+                        for position, post in enumerate(listed_posts, start=1)
+                    ],
+                }
+            )
     meta["schema"] = {
         "@context": "https://schema.org",
         "@graph": graph,
@@ -161,13 +183,36 @@ def page_meta(name):
     return meta
 
 
+def add_heading_anchors(content):
+    """Add stable, human-readable anchors and a compact table of contents."""
+    seen = {}
+    toc = []
+
+    def replace_heading(match):
+        heading_html = match.group(1)
+        heading_text = unescape(re.sub(r"<[^>]+>", "", heading_html)).strip()
+        base_slug = re.sub(r"[^a-z0-9]+", "-", heading_text.lower()).strip("-") or "section"
+        seen[base_slug] = seen.get(base_slug, 0) + 1
+        heading_id = base_slug if seen[base_slug] == 1 else f"{base_slug}-{seen[base_slug]}"
+        toc.append({"id": heading_id, "title": heading_text})
+        return f'<h2 id="{heading_id}">{heading_html}</h2>'
+
+    return re.sub(r"<h2>(.*?)</h2>", replace_heading, content, flags=re.IGNORECASE | re.DOTALL), toc
+
+
 def find_post(slug):
     post = next((item for item in BLOG_POSTS if item["slug"] == slug), None)
     if not post:
         return None
     safe_post = dict(post)
-    safe_post["content"] = sanitize_article_html(post["content"])
+    safe_post["content"], safe_post["toc"] = add_heading_anchors(sanitize_article_html(post["content"]))
     return safe_post
+
+
+def related_posts_for(post, limit=2):
+    same_section = [item for item in BLOG_POSTS if item["slug"] != post["slug"] and item.get("section") == post.get("section")]
+    other_sections = [item for item in BLOG_POSTS if item["slug"] != post["slug"] and item not in same_section]
+    return (same_section + other_sections)[:limit]
 
 
 def safe_local_redirect(value, default_endpoint):
@@ -229,13 +274,21 @@ def post_detail(slug):
     article_url = public_url("main.post_detail", slug=post["slug"])
     author_url = public_url("main.author_detail", slug=post["author_slug"])
     image_url = public_url("static", filename="images/lexnush-hero-editorial-1200.jpg")
+    image_alt = "LexNush editorial desk with books and legal papers"
+    section_endpoints = {
+        "analysis": ("Analysis", "main.analysis"),
+        "law_explained": ("Law Explained", "main.law_explained"),
+        "judgment_explained": ("Judgment Explained", "main.judgment_explained"),
+        "counsels_desk": ("Counsel's Desk", "main.counsels_desk"),
+    }
+    section_name, section_endpoint = section_endpoints.get(post.get("section"), ("Journal", "main.blogs"))
     meta = {
         "title": f"{post['title']} | LexNush",
         "description": post["seo_description"],
         "type": "article",
         "url": article_url,
         "image": image_url,
-        "image_alt": post["image_alt"],
+        "image_alt": image_alt,
         "image_width": 1200,
         "image_height": 583,
         "published_time": post["date_published_iso"],
@@ -268,10 +321,11 @@ def post_detail(slug):
                         "url": image_url,
                         "width": 1200,
                         "height": 583,
-                        "caption": post["image_alt"],
+                        "caption": image_alt,
                     },
                     "articleSection": post["category"],
                     "keywords": post["keywords"],
+                    "citation": [source["url"] for source in post["sources"]],
                     "wordCount": post["word_count"],
                     "inLanguage": "en-IN",
                     "isAccessibleForFree": True,
@@ -279,14 +333,20 @@ def post_detail(slug):
                 breadcrumb_schema(
                     [
                         ("Home", home_url),
-                        ("Journal", public_url("main.blogs")),
+                        (section_name, public_url(section_endpoint)),
                         (post["title"], article_url),
                     ]
                 ),
             ],
         },
     }
-    return render_template("post.html", post=post, author=AUTHORS[post["author_slug"]], meta=meta)
+    return render_template(
+        "post.html",
+        post=post,
+        author=AUTHORS[post["author_slug"]],
+        related_posts=related_posts_for(post),
+        meta=meta,
+    )
 
 
 @main_bp.route("/authors/<slug>/")
@@ -387,8 +447,7 @@ def newsletter_signup():
     subscription = get_or_create_subscription(email)
     if subscription.status == "confirmed":
         db.session.commit()
-        flash("That email is already confirmed for the LexNush journal list.", "success")
-        return redirect(target)
+        return redirect(url_for("main.thank_you", kind="newsletter"))
     raw_token, _ = create_newsletter_token(subscription, "confirm")
     signed_token = signed_newsletter_token(subscription.id, raw_token, "confirm")
     event = queue_newsletter_confirmation(subscription, signed_token)
@@ -397,12 +456,29 @@ def newsletter_signup():
     return redirect(url_for("main.thank_you", kind="newsletter"))
 
 
-@main_bp.route("/newsletter/confirm/<signed_token>")
-@limiter.limit(lambda: current_app.config["RATE_LIMIT_CONFIRM"])
+def newsletter_action_meta(action):
+    title = "Confirm your subscription" if action == "confirm" else "Confirm unsubscribe"
+    return {
+        "title": f"{title} | LexNush",
+        "description": "A protected LexNush newsletter preference page.",
+        "robots": "noindex, nofollow, noarchive",
+        "url": public_url("main.home"),
+    }
+
+
+@main_bp.route("/newsletter/confirm/<signed_token>", methods=["GET", "POST"])
+@limiter.limit(lambda: current_app.config["RATE_LIMIT_CONFIRM"], methods=["POST"])
 def newsletter_confirm(signed_token):
     token_data = read_signed_newsletter_token(signed_token, "confirm")
     if not token_data:
         abort(400)
+    if request.method == "GET":
+        return render_template(
+            "newsletter_action.html",
+            action="confirm",
+            signed_token=signed_token,
+            meta=newsletter_action_meta("confirm"),
+        )
     subscription = consume_newsletter_token(token_data["token"], "confirm")
     if not subscription or subscription.id != token_data["subscription_id"]:
         abort(400)
@@ -413,12 +489,19 @@ def newsletter_confirm(signed_token):
     return redirect(url_for("main.blogs"))
 
 
-@main_bp.route("/newsletter/unsubscribe/<signed_token>")
-@limiter.limit(lambda: current_app.config["RATE_LIMIT_CONFIRM"])
+@main_bp.route("/newsletter/unsubscribe/<signed_token>", methods=["GET", "POST"])
+@limiter.limit(lambda: current_app.config["RATE_LIMIT_CONFIRM"], methods=["POST"])
 def newsletter_unsubscribe(signed_token):
     token_data = read_signed_newsletter_token(signed_token, "unsubscribe")
     if not token_data:
         abort(400)
+    if request.method == "GET":
+        return render_template(
+            "newsletter_action.html",
+            action="unsubscribe",
+            signed_token=signed_token,
+            meta=newsletter_action_meta("unsubscribe"),
+        )
     subscription = consume_newsletter_token(token_data["token"], "unsubscribe")
     if not subscription or subscription.id != token_data["subscription_id"]:
         abort(400)
@@ -469,6 +552,16 @@ def disclaimer():
     return render_template("disclaimer.html", meta=page_meta("disclaimer"))
 
 
+@main_bp.route("/editorial-standards/")
+def editorial_standards():
+    return render_template("editorial_standards.html", meta=page_meta("editorial_standards"))
+
+
+@main_bp.route("/accessibility/")
+def accessibility():
+    return render_template("accessibility.html", meta=page_meta("accessibility"))
+
+
 @main_bp.route("/healthz")
 def healthz():
     try:
@@ -491,11 +584,24 @@ def robots_txt():
             "Disallow: /newsletter/",
             "Disallow: /thank-you/",
             f"Sitemap: {public_url('main.sitemap_xml')}",
-            f"Sitemap: {public_url('main.feed_xml')}",
             "",
         ]
     )
     return Response(body, mimetype="text/plain")
+
+
+@main_bp.route("/.well-known/security.txt")
+def security_txt():
+    body = "\n".join(
+        [
+            "Contact: mailto:editor@lexnush.com",
+            "Expires: 2027-08-29T23:59:59Z",
+            "Preferred-Languages: en",
+            f"Canonical: {public_url('main.security_txt')}",
+            "",
+        ]
+    )
+    return Response(body, mimetype="text/plain", headers={"Cache-Control": "public, max-age=86400"})
 
 
 @main_bp.route("/sitemap.xml")
@@ -512,6 +618,8 @@ def sitemap_xml():
         (public_url("main.privacy"), SITE_LASTMOD_ISO, None),
         (public_url("main.terms"), SITE_LASTMOD_ISO, None),
         (public_url("main.disclaimer"), SITE_LASTMOD_ISO, None),
+        (public_url("main.editorial_standards"), SITE_LASTMOD_ISO, None),
+        (public_url("main.accessibility"), SITE_LASTMOD_ISO, None),
     ]
     urls.extend(
         (

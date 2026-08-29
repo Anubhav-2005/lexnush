@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-hero newsletter-action-hero">
+    <span class="eyebrow">Newsletter preferences</span>
+    {% if action == 'confirm' %}
+        <h1 class="page-title">Confirm your subscription.</h1>
+        <p>One final confirmation keeps the LexNush list accurate and ensures the request came from you.</p>
+    {% else %}
+        <h1 class="page-title">Unsubscribe from LexNush?</h1>
+        <p>Confirm below and we will stop sending newsletter email to this address.</p>
+    {% endif %}
+</section>
+
+<section class="section section-narrow newsletter-action-panel">
+    <form method="post" action="{{ request.path }}" class="stack-md">
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+        <button type="submit" class="primary-button">
+            {{ 'Confirm subscription' if action == 'confirm' else 'Confirm unsubscribe' }}
+        </button>
+        <a href="{{ site_urls.home }}" class="text-link">Return to LexNush</a>
+    </form>
+</section>
+{% endblock %}

@@ -100,7 +100,9 @@ def create_app(config_name=None, config_overrides=None):
             "public_base_url": app.config["PUBLIC_BASE_URL"],
             "google_analytics_measurement_id": app.config.get("GOOGLE_ANALYTICS_MEASUREMENT_ID", ""),
             "contact_address": app.config.get("CONTACT_ADDRESS", ""),
-            "turnstile_site_key": app.config.get("TURNSTILE_SITE_KEY", ""),
+            "turnstile_site_key": (
+                app.config.get("TURNSTILE_SITE_KEY", "") if app.config.get("TURNSTILE_ENABLED") else ""
+            ),
             "static_url": static_asset_url,
             "site_urls": {
                 "home": main_route_url("main.home", "/"),
@@ -117,6 +119,8 @@ def create_app(config_name=None, config_overrides=None):
                 "privacy": main_route_url("main.privacy", "/privacy/"),
                 "terms": main_route_url("main.terms", "/terms/"),
                 "disclaimer": main_route_url("main.disclaimer", "/disclaimer/"),
+                "editorial_standards": main_route_url("main.editorial_standards", "/editorial-standards/"),
+                "accessibility": main_route_url("main.accessibility", "/accessibility/"),
             },
         }
     )

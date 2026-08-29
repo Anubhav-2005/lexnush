@@ -204,7 +204,16 @@ def audit_admin_action(admin_email, action, target_type=None, target_id=None, ip
 def purge_personal_data(older_than_days):
     cutoff = utcnow() - timedelta(days=older_than_days)
     contacts = db.session.query(ContactSubmission).filter(ContactSubmission.created_at < cutoff).delete()
-    subscribers = db.session.query(NewsletterSubscription).filter(NewsletterSubscription.created_at < cutoff).delete()
+    # Confirmed subscribers remain subscribed until they opt out. Only abandon
+    # stale, never-confirmed signups during the general retention purge.
+    subscribers = (
+        db.session.query(NewsletterSubscription)
+        .filter(
+            NewsletterSubscription.status == "pending",
+            NewsletterSubscription.created_at < cutoff,
+        )
+        .delete(synchronize_session=False)
+    )
     db.session.query(EmailOutboxEvent).filter(EmailOutboxEvent.created_at < cutoff).delete()
     db.session.query(NewsletterToken).filter(NewsletterToken.expires_at < utcnow()).delete()
     db.session.commit()

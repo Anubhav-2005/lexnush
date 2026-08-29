@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="page-hero">
+    <span class="eyebrow">Accessibility</span>
+    <h1 class="page-title">Law should be readable by more people.</h1>
+    <p>Accessibility is an ongoing part of how LexNush writes, designs, and maintains the publication.</p>
+    <p class="form-privacy">Last updated: 29 August 2026</p>
+</section>
+
+<section class="section section-narrow legal-copy">
+    <div class="stack-md">
+        <h2 class="section-title">Our ongoing aim</h2>
+        <p>LexNush aims to make its public website usable across different devices, input methods, reading preferences, and assistive technologies. This page describes the direction of that work; it is not a claim that every page or feature currently meets a particular accessibility standard.</p>
+
+        <h2>What the website currently supports</h2>
+        <ul>
+            <li>Semantic page landmarks, heading structures, descriptive page titles, and a skip link to the main content.</li>
+            <li>Keyboard access to primary navigation, search, forms, theme controls, sharing actions, and other interactive elements.</li>
+            <li>Visible focus indicators and labelled controls.</li>
+            <li>Responsive layouts that reflow across phone, tablet, and desktop widths.</li>
+            <li>Dark and light reading themes with text and interface colours selected for legibility.</li>
+            <li>Reduced animation when a device or browser requests reduced motion.</li>
+            <li>Text that can be enlarged through browser zoom and article layouts designed around readable line lengths.</li>
+            <li>Alternative text for meaningful editorial and author images, with decorative visuals kept out of the accessibility tree where appropriate.</li>
+        </ul>
+
+        <h2>Clear content is part of accessibility</h2>
+        <p>LexNush works to explain legal language without stripping away necessary nuance. Short sections, descriptive headings, defined terms, source links, and a distinction between facts and analysis help more readers follow the legal issue.</p>
+
+        <h2>Known limits</h2>
+        <p>Some older content, third-party services, external documents, or combinations of browser and assistive technology may not work as well as intended. PDF judgments and other records linked from LexNush are often created and controlled by third parties, so their accessibility may vary.</p>
+        <p>The website continues to be reviewed as content and features are added. Improvements may be introduced progressively rather than all at once.</p>
+
+        <h2>Report a difficulty</h2>
+        <p>If something prevents you from reading an article, navigating the website, using a form, or understanding a control, please tell LexNush. Helpful details include the page address, what you were trying to do, your browser or device, and any assistive technology involved. You do not need to disclose a disability.</p>
+        <p>Email <a href="mailto:editor@lexnush.com">editor@lexnush.com</a> or use the <a href="{{ site_urls.contact }}">Contact page</a>. LexNush will review the report and, where reasonably possible, offer the information in another usable form while the underlying issue is addressed.</p>
+    </div>
+</section>
+{% endblock %}

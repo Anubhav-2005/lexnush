@@ -8,7 +8,7 @@ services:
     plan: starter
     buildCommand: pip install -r requirements.txt
     preDeployCommand: flask --app app db upgrade && flask --app app verify-production-database
-    startCommand: gunicorn --workers 2 --threads 4 --timeout 30 --access-logfile - --error-logfile - wsgi:app
+    startCommand: gunicorn --config gunicorn.conf.py wsgi:app
     healthCheckPath: /healthz
     envVars:
       - key: LEXNUSH_ENV
@@ -41,6 +41,14 @@ services:
         sync: false
       - key: SENTRY_DSN
         sync: false
+      - key: GOOGLE_ANALYTICS_MEASUREMENT_ID
+        sync: false
+      - key: TURNSTILE_SITE_KEY
+        sync: false
+      - key: TURNSTILE_SECRET_KEY
+        sync: false
+      - key: TURNSTILE_REQUIRED
+        value: "false"
   - type: keyvalue
     name: lexnush-rate-limit
     ipAllowList: []

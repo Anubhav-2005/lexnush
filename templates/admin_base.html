@@ -5,14 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
     <title>{{ meta.title }}</title>
+    {% set admin_asset_version = "20260829-security" %}
     <link rel="icon" type="image/png" sizes="192x192" href="{{ url_for('static', filename='favicon.png') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/variables.css') }}?v=20260718-admin1">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}?v=20260718-admin1">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}?v=20260718-admin1">
-    <script src="{{ url_for('static', filename='theme.js') }}?v=20260718-admin1"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/variables.css') }}?v={{ admin_asset_version }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}?v={{ admin_asset_version }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}?v={{ admin_asset_version }}">
+    <script src="{{ url_for('static', filename='theme.js') }}?v={{ admin_asset_version }}"></script>
 </head>
 <body class="admin-body">
     {% set nav_items = [
@@ -66,12 +67,5 @@
             {% block content %}{% endblock %}
         </main>
     </div>
-    <script>
-        document.querySelector('.admin-theme-toggle').addEventListener('click', function () {
-            const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
-            document.documentElement.dataset.theme = next;
-            try { localStorage.setItem('theme', next); } catch (_) {}
-        });
-    </script>
 </body>
 </html>

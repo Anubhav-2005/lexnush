@@ -1,1 +1,1 @@
-web: gunicorn --workers 2 --threads 4 --timeout 30 --access-logfile - --error-logfile - wsgi:app
+web: gunicorn --config gunicorn.conf.py wsgi:app

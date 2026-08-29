@@ -7,6 +7,7 @@
     <meta itemprop="mainEntityOfPage" content="{{ meta.url }}">
     <span class="card-meta-label" itemprop="articleSection">{{ post.category }}</span>
     <h1 class="article-title" itemprop="headline">{{ post.title }}</h1>
+    <p class="article-standfirst" itemprop="description">{{ post.summary }}</p>
     <div class="article-meta">
         <span class="article-by" itemprop="author" itemscope itemtype="https://schema.org/Person">
             By <a itemprop="url" href="{{ url_for('main.author_detail', slug=post.author_slug) }}"><strong itemprop="name">{{ post.author }}</strong></a>
@@ -19,6 +20,30 @@
 
 <article class="article-container">
     <div class="article-divider"></div>
+
+    <div class="article-reader-tools" aria-label="Article reading tools">
+        <details class="reader-tool reader-citation">
+            <summary aria-label="Show citation details for {{ post.title }}">Cite this article</summary>
+            <div class="reader-citation-panel">
+                <p class="reader-citation-text">{{ post.author }}. “{{ post.title }}.” <em>LexNush</em>, {{ post.date }}. {{ meta.url }}</p>
+                <button type="button" class="reader-tool-button" data-copy-citation="{{ post.author }}. “{{ post.title }}.” LexNush, {{ post.date }}. {{ meta.url }}" aria-label="Copy citation for {{ post.title }}">Copy citation</button>
+                <p class="reader-tool-feedback reader-tools-feedback" aria-live="polite"></p>
+            </div>
+        </details>
+        <button type="button" class="reader-tool reader-tool-button" data-print-article aria-label="Print {{ post.title }}">Print article</button>
+    </div>
+
+    {% if post.toc %}
+        <nav class="article-toc" aria-labelledby="article-toc-title">
+            <span class="section-kicker">On this page</span>
+            <h2 id="article-toc-title">In this article</h2>
+            <ol>
+                {% for item in post.toc %}
+                    <li><a href="#{{ item.id }}" aria-label="Jump to {{ item.title }}">{{ item.title }}</a></li>
+                {% endfor %}
+            </ol>
+        </nav>
+    {% endif %}
 
     {% if post.key_takeaways %}
         <aside class="takeaways" aria-labelledby="brief-analysis-title">
@@ -57,7 +82,7 @@
             <span class="section-kicker">About the author</span>
             <h2 id="article-author-title">{{ post.author }}</h2>
             <p>{{ author.short_bio }}</p>
-            <a href="{{ url_for('main.author_detail', slug=post.author_slug) }}" class="text-link">View author profile <span aria-hidden="true">&rarr;</span></a>
+            <a href="{{ url_for('main.author_detail', slug=post.author_slug) }}" class="text-link" aria-label="View {{ post.author }}'s author profile">View author profile <span aria-hidden="true">&rarr;</span></a>
         </div>
     </aside>
 
@@ -66,13 +91,32 @@
         <h2 id="share-title">Share this article</h2>
         <p class="muted-copy">Clearer law travels further when it is shared.</p>
         <div class="article-share-actions">
-            <button type="button" class="outline-button" data-native-share data-share-title="{{ post.title }} | LexNush" data-share-text="Read this LexNush article: {{ post.title }}">Share</button>
-            <a class="outline-button" href="https://wa.me/?text={{ ('Read on LexNush: ' ~ post.title ~ ' ' ~ meta.url)|urlencode }}" target="_blank" rel="noopener noreferrer">WhatsApp</a>
-            <a class="outline-button" href="mailto:?subject={{ (post.title ~ ' | LexNush')|urlencode }}&amp;body={{ ('I thought you might find this LexNush article useful: ' ~ meta.url)|urlencode }}">Email</a>
-            <a class="outline-button" href="https://www.linkedin.com/sharing/share-offsite/?url={{ meta.url|urlencode }}" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-            <button type="button" class="outline-button" data-copy-link>Copy link</button>
+            <button type="button" class="outline-button" data-native-share data-share-title="{{ post.title }} | LexNush" data-share-text="Read this LexNush article: {{ post.title }}" aria-label="Share {{ post.title }}">Share</button>
+            <a class="outline-button" href="https://wa.me/?text={{ ('Read on LexNush: ' ~ post.title ~ ' ' ~ meta.url)|urlencode }}" target="_blank" rel="noopener noreferrer" aria-label="Share {{ post.title }} on WhatsApp">WhatsApp</a>
+            <a class="outline-button" href="mailto:?subject={{ (post.title ~ ' | LexNush')|urlencode }}&amp;body={{ ('I thought you might find this LexNush article useful: ' ~ meta.url)|urlencode }}" aria-label="Share {{ post.title }} by email">Email</a>
+            <a class="outline-button" href="https://www.linkedin.com/sharing/share-offsite/?url={{ meta.url|urlencode }}" target="_blank" rel="noopener noreferrer" aria-label="Share {{ post.title }} on LinkedIn">LinkedIn</a>
+            <button type="button" class="outline-button" data-copy-link aria-label="Copy link to {{ post.title }}">Copy link</button>
         </div>
         <p class="copy-feedback" aria-live="polite"></p>
     </section>
+
+    {% if related_posts %}
+        <section class="related-articles" aria-labelledby="related-articles-title">
+            <div class="related-articles-heading">
+                <span class="section-kicker">Continue reading</span>
+                <h2 id="related-articles-title">More from LexNush</h2>
+            </div>
+            <div class="related-articles-grid">
+                {% for related in related_posts[:2] %}
+                    <a class="related-article" href="{{ url_for('main.post_detail', slug=related.slug) }}" aria-label="Read {{ related.category }}: {{ related.title }}">
+                        <span>{{ related.category }}</span>
+                        <h3>{{ related.title }}</h3>
+                        <p>{{ related.summary }}</p>
+                        <small>{{ related.date }} &bull; {{ related.read_time }}</small>
+                    </a>
+                {% endfor %}
+            </div>
+        </section>
+    {% endif %}
 </article>
 {% endblock %}

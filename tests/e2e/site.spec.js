@@ -4,7 +4,7 @@ const article = "/blogs/surgery-or-autopsy-adr-award-modification";
 const counselArticle = "/blogs/every-file-has-a-story";
 
 test("public routes return rendered pages", async ({ page }) => {
-    for (const path of ["/", "/about/", "/analysis/", "/law-explained/", "/judgment-explained/", "/authors/anushka-pandey/", "/blogs/", article, counselArticle, "/counsels-desk/", "/contact/", "/privacy/", "/terms/", "/disclaimer/", "/thank-you/", "/not-found"]) {
+    for (const path of ["/", "/about/", "/analysis/", "/law-explained/", "/judgment-explained/", "/authors/anushka-pandey/", "/blogs/", article, counselArticle, "/counsels-desk/", "/contact/", "/privacy/", "/terms/", "/disclaimer/", "/editorial-standards/", "/accessibility/", "/thank-you/", "/not-found"]) {
         const response = await page.goto(path);
         expect(response.status()).toBe(path === "/not-found" ? 404 : 200);
         await expect(page.locator("main")).toBeVisible();
@@ -44,6 +44,19 @@ test("article exposes useful sharing destinations", async ({ page }) => {
     await expect(share.getByRole("button", { name: "Copy link" })).toBeVisible();
 });
 
+test("article offers orientation, citation, print and related reading", async ({ page }) => {
+    await page.goto(article);
+    const toc = page.locator(".article-toc");
+    await expect(toc).toBeVisible();
+    const firstLink = toc.getByRole("link").first();
+    const target = await firstLink.getAttribute("href");
+    expect(target).toMatch(/^#[a-z0-9-]+$/);
+    await firstLink.click();
+    await expect(page.locator(target)).toBeVisible();
+    await expect(page.getByRole("button", { name: /Print/ })).toBeVisible();
+    await expect(page.getByText("More from LexNush")).toBeVisible();
+});
+
 for (const width of [320, 360, 375, 390, 414, 768, 1024, 1440]) {
     test(`article is visible without horizontal overflow at ${width}px`, async ({ page }) => {
         await page.setViewportSize({ width, height: 900 });
@@ -64,9 +77,11 @@ test("mobile menu and search dialog expose accessible state", async ({ page }) =
     await expect(closeMenu).toHaveAttribute("aria-expanded", "true");
     await expect(page.getByRole("navigation", { name: "Mobile navigation" })).toBeVisible();
     await expect(page.locator(".mobile-menu-subscribe")).toBeVisible();
+    await expect(page.locator("main")).toHaveAttribute("inert", "");
     await closeMenu.click();
     await page.getByRole("button", { name: "Search LexNush" }).click();
     await expect(page.getByRole("dialog", { name: "Search" })).toBeVisible();
+    await expect(page.locator(".site-shell")).toHaveAttribute("inert", "");
     await page.keyboard.press("Escape");
     await expect(page.getByRole("dialog", { name: "Search" })).not.toBeVisible();
 });

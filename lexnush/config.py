@@ -1,10 +1,13 @@
 """Environment-backed configuration with production fail-fast checks."""
 
 import os
+import re
 from pathlib import Path
 from urllib.parse import urlsplit
 
 from sqlalchemy.engine import make_url
+
+GA4_MEASUREMENT_ID_RE = re.compile(r"G-[A-Z0-9]{4,32}\Z", re.ASCII)
 
 
 def environment_list(name):
@@ -16,6 +19,12 @@ def environment_bool(name, default=False):
     if value is None:
         return default
     return value.strip().lower() in {"1", "true", "yes", "on"}
+
+
+def normalize_google_analytics_measurement_id(value):
+    """Return only a valid GA4 measurement ID so config mistakes stay private."""
+    measurement_id = (value or "").strip().upper()
+    return measurement_id if GA4_MEASUREMENT_ID_RE.fullmatch(measurement_id) else ""
 
 
 def normalize_trusted_hosts(values, public_base_url):
@@ -95,7 +104,9 @@ class BaseConfig:
     EMAIL_DELIVERY_ENABLED = environment_bool("EMAIL_DELIVERY_ENABLED", False)
     ADMIN_EMAIL = os.getenv("ADMIN_EMAIL", "").strip().lower()
     ADMIN_PASSWORD_HASH = os.getenv("ADMIN_PASSWORD_HASH", "")
-    GOOGLE_ANALYTICS_MEASUREMENT_ID = os.getenv("GOOGLE_ANALYTICS_MEASUREMENT_ID", "").strip()
+    GOOGLE_ANALYTICS_MEASUREMENT_ID = normalize_google_analytics_measurement_id(
+        os.getenv("GOOGLE_ANALYTICS_MEASUREMENT_ID", "")
+    )
     SENTRY_DSN = os.getenv("SENTRY_DSN", "")
     TURNSTILE_SECRET_KEY = os.getenv("TURNSTILE_SECRET_KEY", "")
     TURNSTILE_REQUIRED = environment_bool("TURNSTILE_REQUIRED", False)
@@ -108,6 +119,24 @@ class BaseConfig:
 
     @staticmethod
     def init_app(app):
+        configured_analytics_id = app.config.get("GOOGLE_ANALYTICS_MEASUREMENT_ID", "")
+        valid_analytics_id = normalize_google_analytics_measurement_id(configured_analytics_id)
+        if configured_analytics_id and not valid_analytics_id:
+            app.logger.warning("Invalid Google Analytics measurement ID; analytics are disabled.")
+        app.config["GOOGLE_ANALYTICS_MEASUREMENT_ID"] = valid_analytics_id
+
+        turnstile_site_key = str(app.config.get("TURNSTILE_SITE_KEY", "")).strip()
+        turnstile_secret_key = str(app.config.get("TURNSTILE_SECRET_KEY", "")).strip()
+        turnstile_pair_is_complete = bool(turnstile_site_key) == bool(turnstile_secret_key)
+        if not turnstile_pair_is_complete:
+            raise RuntimeError("TURNSTILE_SITE_KEY and TURNSTILE_SECRET_KEY must be configured together.")
+        turnstile_configured = bool(turnstile_site_key and turnstile_secret_key)
+        if app.config.get("TURNSTILE_REQUIRED") and not turnstile_configured:
+            raise RuntimeError("TURNSTILE_REQUIRED=true requires both Turnstile keys.")
+        app.config["TURNSTILE_SITE_KEY"] = turnstile_site_key
+        app.config["TURNSTILE_SECRET_KEY"] = turnstile_secret_key
+        app.config["TURNSTILE_ENABLED"] = bool(app.config.get("TURNSTILE_REQUIRED") and turnstile_configured)
+
         database_url = normalize_database_url(app.config.get("DATABASE_URL"))
         if database_url:
             # Render supplies postgresql://; this application uses Psycopg 3.

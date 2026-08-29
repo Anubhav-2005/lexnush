@@ -9,7 +9,7 @@ from unittest.mock import Mock, patch
 
 from lexnush import create_app, main_route_url, static_asset_url
 from lexnush.admin import safe_csv_cell
-from lexnush.config import normalize_trusted_hosts
+from lexnush.config import normalize_google_analytics_measurement_id, normalize_trusted_hosts
 from lexnush.db import ContactSubmission, EmailOutboxEvent, NewsletterSubscription, db, purge_personal_data, utcnow
 from lexnush.security import sanitize_article_html
 
@@ -77,6 +77,8 @@ class LexNushAppTests(unittest.TestCase):
             "/privacy/",
             "/terms/",
             "/disclaimer/",
+            "/editorial-standards/",
+            "/accessibility/",
             "/thank-you/",
             "/feed.xml",
             "/healthz",
@@ -147,7 +149,8 @@ class LexNushAppTests(unittest.TestCase):
         self.assertIn(b"Law with a Pulse.", homepage.data)
         self.assertIn(b"LATEST FROM LEXNUSH", homepage.data)
         self.assertIn(b"Every File Has a Story", homepage.data)
-        self.assertIn(b"art-counsel", homepage.data)
+        self.assertIn(b"latest-editorial-grid", homepage.data)
+        self.assertNotIn(b"latest-card-art", homepage.data)
         self.assertIn(b"Ep. 2 \xe2\x80\x9cShall\xe2\x80\x9d vs. \xe2\x80\x9cMay\xe2\x80\x9d", homepage.data)
         self.assertIn(b"One Year at the Bar, Two Years Before the Bench: Has the Supreme Court Reimagined Judicial Experience?", homepage.data)
         self.assertIn(b"The Clause You Skipped", homepage.data)
@@ -193,7 +196,13 @@ class LexNushAppTests(unittest.TestCase):
         self.assertIn("https://www.googletagmanager.com", response.headers["Content-Security-Policy"])
         self.assertEqual(response.headers["X-Content-Type-Options"], "nosniff")
         self.assertEqual(response.headers["X-Frame-Options"], "DENY")
+        self.assertEqual(response.headers["X-Permitted-Cross-Domain-Policies"], "none")
+        self.assertIn("private, no-cache", response.headers["Cache-Control"])
         self.assertIn("http://testserver/", response.get_data(as_text=True))
+
+        admin_response = self.client.get("/admin/login/")
+        self.assertIn("no-store", admin_response.headers["Cache-Control"])
+        self.assertIn("noindex", admin_response.headers["X-Robots-Tag"])
 
     def test_public_seo_metadata_and_structured_data_are_complete(self):
         homepage = self.client.get("/").get_data(as_text=True)
@@ -217,6 +226,11 @@ class LexNushAppTests(unittest.TestCase):
         self.assertIn("wa.me/?text=", article)
         self.assertIn("mailto:?subject=", article)
         self.assertIn("linkedin.com/sharing/share-offsite", article)
+        self.assertIn('class="article-toc"', article)
+        self.assertIn('id="the-lexnush-takeaway"', article)
+        self.assertIn("Cite this article", article)
+        self.assertIn("data-print-article", article)
+        self.assertIn("More from LexNush", article)
 
         author = self.client.get("/authors/anushka-pandey/").get_data(as_text=True)
         self.assertIn('"@type": "ProfilePage"', author)
@@ -226,6 +240,10 @@ class LexNushAppTests(unittest.TestCase):
         about = self.client.get("/about/").get_data(as_text=True)
         self.assertNotIn('<h2 class="section-title">Anushka Pandey</h2>', about)
         self.assertNotIn('class="founder-role"', about)
+
+        analysis = self.client.get("/analysis/").get_data(as_text=True)
+        self.assertIn('"name": "LexNush Analysis"', analysis)
+        self.assertIn('"@type": "ItemList"', analysis)
 
     def test_favicon_is_a_crawlable_png(self):
         response = self.client.get("/static/favicon.png")
@@ -262,6 +280,20 @@ class LexNushAppTests(unittest.TestCase):
         homepage = self.client.get("/").get_data(as_text=True)
         self.assertIn('data-google-analytics-id="G-TEST123456"', homepage)
         self.assertNotIn("googletagmanager.com/gtag/js", homepage)
+
+    def test_invalid_analytics_configuration_is_suppressed(self):
+        self.assertEqual(normalize_google_analytics_measurement_id("tibs2005@gmail.com"), "")
+        invalid_app = create_app(
+            "testing",
+            {
+                "SQLALCHEMY_DATABASE_URI": f"sqlite:///{Path(self.tempdir.name) / 'invalid-ga.sqlite3'}",
+                "PUBLIC_BASE_URL": "http://testserver",
+                "GOOGLE_ANALYTICS_MEASUREMENT_ID": "tibs2005@gmail.com",
+            },
+        )
+        homepage = invalid_app.test_client().get("/").get_data(as_text=True)
+        self.assertNotIn("tibs2005@gmail.com", homepage)
+        self.assertNotIn("data-google-analytics-id", homepage)
 
     def test_contact_is_persisted_with_outbox_event(self):
         response = self.client.post("/contact/", data=self.contact_payload(), follow_redirects=True)
@@ -301,7 +333,12 @@ class LexNushAppTests(unittest.TestCase):
             event = db.session.query(EmailOutboxEvent).one()
             self.assertEqual(subscription.status, "pending")
             signed_token = re.search(r'href="http://testserver(/newsletter/confirm/[^"]+)"', json.loads(event.payload_json)["html"]).group(1)
-        confirmed = self.client.get(signed_token, follow_redirects=True)
+        preview = self.client.get(signed_token)
+        self.assertEqual(preview.status_code, 200)
+        self.assertIn(b"Confirm your subscription.", preview.data)
+        with self.app.app_context():
+            self.assertEqual(db.session.query(NewsletterSubscription).one().status, "pending")
+        confirmed = self.client.post(signed_token, follow_redirects=True)
         self.assertEqual(confirmed.status_code, 200)
         with self.app.app_context():
             self.assertEqual(db.session.query(NewsletterSubscription).one().status, "confirmed")
@@ -310,6 +347,8 @@ class LexNushAppTests(unittest.TestCase):
         self.assertEqual(self.client.get("/admin/", follow_redirects=False).status_code, 302)
         login = self.client.post("/admin/login/", data={"email": "admin@example.test", "password": "test-admin-password"}, follow_redirects=True)
         self.assertEqual(login.status_code, 200)
+        with self.client.session_transaction() as session_data:
+            self.assertTrue(session_data.permanent)
         self.assertIn(b"Latest email activity", login.data)
         self.assertEqual(self.client.get("/admin/contacts/").status_code, 200)
         emails = self.client.get("/admin/emails/")
@@ -338,10 +377,14 @@ class LexNushAppTests(unittest.TestCase):
     def test_retention_purge_removes_old_records(self):
         with self.app.app_context():
             record = ContactSubmission(name="Old User", email="old@example.com", topic="Old", message="This is an old retained message.", created_at=utcnow() - timedelta(days=500))
-            db.session.add(record)
+            stale_pending = NewsletterSubscription(email="pending@example.com", status="pending", created_at=utcnow() - timedelta(days=500))
+            confirmed = NewsletterSubscription(email="confirmed@example.com", status="confirmed", created_at=utcnow() - timedelta(days=500), confirmed_at=utcnow() - timedelta(days=499))
+            db.session.add_all([record, stale_pending, confirmed])
             db.session.commit()
             contacts, subscribers = purge_personal_data(365)
-            self.assertEqual((contacts, subscribers), (1, 0))
+            self.assertEqual((contacts, subscribers), (1, 1))
+            remaining = db.session.query(NewsletterSubscription).one()
+            self.assertEqual((remaining.email, remaining.status), ("confirmed@example.com", "confirmed"))
 
     def test_sanitizer_removes_script_and_event_handlers(self):
         cleaned = sanitize_article_html('<p onclick="alert(1)">Safe</p><script>alert(1)</script>')
@@ -349,11 +392,11 @@ class LexNushAppTests(unittest.TestCase):
 
     def test_sitemap_and_robots_use_public_url(self):
         self.assertIn(b"http://testserver/sitemap.xml", self.client.get("/robots.txt").data)
-        self.assertIn(b"http://testserver/feed.xml", self.client.get("/robots.txt").data)
+        self.assertNotIn(b"http://testserver/feed.xml", self.client.get("/robots.txt").data)
         self.assertIn(b"Disallow: /admin/", self.client.get("/robots.txt").data)
         self.assertIn(b"Disallow: /thank-you/", self.client.get("/robots.txt").data)
         sitemap = self.client.get("/sitemap.xml").get_data(as_text=True)
-        self.assertIn("<lastmod>2026-07-27</lastmod>", sitemap)
+        self.assertIn("<lastmod>2026-08-29</lastmod>", sitemap)
         self.assertIn("http://testserver/blogs/", sitemap)
         self.assertIn("http://testserver/analysis/", sitemap)
         self.assertIn("http://testserver/law-explained/", sitemap)
@@ -363,6 +406,8 @@ class LexNushAppTests(unittest.TestCase):
         self.assertIn("http://testserver/privacy/", sitemap)
         self.assertIn("http://testserver/terms/", sitemap)
         self.assertIn("http://testserver/disclaimer/", sitemap)
+        self.assertIn("http://testserver/editorial-standards/", sitemap)
+        self.assertIn("http://testserver/accessibility/", sitemap)
         self.assertIn("http://testserver/static/images/supreme-court-hero.jpg", sitemap)
         self.assertIn("when-the-state-watches-you-ai-surveillance-constitutional-privacy", sitemap)
         self.assertIn("<lastmod>2026-08-18</lastmod>", sitemap)
@@ -371,6 +416,11 @@ class LexNushAppTests(unittest.TestCase):
         self.assertIn("the-clause-you-skipped-final-and-binding", sitemap)
         self.assertIn('xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"', sitemap)
         self.assertNotIn("http://testserver/interviews/", sitemap)
+
+        security = self.client.get("/.well-known/security.txt")
+        self.assertEqual(security.mimetype, "text/plain")
+        self.assertIn(b"Contact: mailto:editor@lexnush.com", security.data)
+        self.assertIn(b"Canonical: http://testserver/.well-known/security.txt", security.data)
 
         feed = self.client.get("/feed.xml")
         self.assertEqual(feed.mimetype, "application/atom+xml")

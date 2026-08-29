@@ -4,7 +4,7 @@ from html import unescape
 from textwrap import dedent
 
 HTML_TAG_RE = re.compile(r"<[^>]+>")
-SITE_LASTMOD_ISO = "2026-08-27"
+SITE_LASTMOD_ISO = "2026-08-29"
 
 AUTHORS = {
     "anushka-pandey": {
@@ -798,6 +798,14 @@ PAGE_META = {
     "disclaimer": {
         "title": "Disclaimer | LexNush",
         "description": "LexNush content is provided for general informational purposes only and is not legal advice.",
+    },
+    "editorial_standards": {
+        "title": "Editorial Standards & Corrections | LexNush",
+        "description": "How LexNush approaches primary sources, clarity, independence, corrections, and editorial accountability.",
+    },
+    "accessibility": {
+        "title": "Accessibility | LexNush",
+        "description": "LexNush's ongoing work to make its legal journalism clear, usable, and accessible to more readers.",
     },
     "thank_you": {
         "title": "Thank You | LexNush",
