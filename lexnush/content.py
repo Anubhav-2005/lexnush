@@ -4,7 +4,7 @@ from html import unescape
 from textwrap import dedent
 
 HTML_TAG_RE = re.compile(r"<[^>]+>")
-SITE_LASTMOD_ISO = "2026-08-29"
+SITE_LASTMOD_ISO = "2026-09-01"
 
 AUTHORS = {
     "anushka-pandey": {
@@ -29,6 +29,78 @@ def calculate_read_time(text):
 
 
 BLOG_POSTS = [
+    {
+        "id": 7,
+        "slug": "from-kerala-to-keralam-inside-article-3",
+        "title": "From Kerala to Keralam: Inside Article 3 and the Constitutional Machinery of Renaming a State",
+        "author": "Anushka Pandey",
+        "author_slug": "anushka-pandey",
+        "category": "Analysis",
+        "section": "analysis",
+        "date": "1 September 2026",
+        "date_iso": "2026-09-01",
+        "date_modified": "1 September 2026",
+        "date_published_iso": "2026-09-01T09:00:00+05:30",
+        "date_modified_iso": "2026-09-01T09:00:00+05:30",
+        "keywords": [
+            "Article 3 of the Constitution",
+            "Kerala to Keralam",
+            "state renaming",
+            "Indian federalism",
+            "First Schedule",
+            "constitutional procedure",
+        ],
+        "image_alt": "Supreme Court of India",
+        "sources": [],
+        "seo_description": "An analysis of Article 3, the constitutional procedure for renaming a state, and the Kerala-to-Keralam change.",
+        "summary": "What a one-word change reveals about Parliament's power, state consultation and the federal balance.",
+        "key_takeaways": [],
+        "content": dedent(
+            """
+            <p>On August 13, 2026, President Droupadi Murmu gave her assent to the Kerala (Alteration of Name) Bill, 2026, formally changing the state’s constitutional name from “Kerala” to “Keralam” The change amends the First Schedule of the Constitution, replacing the English rendering with a name that has always been in everyday use in Malayalam. It is a small edit to a single word in a constitutional schedule, but it runs through one of the more procedurally distinctive provisions in the Indian Constitution: Article 3.</p>
+
+            <h2>The Article 3 Procedure, Step by Step</h2>
+
+            <p>Article 3 gives Parliament the power to form new states or alter the areas, boundaries, or names of existing ones. Unlike most constitutional amendments, changes under Article 3 don’t require the elaborate Article 368 amendment machinery, a simple parliamentary majority suffices. But the provision builds in a distinct sequence of checks before a bill can even reach the floor of Parliament. The Kerala case tracks each step cleanly:</p>
+
+            <ol>
+                <li><strong>State-level initiation.</strong> The process usually begins with a resolution from the state legislature. In Kerala’s case, the Legislative Assembly first passed a resolution in August 2023, but it ran into a procedural snag, that draft had tried to modify the state’s name across all Eighth Schedule languages, not just English, creating technical inconsistencies the Union Home Ministry flagged. A corrected resolution was passed unanimously by the Assembly on June 24, 2024, and forwarded to the Centre.</li>
+                <li><strong>Union Cabinet approval.</strong> The Ministry of Home Affairs examined the proposal, and with the Home Minister’s approval, the draft Cabinet note was routed to the Department of Legal Affairs and the Legislative Department for vetting. The Union Cabinet formally approved the renaming proposal on February 24, 2026.</li>
+                <li><strong>Presidential reference to the state legislature.</strong> This is the step that makes Article 3 procedurally unusual. A bill to alter a state’s name cannot even be introduced in Parliament without the President’s prior recommendation, and the President cannot make that recommendation without first referring the bill to the concerned state legislature “for expressing its views thereon” within a period she specifies. Following Cabinet approval, President Murmu referred the draft Kerala (Alteration of Name) Bill to the Kerala Assembly. On July 1, 2026, the Assembly went through all ten clauses of the proposed legislation and returned a supportive view.</li>
+                <li><strong>The views are consultative, not binding.</strong> This is the crucial, and often misunderstood, feature of Article 3. The state legislature’s views must be sought, but Parliament and the President are not bound by them. Even if a state assembly objected, Parliament could still proceed. The consultation exists to uphold a degree of cooperative federalism, not to hand states a veto.</li>
+                <li><strong>Presidential recommendation and introduction in Parliament.</strong> Once the state’s views were received, the President’s recommendation was obtained, and the Kerala (Alteration of Name) Bill, 2026 was introduced by Union Minister of State for Home Affairs Nityanand Rai.</li>
+                <li><strong>Passage by simple majority.</strong> Article 3 bills are treated as ordinary legislation under Article 4, no special majority is required. The Bill passed the Lok Sabha on August 11, 2026, and the Rajya Sabha by voice vote on August 12, 2026, amid some Opposition protest but without serious resistance to the substance of the bill.</li>
+                <li><strong>Presidential assent and constitutional amendment.</strong> With President Murmu’s assent on August 13, the First Schedule of the Constitution, Entry 15: now reads “Keralam” in place of “Kerala.” No separate constitutional amendment bill under Article 368 was needed, because Article 3 itself carries the authority to amend the First Schedule.</li>
+            </ol>
+
+            <h2>Precedent: How Odisha and Uttarakhand Got There</h2>
+
+            <p>Kerala’s renaming isn’t a constitutional novelty, it follows a well-worn path.</p>
+
+            <p><strong>Orissa → Odisha (2011).</strong> The most direct precedent. Odisha’s Cabinet first resolved on the change in June 2008, and the state Assembly passed a supporting resolution that August. The bill, which also renamed the language from Oriya to Odia, was introduced by then-Home Minister P. Chidambaram, passed the Lok Sabha on November 9, 2010, cleared the Rajya Sabha on March 24, 2011, and received presidential assent on September 23, 2011, with the change taking legal effect from November 1, 2011. The roughly three-year gap between the state resolution and the final assent illustrates how long the layered consultation and vetting process can take, a timeline Kerala’s own trajectory (2023 resolution to 2026 assent) roughly mirrors.</p>
+
+            <p><strong>Uttaranchal → Uttarakhand (2007).</strong> A different flavor of the same power: this was a renaming of a state that itself had been carved out of Uttar Pradesh only in 2000. Local sentiment favored “Uttarakhand,” a name with older textual roots, over the administratively coined “Uttaranchal.” The Centre approved the switch, and the bill was passed and signed into law in late 2006, taking effect on January 1, 2007.</p>
+
+            <p><strong>What links all three.</strong> In each case, the trigger was a state legislature’s resolution reflecting linguistic or cultural sentiment, not a boundary or territorial dispute. All three follow the same procedural spine: state resolution → Centre's vetting → presidential reference back to the state → parliamentary passage by simple majority → presidential assent. None required anything beyond ordinary legislative process, underscoring how deliberately the framers of Article 3 separated “renaming” from the heavier machinery reserved for genuine constitutional amendments.</p>
+
+            <h2>Federal Dynamics: Who Really Holds the Power?</h2>
+
+            <p>Article 3 sits at an interesting fault line in India’s constitutional design, and the Kerala episode illustrates the tension clearly.</p>
+
+            <p><strong>The Centre holds the trump card.</strong> Textually, Article 3 is a Union power. Parliament can rename, reorganize, or redraw a state's boundaries by ordinary legislation, and the state legislature’s views, however unanimous or emphatically expressed, are advisory only. This was a deliberate choice by the Constituent Assembly: India was conceived as an “indestructible Union of destructible states,” and B.R. Ambedkar and others were explicit that no single state should be able to hold constitutional reorganization hostage. The name of a state, like its boundaries, is ultimately something the Union defines.</p>
+
+            <p><strong>But practice has softened the theory.</strong> In every recent case, Kerala, Odisha, Uttarakhand, the process was in substance state-initiated and consensus-driven. The Centre didn’t impose a renaming; it responded to a state assembly's request, and did so only after the state had made its case not once but sometimes twice (Kerala’s own resolution needed a second, corrected pass). This gives Article 3, as actually exercised in the post-1970s period, a far more cooperative-federalism character than its unilateral constitutional text would suggest. The “consultation” requirement, non-binding as it is, has functioned in practice as a genuine political check: no Union government has moved to rename a state against clearly expressed local opposition in recent memory.</p>
+
+            <p><strong>The asymmetry becomes visible in disputed cases.</strong> Article 3’s centralizing potential is much more exposed in situations where the Centre and a state disagree, historically most visible in territorial reorganizations rather than simple renamings (for instance, the bifurcation of Andhra Pradesh in 2014, which proceeded despite significant local opposition in parts of the state). Renaming cases like Kerala’s are, by contrast, comparatively low-friction because they map onto identity and pronunciation rather than territory, resources, or political representation, there's little for the Centre and state to actually fight over. That’s precisely why they make useful teaching cases: they show Article 3’s procedural architecture cleanly, without the political noise that usually accompanies its use.</p>
+
+            <p><strong>The unanswered structural question.</strong> Article 3’s asymmetry, a state can request but not compel, and the Centre can act even over a state’s express objection, remains one of the more centralizing features of India’s federal design, especially when set against systems where sub-national units enjoy stronger entrenchment. The Kerala case didn’t test that asymmetry, since Centre and state were aligned throughout. But it's worth remembering that the same procedural pathway which delivered a smooth, welcomed change for Kerala is constitutionally capable of delivering an unwelcome one elsewhere, since nothing in Article 3 requires the state’s consent, only its opinion.</p>
+
+            <h2>Summing Up</h2>
+
+            <p>The Kerala-to-Keralam change is a clean, low-conflict illustration of a high-consequence power. Procedurally, it shows Article 3’s full sequence: resolution, Cabinet vetting, presidential reference, non-binding state consultation, simple-majority passage, and assent. Precedent-wise, it sits comfortably alongside Odisha and Uttarakhand as a linguistic-identity renaming rather than a territorial dispute. And structurally, it’s a reminder that Article 3’s federal balance tilts toward the Union by design, cooperative practice, not constitutional obligation, is what has kept that power from becoming contentious in recent renamings.</p>
+            """
+        ).strip(),
+    },
     {
         "id": 6,
         "slug": "every-file-has-a-story",

@@ -2,9 +2,10 @@ const { test, expect } = require("@playwright/test");
 
 const article = "/blogs/surgery-or-autopsy-adr-award-modification";
 const counselArticle = "/blogs/every-file-has-a-story";
+const keralaArticle = "/blogs/from-kerala-to-keralam-inside-article-3";
 
 test("public routes return rendered pages", async ({ page }) => {
-    for (const path of ["/", "/about/", "/analysis/", "/law-explained/", "/judgment-explained/", "/authors/anushka-pandey/", "/blogs/", article, counselArticle, "/counsels-desk/", "/contact/", "/privacy/", "/terms/", "/disclaimer/", "/editorial-standards/", "/accessibility/", "/thank-you/", "/not-found"]) {
+    for (const path of ["/", "/about/", "/analysis/", "/law-explained/", "/judgment-explained/", "/authors/anushka-pandey/", "/blogs/", article, counselArticle, keralaArticle, "/counsels-desk/", "/contact/", "/privacy/", "/terms/", "/disclaimer/", "/editorial-standards/", "/accessibility/", "/thank-you/", "/not-found"]) {
         const response = await page.goto(path);
         expect(response.status()).toBe(path === "/not-found" ? 404 : 200);
         await expect(page.locator("main")).toBeVisible();
