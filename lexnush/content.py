@@ -32,7 +32,7 @@ BLOG_POSTS = [
     {
         "id": 8,
         "slug": "ep-3-ill-just-sue-instead",
-        "title": "I’ll Just Sue Instead",
+        "title": "The Clause You Skipped",
         "author": "Anushka Pandey",
         "author_slug": "anushka-pandey",
         "category": "Law Explained",
@@ -253,7 +253,7 @@ BLOG_POSTS = [
     {
         "id": 5,
         "slug": "the-clause-you-skipped-shall-vs-may",
-        "title": "Shall vs. May",
+        "title": "The Clause You Skipped",
         "author": "Anushka Pandey",
         "author_slug": "anushka-pandey",
         "category": "Law Explained",
@@ -600,7 +600,7 @@ BLOG_POSTS = [
     {
         "id": 3,
         "slug": "the-clause-you-skipped-final-and-binding",
-        "title": "Final and Binding",
+        "title": "The Clause You Skipped",
         "author": "Anushka Pandey",
         "author_slug": "anushka-pandey",
         "category": "Law Explained",
