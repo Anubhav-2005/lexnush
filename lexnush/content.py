@@ -32,7 +32,7 @@ BLOG_POSTS = [
     {
         "id": 8,
         "slug": "ep-3-ill-just-sue-instead",
-        "title": "Ep. 3 “I’ll just sue instead”: why walking away from arbitration almost never works",
+        "title": "The Clause You Skipped",
         "author": "Anushka Pandey",
         "author_slug": "anushka-pandey",
         "category": "Law Explained",
@@ -53,7 +53,7 @@ BLOG_POSTS = [
         "image_alt": "Supreme Court of India",
         "sources": [],
         "seo_description": "Law Explained Episode 3: what happens when a party ignores a valid arbitration clause and files in court.",
-        "summary": "Spoiler: it almost never works the way people think it will.",
+        "summary": "Ep. 3 “I’ll just sue instead”: why walking away from arbitration almost never works.",
         "key_takeaways": [],
         "content": dedent(
             """
