@@ -253,7 +253,7 @@ BLOG_POSTS = [
     {
         "id": 5,
         "slug": "the-clause-you-skipped-shall-vs-may",
-        "title": "The Clause You Skipped",
+        "title": "Shall vs. May",
         "author": "Anushka Pandey",
         "author_slug": "anushka-pandey",
         "category": "Law Explained",
@@ -600,7 +600,7 @@ BLOG_POSTS = [
     {
         "id": 3,
         "slug": "the-clause-you-skipped-final-and-binding",
-        "title": "The Clause You Skipped",
+        "title": "Final and Binding",
         "author": "Anushka Pandey",
         "author_slug": "anushka-pandey",
         "category": "Law Explained",

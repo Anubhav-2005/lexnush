@@ -168,7 +168,8 @@ class LexNushAppTests(unittest.TestCase):
         law_explained = self.client.get("/law-explained/").data
         self.assertIn(b"Ep. 3 \xe2\x80\x9cI\xe2\x80\x99ll just sue instead\xe2\x80\x9d: why walking away from arbitration almost never works.", law_explained)
         self.assertIn(b"Ep. 2 \xe2\x80\x9cShall\xe2\x80\x9d vs. \xe2\x80\x9cMay\xe2\x80\x9d", law_explained)
-        self.assertIn(b"The Clause You Skipped", law_explained)
+        self.assertIn(b"Shall vs. May", law_explained)
+        self.assertIn(b"Final and Binding", law_explained)
         self.assertIn(b"Latest from Law Explained", law_explained)
         self.assertIn(b"Read explainer", law_explained)
 
