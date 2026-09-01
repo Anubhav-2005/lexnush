@@ -32,7 +32,7 @@ BLOG_POSTS = [
     {
         "id": 8,
         "slug": "ep-3-ill-just-sue-instead",
-        "title": "The Clause You Skipped",
+        "title": "I’ll Just Sue Instead",
         "author": "Anushka Pandey",
         "author_slug": "anushka-pandey",
         "category": "Law Explained",

@@ -152,7 +152,7 @@ class LexNushAppTests(unittest.TestCase):
         self.assertIn(b"Every File Has a Story", homepage.data)
         self.assertIn(b"latest-editorial-grid", homepage.data)
         self.assertNotIn(b"latest-card-art", homepage.data)
-        self.assertIn(b"The Clause You Skipped", homepage.data)
+        self.assertIn(b"I\xe2\x80\x99ll Just Sue Instead", homepage.data)
         self.assertIn(b"Ep. 3 \xe2\x80\x9cI\xe2\x80\x99ll just sue instead\xe2\x80\x9d: why walking away from arbitration almost never works.", homepage.data)
         self.assertNotIn(b"One Year at the Bar, Two Years Before the Bench: Has the Supreme Court Reimagined Judicial Experience?", homepage.data)
         self.assertIn(b"Stay Informed. Every Week.", homepage.data)
