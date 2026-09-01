@@ -30,6 +30,87 @@ def calculate_read_time(text):
 
 BLOG_POSTS = [
     {
+        "id": 8,
+        "slug": "ep-3-ill-just-sue-instead",
+        "title": "Ep. 3 “I’ll just sue instead”: why walking away from arbitration almost never works",
+        "author": "Anushka Pandey",
+        "author_slug": "anushka-pandey",
+        "category": "Law Explained",
+        "section": "law_explained",
+        "date": "1 September 2026",
+        "date_iso": "2026-09-01",
+        "date_modified": "1 September 2026",
+        "date_published_iso": "2026-09-01T11:00:00+05:30",
+        "date_modified_iso": "2026-09-01T11:00:00+05:30",
+        "keywords": [
+            "arbitration clause",
+            "Section 8 Arbitration and Conciliation Act",
+            "Section 16 Arbitration and Conciliation Act",
+            "competence-competence",
+            "arbitration referral",
+            "law explained",
+        ],
+        "image_alt": "Supreme Court of India",
+        "sources": [],
+        "seo_description": "Law Explained Episode 3: what happens when a party ignores a valid arbitration clause and files in court.",
+        "summary": "Spoiler: it almost never works the way people think it will.",
+        "key_takeaways": [],
+        "content": dedent(
+            """
+            <p><strong>Ep. 3 “I’ll just sue instead”: why walking away from arbitration almost never works</strong></p>
+
+            <p><em>A weekly series decoding the legal clauses nobody reads - until they need to.</em></p>
+
+            <p>Last week we talked about shall versus may, and how one word decides whether arbitration is your only route or just one option among several. This week: what actually happens when a dispute lands, and one side decides they’d rather skip arbitration and head straight to court instead.</p>
+
+            <p>Spoiler: it almost never works the way people think it will.</p>
+
+            <h2>Why would anyone try this in the first place?</h2>
+
+            <p>A few reasons come up again and again. Court might feel more familiar - most people have at least heard of how a lawsuit works, arbitration still feels like a black box. Sometimes a party thinks a judge will be more sympathetic, or that the threat of a public lawsuit puts more pressure on the other side. And sometimes it’s simpler than that: they’re hoping the other side won’t notice, or won’t bother to object.</p>
+
+            <p>None of these are good bets.</p>
+
+            <h2>So what actually happens when you file in court anyway?</h2>
+
+            <p>If there’s a valid arbitration clause covering the dispute, the other side can point to it and ask the court to send the case back to arbitration - this is usually called a referral application. In India, this sits in Section 8 of the Arbitration and Conciliation Act, 1996: it requires a judicial authority to refer the parties back to arbitration, provided the clause exists, covers the dispute, and the objecting party raises it early - specifically, no later than filing its first statement on the merits. Miss that window, and you may have effectively waived your right to insist on arbitration at all.</p>
+
+            <p>The court isn’t usually deciding who's right on the merits at this stage. It’s just checking: is there an arbitration agreement, does it cover this dispute, and should this be sent back to arbitration. If the answer is yes, the lawsuit gets parked and the parties are pushed back toward the arbitrator.</p>
+
+            <h2>Doesn’t the court decide if the clause is even valid first?</h2>
+
+            <p>Here’s the part that surprises people: usually, no - not in detail, and not at length. Most arbitration-friendly legal systems follow something called competence-competence (in Latin, Kompetenz-Kompetenz) - a principle that says the arbitrator gets to decide questions about their own jurisdiction first, including whether the arbitration clause itself is valid, whether it’s still in force, and whether it actually covers this dispute. In India this is codified directly in Section 16 of the Act. Courts, at the referral stage, are expected to do only a light, preliminary check and leave the deeper argument for the arbitrator.</p>
+
+            <p>It sounds circular, and a little bit, it is. But the logic is that if courts got to fully re-litigate every jurisdiction fight before arbitration could even start, the whole point of arbitration - speed, and staying out of court - would collapse before the first hearing.</p>
+
+            <h2>Are there situations where court actually is the right move?</h2>
+
+            <p>Yes, a few:</p>
+
+            <ul>
+                <li><strong>No valid arbitration agreement exists</strong> - it was never properly signed, or doesn’t cover this type of dispute at all.</li>
+                <li><strong>The dispute isn’t arbitrable</strong> - some categories of disputes (certain criminal matters, some family and inheritance issues, insolvency proceedings) generally can't be resolved through private arbitration, no matter what the contract says.</li>
+                <li><strong>Interim relief is urgent</strong> - before an arbitrator is even appointed, courts can often step in for time-sensitive relief, like an injunction to stop assets from disappearing, while the arbitration itself proceeds separately.</li>
+                <li><strong>Waiver</strong> - if the other side goes along with the lawsuit for too long without objecting - filing a defence on the merits, for instance - some courts treat that as giving up the right to insist on arbitration later.</li>
+            </ul>
+
+            <p>Outside of situations like these, “I’d rather just sue” is usually a delay tactic, not a real alternative.</p>
+
+            <h2>What does trying it actually cost you?</h2>
+
+            <p>Time, mostly - and money. Filing in the wrong forum means arguing a referral application before the real dispute is even touched, then starting again in arbitration once the court sends it back. Meanwhile, limitation periods and deadlines don’t pause to wait for you to pick the right forum. Courts also aren’t shy about pointing out when a party is using a random lawsuit purely to avoid arbitration, which rarely helps that party’s credibility once the case does get to arbitration.</p>
+
+            <hr>
+
+            <p>The clause you signed doesn’t disappear just because you’d rather not deal with it.</p>
+
+            <p>Next Tuesday: how arbitration actually starts - what a notice of arbitration needs to say, and the deadlines that start running the moment you send it.</p>
+
+            <p><em>This is a general explainer, not legal advice for any specific situation. New post every Tuesday.</em></p>
+            """
+        ).strip(),
+    },
+    {
         "id": 7,
         "slug": "from-kerala-to-keralam-inside-article-3",
         "title": "From Kerala to Keralam: Inside Article 3 and the Constitutional Machinery of Renaming a State",

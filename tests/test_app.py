@@ -152,9 +152,9 @@ class LexNushAppTests(unittest.TestCase):
         self.assertIn(b"Every File Has a Story", homepage.data)
         self.assertIn(b"latest-editorial-grid", homepage.data)
         self.assertNotIn(b"latest-card-art", homepage.data)
-        self.assertIn(b"Ep. 2 \xe2\x80\x9cShall\xe2\x80\x9d vs. \xe2\x80\x9cMay\xe2\x80\x9d", homepage.data)
+        self.assertIn(b"Ep. 3 \xe2\x80\x9cI\xe2\x80\x99ll just sue instead\xe2\x80\x9d: why walking away from arbitration almost never works", homepage.data)
         self.assertNotIn(b"One Year at the Bar, Two Years Before the Bench: Has the Supreme Court Reimagined Judicial Experience?", homepage.data)
-        self.assertIn(b"The Clause You Skipped", homepage.data)
+        self.assertNotIn(b"The Clause You Skipped", homepage.data)
         self.assertIn(b"Stay Informed. Every Week.", homepage.data)
         self.assertIn(b"ABOUT LEXNUSH", homepage.data)
         self.assertIn(b"supreme-court-hero.jpg", homepage.data)
@@ -166,6 +166,7 @@ class LexNushAppTests(unittest.TestCase):
         self.assertIn(b"Surgery or Autopsy? The Supreme Court&#39;s Arbitral Scalpel", analysis)
 
         law_explained = self.client.get("/law-explained/").data
+        self.assertIn(b"Ep. 3 \xe2\x80\x9cI\xe2\x80\x99ll just sue instead\xe2\x80\x9d: why walking away from arbitration almost never works", law_explained)
         self.assertIn(b"Ep. 2 \xe2\x80\x9cShall\xe2\x80\x9d vs. \xe2\x80\x9cMay\xe2\x80\x9d", law_explained)
         self.assertIn(b"The Clause You Skipped", law_explained)
         self.assertIn(b"Latest from Law Explained", law_explained)
