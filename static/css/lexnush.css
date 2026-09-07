@@ -2014,7 +2014,8 @@ button.is-loading::before {
         -webkit-line-clamp: unset;
     }
 
-    .latest-editorial-grid .is-lead h3 { font-size: 1.82rem; }
+    /* Keep an editorial lead compact enough for long legal headlines on a phone. */
+    .latest-editorial-grid .is-lead h3 { font-size: 1.72rem; }
 
     .latest-editorial-grid .latest-card-copy p {
         margin-top: 11px;

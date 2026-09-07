@@ -4,7 +4,7 @@ from html import unescape
 from textwrap import dedent
 
 HTML_TAG_RE = re.compile(r"<[^>]+>")
-SITE_LASTMOD_ISO = "2026-09-01"
+SITE_LASTMOD_ISO = "2026-09-07"
 
 AUTHORS = {
     "anushka-pandey": {
@@ -29,6 +29,150 @@ def calculate_read_time(text):
 
 
 BLOG_POSTS = [
+    {
+        "id": 9,
+        "slug": "two-decade-old-conviction-forgotten-birth-certificate-limits-final",
+        "title": "A Two-Decade-Old Conviction, a Forgotten Birth Certificate, and the Limits of “Final”",
+        "author": "Anushka Pandey",
+        "author_slug": "anushka-pandey",
+        "category": "Analysis",
+        "section": "analysis",
+        "date": "7 September 2026",
+        "date_iso": "2026-09-07",
+        "date_modified": "7 September 2026",
+        "date_published_iso": "2026-09-07T09:00:00+05:30",
+        "date_modified_iso": "2026-09-07T09:00:00+05:30",
+        "keywords": [
+            "Mahavir Avnish v State of Madhya Pradesh",
+            "2026 INSC 942",
+            "juvenility claim",
+            "Section 362 CrPC",
+            "inherent powers of High Court",
+            "criminal procedure",
+        ],
+        "image_alt": "Supreme Court of India",
+        "sources": [],
+        "seo_description": "An analysis of Mahavir @ Avnish v. State of Madhya Pradesh and why finality cannot prevent correction of a fundamental miscarriage of justice.",
+        "summary": "What happens when a criminal case is considered over, but the person convicted was actually a child when the offence took place?",
+        "key_takeaways": [],
+        "content": dedent(
+            """
+            <p>What happens when a criminal case is considered “over,” but the person convicted was actually a child when the offence took place?</p>
+
+            <p>The Supreme Court’s recent decision in <em>Mahavir @ Avnish v. State of Madhya Pradesh</em>, 2026 INSC 942, answers that question with an important reminder: finality in criminal proceedings cannot come at the cost of correcting a fundamental miscarriage of justice.</p>
+
+            <p>In criminal law, “final” is a powerful word.</p>
+
+            <p>Once a judgment has been delivered, courts generally cannot go back and rewrite it. Section 362 of the Code of Criminal Procedure (CrPC) reflects this principle by restricting courts from altering or reviewing their own judgments, except for limited corrections such as clerical or arithmetical errors.</p>
+
+            <p>The reason is obvious. Litigation has to end somewhere.</p>
+
+            <p>But there is another principle that matters just as much: a legal system cannot protect a mistake merely because it has become old.</p>
+
+            <p>That tension lies at the heart of <em>Mahavir @ Avnish</em>.</p>
+
+            <h2>A conviction that was supposed to be over</h2>
+
+            <p>The appellant had been convicted under Section 201 Part II of the IPC for causing the disappearance of evidence connected with the deaths of a woman and her infant daughter.</p>
+
+            <p>The Madhya Pradesh High Court dismissed his appeal in 2017.</p>
+
+            <p>He then approached the Supreme Court, but his Special Leave Petition was dismissed as withdrawn in 2018. Ordinarily, that would have been the end of the matter.</p>
+
+            <p>Years later, however, the appellant raised something fundamental.</p>
+
+            <p>He claimed that he was only about 17 years and 2 months old when the offence was committed.</p>
+
+            <p>If that was correct, he was a juvenile under the juvenile justice framework at the relevant time. And that changed the legal position entirely.</p>
+
+            <p>This was not simply a question of reducing a sentence or reconsidering a piece of evidence. It went to the manner in which the criminal proceedings themselves should have been dealt with.</p>
+
+            <p>The appellant therefore returned to the Madhya Pradesh High Court, invoking Sections 482 and 362 CrPC and seeking recall of the court's earlier judgment.</p>
+
+            <p>The High Court refused.</p>
+
+            <p>Its reasoning was essentially that the matter had already travelled to the Supreme Court and had therefore acquired finality.</p>
+
+            <p>That is where the Supreme Court stepped in.</p>
+
+            <h2>When “final” is not enough</h2>
+
+            <p>A Bench comprising Justices Prashant Kumar Mishra and Shree Chandrashekhar held that the High Court had fallen into an error by treating the earlier judgment as beyond correction simply because the case had reached the Supreme Court.</p>
+
+            <p>The important distinction is this:</p>
+
+            <p>Finality protects judgments from endless reconsideration. It does not protect a judgment that suffers from a fundamental jurisdictional defect.</p>
+
+            <p>The Court made it clear that Section 362 CrPC cannot be applied so mechanically that it prevents a court from correcting an order where doing so is necessary to prevent a miscarriage of justice.</p>
+
+            <p>The High Court's inherent powers can still be exercised in appropriate circumstances to recall an order that was passed without jurisdiction or suffers from a fundamental defect.</p>
+
+            <p>And juvenility, the Court emphasised, falls within that important category.</p>
+
+            <h2>A person’s age is not just another piece of evidence</h2>
+
+            <p>This is perhaps the most significant part of the judgment.</p>
+
+            <p>A claim of juvenility is not treated like an ordinary defence that can simply disappear because it was raised late.</p>
+
+            <p>The relevant question is how old was the person on the date of the offence?</p>
+
+            <p>If the person was a child at that point, the protective framework of juvenile justice becomes relevant.</p>
+
+            <p>That status cannot simply be erased because the accused failed to raise the issue at the earliest possible stage, or because the criminal proceedings have continued for years.</p>
+
+            <p>In other words, procedural delay cannot turn a child into an adult for the purposes of the law applicable on the date of the offence.</p>
+
+            <p>That is why the Supreme Court recognised that a claim of juvenility can be raised even at a later stage, including after the case has otherwise reached finality.</p>
+
+            <h2>Section 362 is a safeguard, not a prison</h2>
+
+            <p>There is an important distinction here.</p>
+
+            <p>The judgment does not mean that criminal courts can routinely reopen concluded cases.</p>
+
+            <p>They cannot.</p>
+
+            <p>Section 362 continues to serve an important purpose. Without finality, every criminal proceeding could potentially become an endless cycle of applications, reviews and fresh arguments.</p>
+
+            <p>The exception is much narrower.</p>
+
+            <p>Where a judgment suffers from something fundamentally wrong, such as lack of jurisdiction, violation of natural justice, fraud, or a serious mistake attributable to the court itself that causes real prejudice, the law cannot simply respond with:</p>
+
+            <p>“The judgment is old, so nothing can be done.”</p>
+
+            <p>That would turn procedural finality into something more dangerous: a shield for injustice.</p>
+
+            <p>The power to recall in such situations is therefore not a disguised appeal.</p>
+
+            <p>It is a correction mechanism.</p>
+
+            <p>The distinction matters because the court is not reconsidering the case merely because one side wants another chance. It is asking whether the original decision was legally capable of standing in the first place.</p>
+
+            <h2>Why this judgment matters</h2>
+
+            <p>For criminal law practitioners, <em>Mahavir @ Avnish</em> is a useful reminder to look beyond the procedural history of a case.</p>
+
+            <p>A matter may have travelled through multiple courts. An appeal may have been dismissed. Years may have passed.</p>
+
+            <p>But if a fundamental issue such as juvenility was wrongly denied or overlooked, the inquiry may not necessarily end there.</p>
+
+            <p>For the broader justice system, the judgment captures a difficult but necessary balance.</p>
+
+            <p>Finality matters. But so does getting the law fundamentally right.</p>
+
+            <p>Courts need finality to prevent litigation from becoming endless. At the same time, procedural rules cannot become so rigid that they prevent courts from correcting an injustice they themselves helped create.</p>
+
+            <p>Perhaps that is the simplest way to understand the decision:</p>
+
+            <p>The law wants cases to end. It does not want injustice to become permanent simply because enough time has passed.</p>
+
+            <p>And sometimes, a birth certificate that was overlooked years ago can reopen a question that everyone thought had already been settled.</p>
+
+            <p><em>This article summarises the Supreme Court’s ruling in Mahavir @ Avnish v. State of Madhya Pradesh, 2026 INSC 942, for general informational purposes and does not constitute legal advice.</em></p>
+            """
+        ).strip(),
+    },
     {
         "id": 8,
         "slug": "ep-3-ill-just-sue-instead",

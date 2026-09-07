@@ -4,9 +4,10 @@ const article = "/blogs/surgery-or-autopsy-adr-award-modification";
 const counselArticle = "/blogs/every-file-has-a-story";
 const keralaArticle = "/blogs/from-kerala-to-keralam-inside-article-3";
 const arbitrationEpisodeThree = "/blogs/ep-3-ill-just-sue-instead";
+const finalityArticle = "/blogs/two-decade-old-conviction-forgotten-birth-certificate-limits-final";
 
 test("public routes return rendered pages", async ({ page }) => {
-    for (const path of ["/", "/about/", "/analysis/", "/law-explained/", "/judgment-explained/", "/authors/anushka-pandey/", "/blogs/", article, counselArticle, keralaArticle, arbitrationEpisodeThree, "/counsels-desk/", "/contact/", "/privacy/", "/terms/", "/disclaimer/", "/editorial-standards/", "/accessibility/", "/thank-you/", "/not-found"]) {
+    for (const path of ["/", "/about/", "/analysis/", "/law-explained/", "/judgment-explained/", "/authors/anushka-pandey/", "/blogs/", article, counselArticle, keralaArticle, arbitrationEpisodeThree, finalityArticle, "/counsels-desk/", "/contact/", "/privacy/", "/terms/", "/disclaimer/", "/editorial-standards/", "/accessibility/", "/thank-you/", "/not-found"]) {
         const response = await page.goto(path);
         expect(response.status()).toBe(path === "/not-found" ? 404 : 200);
         await expect(page.locator("main")).toBeVisible();
