@@ -4,7 +4,7 @@ from html import unescape
 from textwrap import dedent
 
 HTML_TAG_RE = re.compile(r"<[^>]+>")
-SITE_LASTMOD_ISO = "2026-09-07"
+SITE_LASTMOD_ISO = "2026-09-08"
 
 AUTHORS = {
     "anushka-pandey": {
@@ -29,6 +29,89 @@ def calculate_read_time(text):
 
 
 BLOG_POSTS = [
+    {
+        "id": 10,
+        "slug": "ep-4-starting-the-clock",
+        "title": "The Clause You Skipped",
+        "author": "Anushka Pandey",
+        "author_slug": "anushka-pandey",
+        "category": "Law Explained",
+        "section": "law_explained",
+        "date": "8 September 2026",
+        "date_iso": "2026-09-08",
+        "date_modified": "8 September 2026",
+        "date_published_iso": "2026-09-08T11:00:00+05:30",
+        "date_modified_iso": "2026-09-08T11:00:00+05:30",
+        "keywords": [
+            "notice of arbitration",
+            "Section 21 Arbitration and Conciliation Act",
+            "Section 11 Arbitration and Conciliation Act",
+            "arbitration limitation period",
+            "arbitrator appointment",
+            "law explained",
+        ],
+        "image_alt": "Legal research materials arranged on a desk",
+        "sources": [],
+        "seo_description": "Law Explained Episode 4: how a notice of arbitration starts the clock under Section 21 of the Arbitration and Conciliation Act, 1996.",
+        "summary": "Ep. 4 “Starting the Clock”: the notice nobody reads twice, and the deadline it quietly sets.",
+        "key_takeaways": [],
+        "content": dedent(
+            """
+            <p><strong>Ep. 4 “Starting the Clock”: the notice nobody reads twice, and the deadline it quietly sets</strong></p>
+
+            <p><em>A weekly series decoding the legal clauses nobody reads - until they need to.</em></p>
+
+            <p>Last week we covered why trying to sue instead of arbitrating almost never works. This week: assuming you are going to arbitrate, how does it actually begin?</p>
+
+            <p>Not when the dispute happened. Not when you decided to act. A specific piece of paper, sent on a specific day.</p>
+
+            <h2>What actually starts arbitration?</h2>
+
+            <p>Under Section 21 of India’s Arbitration and Conciliation Act, 1996, arbitral proceedings begin on the date the respondent receives a request to refer the dispute to arbitration - unless the parties have agreed otherwise.</p>
+
+            <p>Not the date you drafted it. Not the date you decided to arbitrate. The date it lands on the other side’s desk.</p>
+
+            <p>This one line does more work than it looks like. It’s the starting gun for limitation periods, for timelines written into the arbitration clause itself, and often for how quickly the other side has to respond before you can move to get an arbitrator appointed.</p>
+
+            <h2>What does this notice actually need to say?</h2>
+
+            <p>There’s no single mandated format, but a notice that's going to hold up needs to cover a few things clearly:</p>
+
+            <ul>
+                <li><strong>That an arbitration agreement exists</strong> - point to the clause or agreement you’re relying on.</li>
+                <li><strong>What the dispute actually is</strong> - the facts, briefly, not the full case.</li>
+                <li><strong>What you want</strong> - the relief or remedy you're seeking.</li>
+                <li><strong>Your proposal on the arbitrator</strong> - a named person, a number of arbitrators, or a reference to whatever appointment mechanism the clause sets out.</li>
+            </ul>
+
+            <p>Vague notices cause real problems later. If a notice doesn't clearly identify the dispute, the other side can argue the arbitration that eventually happens goes beyond what was actually notified - and that argument can resurface all the way at the award-challenge stage.</p>
+
+            <h2>Why does the exact date matter so much?</h2>
+
+            <p>Two reasons, and they compound.</p>
+
+            <p>First, <strong>limitation</strong>. Most legal systems treat the arbitration notice the way a court would treat filing a lawsuit - it's the act that stops the clock on the limitation period for your claim. If you're close to a limitation deadline and you wait to “get the wording right,” you can lose the claim entirely before arbitration even starts.</p>
+
+            <p>Second, <strong>your own contractual clock</strong>. A lot of arbitration clauses build in their own timelines - a fixed number of days for the other side to respond, a window to agree on an arbitrator before either party can go to court under Section 11. All of that starts running from the date this notice is received, not sent.</p>
+
+            <p>If your clause requires proof of delivery, or specifies a mode of service, that's not boilerplate to skim past - miss it, and you may not be able to prove your own start date later.</p>
+
+            <h2>Does the other side have to respond?</h2>
+
+            <p>Not always in a fixed statutory window, though many clauses build one in. But silence from the other side isn't a dead end - if there’s no response, or no agreement on an arbitrator within the time set out (or a reasonable time, if the clause is silent), that's usually exactly the trigger a party needs to approach the court for appointment.</p>
+
+            <h2>The one habit worth building here</h2>
+
+            <p>Send the notice in a way you can prove was received, on a date you can prove. Track that date.</p>
+
+            <p>Everything downstream - arbitrator appointment, procedural timelines, and years later, if it ever comes up, when the clock actually started - traces back to it.</p>
+
+            <p>Next Tuesday: what happens when the parties can’t agree on who the arbitrator should be, and how a court steps in to appoint one under Section 11.</p>
+
+            <p><em>This is a general explainer, not legal advice for any specific situation. New post every Tuesday.</em></p>
+            """
+        ).strip(),
+    },
     {
         "id": 9,
         "slug": "two-decade-old-conviction-forgotten-birth-certificate-limits-final",
