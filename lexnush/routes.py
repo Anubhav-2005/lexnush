@@ -262,7 +262,8 @@ def law_explained():
 
 @main_bp.route("/judgment-explained/")
 def judgment_explained():
-    return render_template("section_page.html", section="judgment_explained", meta=page_meta("judgment_explained"))
+    posts = [post for post in BLOG_POSTS if post.get("section") == "judgment_explained"]
+    return render_template("section_page.html", section="judgment_explained", posts=posts, meta=page_meta("judgment_explained"))
 
 
 @main_bp.route("/blogs/<slug>")

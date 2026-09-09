@@ -6,9 +6,10 @@ const keralaArticle = "/blogs/from-kerala-to-keralam-inside-article-3";
 const arbitrationEpisodeThree = "/blogs/ep-3-ill-just-sue-instead";
 const arbitrationEpisodeFour = "/blogs/ep-4-starting-the-clock";
 const finalityArticle = "/blogs/two-decade-old-conviction-forgotten-birth-certificate-limits-final";
+const judgmentExplainedArticle = "/blogs/missing-soda-bottle-murder-conviction-fell-apart";
 
 test("public routes return rendered pages", async ({ page }) => {
-    for (const path of ["/", "/about/", "/analysis/", "/law-explained/", "/judgment-explained/", "/authors/anushka-pandey/", "/blogs/", article, counselArticle, keralaArticle, arbitrationEpisodeThree, arbitrationEpisodeFour, finalityArticle, "/counsels-desk/", "/contact/", "/privacy/", "/terms/", "/disclaimer/", "/editorial-standards/", "/accessibility/", "/thank-you/", "/not-found"]) {
+    for (const path of ["/", "/about/", "/analysis/", "/law-explained/", "/judgment-explained/", "/authors/anushka-pandey/", "/blogs/", article, counselArticle, keralaArticle, arbitrationEpisodeThree, arbitrationEpisodeFour, finalityArticle, judgmentExplainedArticle, "/counsels-desk/", "/contact/", "/privacy/", "/terms/", "/disclaimer/", "/editorial-standards/", "/accessibility/", "/thank-you/", "/not-found"]) {
         const response = await page.goto(path);
         expect(response.status()).toBe(path === "/not-found" ? 404 : 200);
         await expect(page.locator("main")).toBeVisible();

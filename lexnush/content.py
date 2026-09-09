@@ -4,7 +4,7 @@ from html import unescape
 from textwrap import dedent
 
 HTML_TAG_RE = re.compile(r"<[^>]+>")
-SITE_LASTMOD_ISO = "2026-09-08"
+SITE_LASTMOD_ISO = "2026-09-09"
 
 AUTHORS = {
     "anushka-pandey": {
@@ -29,6 +29,216 @@ def calculate_read_time(text):
 
 
 BLOG_POSTS = [
+    {
+        "id": 11,
+        "slug": "missing-soda-bottle-murder-conviction-fell-apart",
+        "title": "The Missing Soda Bottle: How a Murder Conviction Fell Apart",
+        "author": "Anushka Pandey",
+        "author_slug": "anushka-pandey",
+        "category": "Judgment Explained",
+        "section": "judgment_explained",
+        "date": "9 September 2026",
+        "date_iso": "2026-09-09",
+        "date_modified": "9 September 2026",
+        "date_published_iso": "2026-09-09T11:00:00+05:30",
+        "date_modified_iso": "2026-09-09T11:00:00+05:30",
+        "keywords": [
+            "Taher Vajiyuddin Rangwala v State of Gujarat",
+            "2026 INSC 859",
+            "circumstantial evidence",
+            "criminal acquittal",
+            "accidental drowning",
+            "murder conviction",
+        ],
+        "image_alt": "Supreme Court of India",
+        "sources": [],
+        "seo_description": "Judgment Explained: why the Supreme Court set aside a murder conviction after finding the evidence was consistent with accidental drowning.",
+        "summary": "A Gujarat man drowned during a river bath with two friends in 2006. Two decades later, the Supreme Court asked: had anyone actually proved it was murder?",
+        "key_takeaways": [],
+        "content": dedent(
+            """
+            <p>A Gujarat man drowned during a river bath with two friends in 2006. Two decades, a trial court conviction and a High Court confirmation later, the Supreme Court asked a much simpler question: had anyone actually proved it was murder?</p>
+
+            <h2>What happened</h2>
+
+            <p>On the morning of 17 July 2006, a man left his house with two friends, Taher Vajiyuddin Rangwala and another accused, on the pretext of going to Ankleshwar to play volleyball.</p>
+
+            <p>He never came home.</p>
+
+            <p>By evening, his family began looking for him. When one of the accused was contacted by his own wife, he allegedly told her that he was at a picture house watching a movie.</p>
+
+            <p>The next morning, the man’s body was recovered from the river.</p>
+
+            <p>His clothes were found on the riverbank and identified by his brother. The post-mortem recorded the cause of death as cardio-respiratory arrest due to asphyxia from drowning.</p>
+
+            <p>On the face of it, it looked like a drowning.</p>
+
+            <p>But the prosecution believed there was much more to the story.</p>
+
+            <h2>The prosecution’s case</h2>
+
+            <p>The prosecution's theory was that the deceased had not simply drowned. He had been murdered by the two men who were last seen with him.</p>
+
+            <p>There were several circumstances that appeared to point in that direction.</p>
+
+            <p>The accused had been with the deceased before his death. They were present near the river. They did not immediately report the incident. They allegedly left the place and went to watch a movie. And, according to the prosecution, they initially gave a false account of where they had taken the deceased.</p>
+
+            <p>There was also an alleged admission made inside a car. According to a prosecution witness, the accused said that they had gone swimming or bathing in the river, that the deceased had accidentally drowned, and that they panicked, fled and went to a movie.</p>
+
+            <p>The prosecution did not see this as an innocent explanation. It saw the conduct that followed the drowning as evidence of guilt.</p>
+
+            <p>There was another piece of evidence that became important: four soda bottles had allegedly been purchased, but only three were returned. The prosecution suggested that the missing bottle had been used to assault the deceased.</p>
+
+            <p>The trial court accepted the prosecution’s case and convicted the accused under Sections 302 and 34, and Section 201 read with Section 120B of the IPC.</p>
+
+            <p>The Gujarat High Court upheld the conviction.</p>
+
+            <p>The matter eventually reached the Supreme Court.</p>
+
+            <p>And that is where the evidence began to look very different.</p>
+
+            <h2>Where the evidence began to fall apart</h2>
+
+            <p>The Supreme Court did not begin by asking whether the accused behaved suspiciously.</p>
+
+            <p>It began with the more fundamental question: what actually caused the death?</p>
+
+            <p>The post-mortem showed drowning. The deceased did have three injuries, a contused lacerated wound above the left eyebrow and abrasions near the eye and on the right side of the chest.</p>
+
+            <p>But none of them were grievous.</p>
+
+            <p>More importantly, the doctor who conducted the post-mortem said that the injuries could also have been caused while bathing in the river or when the body was dragged by the current and struck against a hard object, such as a stone with a sharp edge.</p>
+
+            <p>The prosecution tried to connect one of the injuries to the missing soda bottle.</p>
+
+            <p>But there was a problem.</p>
+
+            <p>No broken soda bottle or glass fragments were seized. The doctor was never shown a broken bottle or fragments of one. There was also no forensic examination of a bloodstained broken soda bottle linking it to the deceased.</p>
+
+            <p>So the missing bottle remained just that, a missing bottle.</p>
+
+            <p>It did not become the murder weapon simply because the prosecution said it might have been one.</p>
+
+            <h2>The motive had problems too</h2>
+
+            <p>The prosecution suggested that the deceased had a relationship with the sister of one of the accused, despite her being married. The other accused was said to have had a quarrel with the deceased over cricket.</p>
+
+            <p>But the Supreme Court found the motive difficult to accept as the explanation for a premeditated murder.</p>
+
+            <p>If the family really believed there was such serious hostility between the deceased and the accused, it was difficult to reconcile that with the fact that the deceased was allowed to leave with them that morning.</p>
+
+            <p>The evidence, in fact, suggested that the deceased and the accused shared a friendly relationship.</p>
+
+            <p>The Court therefore treated the alleged motive with considerable caution rather than simply accepting it as proof of what happened at the river.</p>
+
+            <h2>Then came the eyewitnesses</h2>
+
+            <p>Some of the prosecution’s witnesses did not provide the certainty the case needed.</p>
+
+            <p>One witness, PW-8, had seen the three men at the river. He said they drank and entered the water. But he left before the incident and did not actually see a murder.</p>
+
+            <p>Two other witnesses, who were shop and pan-shop owners, were relied upon for identification. But they did not know the accused beforehand, and there had been no test identification parade.</p>
+
+            <p>The Supreme Court therefore found that their identification of the accused in court could not safely carry the prosecution's case.</p>
+
+            <p>There was also a significant delay in the accusation being raised.</p>
+
+            <p>The incident took place on 17 July 2006, while the accusation in the First Information Statement came only on 3 November 2006, around four months later.</p>
+
+            <p>For the Court, that delay mattered because the prosecution’s later version had to be tested against what had actually been said at the earliest stage.</p>
+
+            <h2>Suspicious behaviour is not enough</h2>
+
+            <p>Perhaps the most interesting part of the judgment was the Court’s treatment of what happened after the drowning.</p>
+
+            <p>The accused did not behave like people one would expect to behave after witnessing a friend's accidental death.</p>
+
+            <p>They did not rescue him.</p>
+
+            <p>They fled.</p>
+
+            <p>They went to a movie.</p>
+
+            <p>They allegedly gave misleading information about where the deceased was.</p>
+
+            <p>None of this looked good.</p>
+
+            <p>But criminal law does not convict people because their behaviour looks bad.</p>
+
+            <p>The Supreme Court recognised that the conduct was reprehensible. But reprehensible is not the same as criminal, and unattractive behaviour is not the same as proof.</p>
+
+            <p>The Court also noted that human behaviour in moments of crisis can be unpredictable. A person's reaction to an unexpected death may be irrational, panicked or even deeply wrong without necessarily proving that the person caused the death.</p>
+
+            <p>That distinction mattered here.</p>
+
+            <h2>What the Supreme Court found</h2>
+
+            <p>Once the individual pieces of evidence were tested, the prosecution’s murder theory began to lose its certainty.</p>
+
+            <p>There was no convincing medical evidence establishing that the death was homicidal.</p>
+
+            <p>There was no reliable forensic evidence connecting a soda bottle to the injuries.</p>
+
+            <p>The alleged motive was uncertain.</p>
+
+            <p>The identification evidence was weak.</p>
+
+            <p>The accusation came after a considerable delay.</p>
+
+            <p>And the conduct of the accused, while suspicious and blameworthy, did not by itself establish that they had murdered the deceased.</p>
+
+            <p>The Court ultimately found that the possibility of accidental drowning was not merely conceivable. It was the more plausible explanation on the evidence before it.</p>
+
+            <p>The convictions were therefore set aside.</p>
+
+            <p>Both accused were acquitted.</p>
+
+            <h2>Why the distinction matters</h2>
+
+            <p>This case is a useful reminder of something criminal trials often make difficult to see: suspicion can be powerful without being proof.</p>
+
+            <p>The circumstances may look ugly. The accused may have behaved badly. Their explanation may seem unbelievable.</p>
+
+            <p>But a murder conviction requires more than a story that fits the suspicious circumstances.</p>
+
+            <p>The prosecution has to establish the death as homicidal and then connect the accused to that homicide through evidence strong enough to meet the criminal standard of proof.</p>
+
+            <p>Here, the Supreme Court found that the evidence did not cross that line.</p>
+
+            <p>The Court was not saying that the accused behaved appropriately.</p>
+
+            <p>It was saying something narrower, and much more important in a criminal trial:</p>
+
+            <p><strong>The evidence did not prove murder.</strong></p>
+
+            <h2>The takeaway</h2>
+
+            <p>The most striking thing about <em>Taher Vajiyuddin Rangwala</em> is that the case did not collapse because of one dramatic contradiction.</p>
+
+            <p>It unravelled piece by piece.</p>
+
+            <p>A wound that could have been caused by a riverbank.</p>
+
+            <p>A missing soda bottle that was never recovered as a weapon.</p>
+
+            <p>Witnesses whose identification could not safely be relied upon.</p>
+
+            <p>A motive that did not sit comfortably with the surrounding conduct.</p>
+
+            <p>And two accused men whose behaviour raised serious questions but did not answer the most important one: did they kill him?</p>
+
+            <p>The Supreme Court’s answer was no, not on the evidence available.</p>
+
+            <p>And that is the point worth remembering.</p>
+
+            <p>In criminal law, however suspicious the surrounding circumstances may appear, the final step from something that seems wrong to this person committed murder still has to be proved.</p>
+
+            <h2>Case details</h2>
+
+            <p><strong>Case:</strong> Taher Vajiyuddin Rangwala &amp; Anr. v. State of Gujarat<br><strong>Citation:</strong> 2026 INSC 859<br><strong>Court:</strong> Supreme Court of India<br><strong>Bench:</strong> Justice J.B. Pardiwala and Justice K. Vinod Chandran<br><strong>Date:</strong> 13 August 2026<br><strong>Result:</strong> Conviction reversed; appellants acquitted</p>
+            """
+        ).strip(),
+    },
     {
         "id": 10,
         "slug": "ep-4-starting-the-clock",

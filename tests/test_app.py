@@ -148,6 +148,7 @@ class LexNushAppTests(unittest.TestCase):
         homepage = self.client.get("/")
         self.assertIn(b"Law with a Pulse.", homepage.data)
         self.assertIn(b"LATEST FROM LEXNUSH", homepage.data)
+        self.assertIn(b"The Missing Soda Bottle: How a Murder Conviction Fell Apart", homepage.data)
         self.assertIn(b"Ep. 4 \xe2\x80\x9cStarting the Clock\xe2\x80\x9d", homepage.data)
         self.assertIn(b"A Two-Decade-Old Conviction, a Forgotten Birth Certificate", homepage.data)
         self.assertNotIn(b"From Kerala to Keralam: Inside Article 3 and the Constitutional Machinery of Renaming a State", homepage.data)
@@ -155,7 +156,7 @@ class LexNushAppTests(unittest.TestCase):
         self.assertIn(b"latest-editorial-grid", homepage.data)
         self.assertNotIn(b"latest-card-art", homepage.data)
         self.assertIn(b"The Clause You Skipped", homepage.data)
-        self.assertIn(b"Ep. 3 \xe2\x80\x9cI\xe2\x80\x99ll just sue instead\xe2\x80\x9d: why walking away from arbitration almost never works.", homepage.data)
+        self.assertNotIn(b"Ep. 3 \xe2\x80\x9cI\xe2\x80\x99ll just sue instead\xe2\x80\x9d: why walking away from arbitration almost never works.", homepage.data)
         self.assertNotIn(b"One Year at the Bar, Two Years Before the Bench: Has the Supreme Court Reimagined Judicial Experience?", homepage.data)
         self.assertIn(b"Stay Informed. Every Week.", homepage.data)
         self.assertIn(b"ABOUT LEXNUSH", homepage.data)
@@ -175,6 +176,10 @@ class LexNushAppTests(unittest.TestCase):
         self.assertIn(b"The Clause You Skipped", law_explained)
         self.assertIn(b"Latest from Law Explained", law_explained)
         self.assertIn(b"Read explainer", law_explained)
+
+        judgment_explained = self.client.get("/judgment-explained/").data
+        self.assertIn(b"The Missing Soda Bottle: How a Murder Conviction Fell Apart", judgment_explained)
+        self.assertIn(b"9 September 2026", judgment_explained)
 
         counsel = self.client.get("/counsels-desk/").data
         self.assertIn(b"Every File Has a Story", counsel)
@@ -403,7 +408,7 @@ class LexNushAppTests(unittest.TestCase):
         self.assertIn(b"Disallow: /admin/", self.client.get("/robots.txt").data)
         self.assertIn(b"Disallow: /thank-you/", self.client.get("/robots.txt").data)
         sitemap = self.client.get("/sitemap.xml").get_data(as_text=True)
-        self.assertIn("<lastmod>2026-09-08</lastmod>", sitemap)
+        self.assertIn("<lastmod>2026-09-09</lastmod>", sitemap)
         self.assertIn("http://testserver/blogs/", sitemap)
         self.assertIn("http://testserver/analysis/", sitemap)
         self.assertIn("http://testserver/law-explained/", sitemap)
@@ -419,6 +424,7 @@ class LexNushAppTests(unittest.TestCase):
         self.assertIn("when-the-state-watches-you-ai-surveillance-constitutional-privacy", sitemap)
         self.assertIn("two-decade-old-conviction-forgotten-birth-certificate-limits-final", sitemap)
         self.assertIn("ep-4-starting-the-clock", sitemap)
+        self.assertIn("missing-soda-bottle-murder-conviction-fell-apart", sitemap)
         self.assertIn("<lastmod>2026-08-18</lastmod>", sitemap)
         self.assertIn("every-file-has-a-story", sitemap)
         self.assertIn("<lastmod>2026-08-27</lastmod>", sitemap)
