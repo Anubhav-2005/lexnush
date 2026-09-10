@@ -148,9 +148,9 @@ class LexNushAppTests(unittest.TestCase):
         homepage = self.client.get("/")
         self.assertIn(b"Law with a Pulse.", homepage.data)
         self.assertIn(b"LATEST FROM LEXNUSH", homepage.data)
+        self.assertIn(b"To Kill a Mockingbird by Harper Lee", homepage.data)
         self.assertIn(b"The Missing Soda Bottle: How a Murder Conviction Fell Apart", homepage.data)
         self.assertIn(b"Ep. 4 \xe2\x80\x9cStarting the Clock\xe2\x80\x9d", homepage.data)
-        self.assertIn(b"A Two-Decade-Old Conviction, a Forgotten Birth Certificate", homepage.data)
         self.assertNotIn(b"From Kerala to Keralam: Inside Article 3 and the Constitutional Machinery of Renaming a State", homepage.data)
         self.assertNotIn(b"Every File Has a Story", homepage.data)
         self.assertIn(b"latest-editorial-grid", homepage.data)
@@ -201,6 +201,15 @@ class LexNushAppTests(unittest.TestCase):
         self.assertIn('"articleSection": "Counsel\\u0027s Desk"', page)
         self.assertIn('"datePublished": "2026-08-27T09:00:00+05:30"', page)
         self.assertIn("Share this article", page)
+
+    def test_todays_counsels_desk_review_is_published(self):
+        article = self.client.get("/blogs/to-kill-a-mockingbird-harper-lee")
+        self.assertEqual(article.status_code, 200)
+        page = article.get_data(as_text=True)
+        self.assertIn("To Kill a Mockingbird by Harper Lee", page)
+        self.assertIn("Why lawyers should read it", page)
+        self.assertIn("LexNush verdict:", page)
+        self.assertIn('"datePublished": "2026-09-10T09:00:00+05:30"', page)
 
     def test_security_headers_and_canonical_url_are_present(self):
         response = self.client.get("/")

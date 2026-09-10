@@ -4,7 +4,7 @@ from html import unescape
 from textwrap import dedent
 
 HTML_TAG_RE = re.compile(r"<[^>]+>")
-SITE_LASTMOD_ISO = "2026-09-09"
+SITE_LASTMOD_ISO = "2026-09-10"
 
 AUTHORS = {
     "anushka-pandey": {
@@ -29,6 +29,75 @@ def calculate_read_time(text):
 
 
 BLOG_POSTS = [
+    {
+        "id": 12,
+        "slug": "to-kill-a-mockingbird-harper-lee",
+        "title": "To Kill a Mockingbird by Harper Lee",
+        "author": "Anushka Pandey",
+        "author_slug": "anushka-pandey",
+        "category": "Counsel's Desk",
+        "section": "counsels_desk",
+        "date": "10 September 2026",
+        "date_iso": "2026-09-10",
+        "date_modified": "10 September 2026",
+        "date_published_iso": "2026-09-10T09:00:00+05:30",
+        "date_modified_iso": "2026-09-10T09:00:00+05:30",
+        "keywords": [
+            "To Kill a Mockingbird",
+            "Harper Lee",
+            "law and literature",
+            "criminal justice",
+            "racial injustice",
+            "legal ethics",
+            "Counsel's Desk",
+        ],
+        "image_alt": "A novel beside legal research materials on a desk",
+        "sources": [],
+        "seo_description": "A Counsel's Desk review of Harper Lee's To Kill a Mockingbird: justice, evidence, prejudice, and the limits of a principled defence.",
+        "summary": "A classic courtroom novel that asks whether a fair process can overcome a community that has already made up its mind.",
+        "key_takeaways": [],
+        "content": dedent(
+            """
+            <p>Some books tell you a story. Others quietly rearrange how you see the world afterward. This one manages both.</p>
+
+            <p>Set in the fictional town of Maycomb, Alabama, during the Great Depression, the novel is narrated by Scout Finch, a young girl growing up with her brother Jem and their father, Atticus, a lawyer who agrees to defend Tom Robinson, a Black man falsely accused of raping a white woman. What starts out as a book about summer, neighbourhood gossip and the mysterious Boo Radley next door turns, slowly, into something else: a book about who gets believed, who gets protected, and what it costs to do the right thing in a town that does not particularly want you to.</p>
+
+            <h2>What stays with you</h2>
+
+            <p>It is Scout's voice, mostly. She narrates as a child, but you can feel the adult underneath, deciding what the young Scout gets to notice and what she does not. That distance lets Lee write about racism and injustice without the book ever tipping into a lecture.</p>
+
+            <p>Atticus is the one everyone remembers, for good reason. He does not perform his principles; he simply has them, and keeps them even when the whole town is against him. His line to Scout about climbing into someone else's skin before judging them has outlived the novel itself. But it is worth sitting with something: Atticus's decency is the emotional centre of a book about a Black man's trial. Tom Robinson barely gets to speak for himself. We know him mostly through how Atticus and Scout see him, which is where much of the fair criticism of this book comes from.</p>
+
+            <p>The trial is where Maycomb's quiet prejudices stop being quiet. On paper the process looks fair: there is a judge, a jury and a defence that actually does its job. That is what makes the verdict land as it does. Nobody in that courtroom is confused about what happened. That is the problem.</p>
+
+            <p>Then there is Boo Radley, who starts out as the neighbourhood boogeyman and ends up as someone the children were simply never given the chance to know. It is a smaller thread than the trial, but it does similar work, showing how fast fear moves in when nobody bothers to ask questions first.</p>
+
+            <h2>But it is not a flawless book</h2>
+
+            <p>Reading it now means reading it a little sideways. Tom Robinson's story comes to us at a distance: we get his testimony and not much else of his interior life. That is the core of the criticism the book has taken over the years. It is supposed to be about racial injustice, and it ends up mostly interested in a white family's moral education.</p>
+
+            <p>The politics of the book can feel tidy, too, next to fiction that actually sits inside a Black character's experience instead of watching it from across the room. And the middle stretch, all that unhurried Maycomb life, can drag if you are used to books that move faster.</p>
+
+            <p>None of this makes it not worth reading. If anything, it is more worth reading with these things in mind than it would be to pretend it is still 1960.</p>
+
+            <h2>Why lawyers should read it</h2>
+
+            <p>The interesting part for a law student is not really the courtroom scenes. It is everything before them: the assumptions the town has already made about Tom Robinson before the trial starts, the pressure on Atticus just for agreeing to take the case, and the fact that a competent and principled defence still does not guarantee the evidence wins.</p>
+
+            <p>Atticus knows he is going to lose before he opens his mouth. He takes the case anyway. The book does not dress that up as a clean, uncomplicated act of heroism; it shows what it costs him and his family, and leaves you to notice that doing your job well and getting justice are not the same thing, and do not always meet.</p>
+
+            <h2>Verdict</h2>
+
+            <p>The book is warm and often funny, and uncomfortable in the places it is supposed to be. It is a coming-of-age story that is really about the limits of fairness, and how much less just the world turns out to be than Scout believed as a child.</p>
+
+            <p>Some of it has not aged well. Some of the criticism is fair and worth taking seriously. But it is still a book that leaves you with something to argue about after you close it, and not many books from any decade manage that.</p>
+
+            <p><strong>LexNush verdict:</strong> ⭐⭐⭐⭐½/5</p>
+
+            <p><strong>Best for:</strong> Readers interested in law, justice, and coming-of-age stories that do not let anyone, including the book itself, off easy.</p>
+            """
+        ).strip(),
+    },
     {
         "id": 11,
         "slug": "missing-soda-bottle-murder-conviction-fell-apart",
