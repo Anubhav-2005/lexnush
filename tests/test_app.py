@@ -148,14 +148,14 @@ class LexNushAppTests(unittest.TestCase):
         homepage = self.client.get("/")
         self.assertIn(b"Law with a Pulse.", homepage.data)
         self.assertIn(b"LATEST FROM LEXNUSH", homepage.data)
+        self.assertIn(b"The Quiet Revolution: How India Learned to Call Privacy a Right", homepage.data)
         self.assertIn(b"To Kill a Mockingbird by Harper Lee", homepage.data)
         self.assertIn(b"The Missing Soda Bottle: How a Murder Conviction Fell Apart", homepage.data)
-        self.assertIn(b"Ep. 4 \xe2\x80\x9cStarting the Clock\xe2\x80\x9d", homepage.data)
         self.assertNotIn(b"From Kerala to Keralam: Inside Article 3 and the Constitutional Machinery of Renaming a State", homepage.data)
         self.assertNotIn(b"Every File Has a Story", homepage.data)
         self.assertIn(b"latest-editorial-grid", homepage.data)
         self.assertNotIn(b"latest-card-art", homepage.data)
-        self.assertIn(b"The Clause You Skipped", homepage.data)
+        self.assertNotIn(b"The Clause You Skipped", homepage.data)
         self.assertNotIn(b"Ep. 3 \xe2\x80\x9cI\xe2\x80\x99ll just sue instead\xe2\x80\x9d: why walking away from arbitration almost never works.", homepage.data)
         self.assertNotIn(b"One Year at the Bar, Two Years Before the Bench: Has the Supreme Court Reimagined Judicial Experience?", homepage.data)
         self.assertIn(b"Stay Informed. Every Week.", homepage.data)
@@ -163,6 +163,7 @@ class LexNushAppTests(unittest.TestCase):
         self.assertIn(b"supreme-court-hero.jpg", homepage.data)
 
         analysis = self.client.get("/analysis/").data
+        self.assertIn(b"The Quiet Revolution: How India Learned to Call Privacy a Right", analysis)
         self.assertIn(b"A Two-Decade-Old Conviction, a Forgotten Birth Certificate", analysis)
         self.assertIn(b"From Kerala to Keralam: Inside Article 3 and the Constitutional Machinery of Renaming a State", analysis)
         self.assertIn(b"One Year at the Bar, Two Years Before the Bench: Has the Supreme Court Reimagined Judicial Experience?", analysis)
@@ -210,6 +211,15 @@ class LexNushAppTests(unittest.TestCase):
         self.assertIn("Why lawyers should read it", page)
         self.assertIn("LexNush verdict:", page)
         self.assertIn('"datePublished": "2026-09-10T09:00:00+05:30"', page)
+
+    def test_todays_privacy_analysis_is_published(self):
+        article = self.client.get("/blogs/quiet-revolution-india-privacy-right")
+        self.assertEqual(article.status_code, 200)
+        page = article.get_data(as_text=True)
+        self.assertIn("The Quiet Revolution: How India Learned to Call Privacy a Right", page)
+        self.assertIn("Nine Judges, One Answer", page)
+        self.assertIn("The Exemption That Undermines the Rule", page)
+        self.assertIn('"datePublished": "2026-09-14T09:00:00+05:30"', page)
 
     def test_security_headers_and_canonical_url_are_present(self):
         response = self.client.get("/")
