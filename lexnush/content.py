@@ -4,7 +4,7 @@ from html import unescape
 from textwrap import dedent
 
 HTML_TAG_RE = re.compile(r"<[^>]+>")
-SITE_LASTMOD_ISO = "2026-09-14"
+SITE_LASTMOD_ISO = "2026-09-15"
 
 AUTHORS = {
     "anushka-pandey": {
@@ -29,6 +29,76 @@ def calculate_read_time(text):
 
 
 BLOG_POSTS = [
+    {
+        "id": 14,
+        "slug": "ep-5-picking-the-referee",
+        "title": "The Clause You Skipped",
+        "author": "Anushka Pandey",
+        "author_slug": "anushka-pandey",
+        "category": "Law Explained",
+        "section": "law_explained",
+        "date": "15 September 2026",
+        "date_iso": "2026-09-15",
+        "date_modified": "15 September 2026",
+        "date_published_iso": "2026-09-15T11:00:00+05:30",
+        "date_modified_iso": "2026-09-15T11:00:00+05:30",
+        "keywords": [
+            "appointment of arbitrators",
+            "arbitrator independence",
+            "Section 11 Arbitration and Conciliation Act",
+            "sole arbitrator and arbitral tribunal",
+            "arbitrator appointment",
+            "law explained",
+        ],
+        "image_alt": "Legal research materials arranged on a desk",
+        "sources": [],
+        "seo_description": "Law Explained Episode 5: how arbitrators get appointed and how Section 11 helps when the appointment process stalls.",
+        "summary": "Ep. 5 “Picking the Referee”: how arbitrators actually get appointed, and what happens when someone stalls.",
+        "key_takeaways": [],
+        "content": dedent(
+            """
+            <p><strong>Ep. 5 “Picking the Referee”: how arbitrators actually get appointed, and what happens when someone stalls</strong></p>
+
+            <p><em>A weekly series decoding the legal clauses nobody reads - until they need to.</em></p>
+
+            <p>Last week’s notice has been sent, the clock has started. Now someone has to actually decide who’s going to hear the case. This is where a surprising number of arbitrations quietly stall before they’ve even begun.</p>
+
+            <h2>Where does the appointment process actually start?</h2>
+
+            <p>With the contract. Most arbitration clauses specify - or should specify - how many arbitrators there will be (typically one or three) and how they get chosen: maybe each party picks one and those two pick a third, maybe a named institution appoints, maybe a specific person is named outright.</p>
+
+            <p>If the clause has a clear mechanism and both sides follow it without a fight, this step is quick and mostly invisible. The problems start when it doesn't go that way.</p>
+
+            <h2>What happens if the other side just doesn't respond?</h2>
+
+            <p>This is the single most common way appointment gets stuck. One side proposes a name, or asks the other to nominate their arbitrator, and hears nothing back - or gets a string of objections that never quite resolve into an actual nomination.</p>
+
+            <p>Under Section 11 of India’s Arbitration and Conciliation Act, 1996, this is exactly the scenario the provision exists for. If the agreed procedure fails - a party doesn't cooperate, the two party-appointed arbitrators can’t agree on a third, or there's simply no mechanism in the clause at all - the other party can approach the appropriate court to make the appointment instead.</p>
+
+            <h2>Does the court re-examine the whole dispute at this stage?</h2>
+
+            <p>No, and this trips people up. A Section 11 application is not a hearing on the merits of the underlying dispute. The court's role here is narrow: constitute the tribunal, not decide who’s right. It will typically look at whether an arbitration agreement exists at all, but it isn't the venue to argue the substance of your claim - that comes later, in front of the arbitrator.</p>
+
+            <p>This is deliberate. If courts used every appointment application as an opportunity to dig into the dispute itself, appointment would take as long as a full trial, defeating the point of arbitration before it even started.</p>
+
+            <h2>Sole arbitrator or three - does it matter who decides?</h2>
+
+            <p>It matters practically. A sole arbitrator is faster and cheaper, but leaves the entire outcome in one person's hands. Three arbitrators - typically one appointed by each side and a presiding arbitrator agreed between them or appointed by an institution - cost more and take longer to convene, but spread the decision-making and are common for higher-value or more complex disputes.</p>
+
+            <p>If your contract doesn’t specify a number, don't assume; check what the default rule is under the governing arbitration law or institutional rules that apply.</p>
+
+            <h2>What if I don’t trust the arbitrator the other side proposed?</h2>
+
+            <p>That’s a separate, later question - not addressed by refusing to engage with the appointment process, which usually just burns the time you’d otherwise spend actually challenging them. Once someone is proposed or appointed, they’re required to disclose anything that could raise doubts about their independence, and there’s a formal route to challenge an appointment on those grounds. We’ll get into exactly how that works next week.</p>
+
+            <p>Stalling on appointment doesn’t make arbitration go away - it just hands the decision to a court instead of to the mechanism you actually negotiated. If you want control over who hears your dispute, engaging early with the appointment process is where that control actually lives.</p>
+
+            <p>Next Tuesday: what an arbitrator has to disclose before taking the job, and how to challenge one after they're already appointed.</p>
+
+            <p><em>This is a general explainer, not legal advice for any specific situation. New post every Tuesday.</em></p>
+            """
+        ).strip(),
+    },
     {
         "id": 13,
         "slug": "quiet-revolution-india-privacy-right",
